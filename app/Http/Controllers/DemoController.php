@@ -1,102 +1,84 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DemoController extends Controller
 {
-    // ==========================================
-    // HALAMAN 1: UPLOAD FOTO EVENT
-    // ==========================================
-    
-    // Fungsi ini yang bertugas MENAMPILKAN halaman HTML (Blade)
-    public function uploadView()
+    private $aiBaseUrl;
+    private $apiKey;
+
+    public function __construct()
     {
-        return view('demo.upload');
+        $this->aiBaseUrl = rtrim(env('AI_BASE_URL'), '/');
+        $this->apiKey    = env('AI_API_KEY');
     }
 
-    // Fungsi ini yang bertugas MEMPROSES file foto yang di-drag & drop
+    // ─── HALAMAN 1: UPLOAD ────────────────────────────────
+    public function uploadView()
+    {
+        $photos = DB::table('demo_photos')->orderByDesc('id')->get();
+        return view('demo.upload', compact('photos'));
+    }
+
     public function uploadProcess(Request $request)
     {
-        // 1. Validasi File
-        $request->validate([
-            'photo' => 'required|image|max:5120', 
-        ]);
+        $request->validate(['photo' => 'required|image|max:10240']);
 
         try {
-            $file = $request->file('photo');
-            // Ganti nama file biar nggak ada spasi/karakter aneh
+            $file     = $request->file('photo');
             $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-            $path = 'event-photos/' . $fileName;
+            $r2Path   = 'demo-photos/' . $fileName;
 
-            Storage::disk('s3')->put($path, file_get_contents($file));
-            $publicUrl = env('AWS_URL') . '/' . $path;
+            // 1. Upload ke R2
+            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            $r2Url = env('AWS_URL') . '/' . $r2Path;
 
-            // KIRIM KE AI
-            $response = Http::timeout(60)->withHeaders([
-                'X-API-Key' => env('AI_API_KEY')
-            ])->post(env('AI_BASE_URL') . '/embed-photo', [
-                // Kita ambil 7 digit terakhir dari time, lalu tambah 2 digit random
-                // Hasilnya akan di bawah 2 miliar, jadi database AI-mu nggak akan crash
-                'photo_id'  => (int) (substr(time(), -7) . rand(10, 99)), 
-                'photo_url' => $publicUrl
+            // 2. Simpan ke DB (status: uploaded)
+            $photoId = DB::table('demo_photos')->insertGetId([
+                'filename'   => $fileName,
+                'r2_url'     => $r2Url,
+                'status'     => 'uploaded',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
-            if (!$response->successful()) {
-                \Log::error("AI Error Response: " . $response->body());
-            }
+            // 3. Kirim ke FastAPI /embed
+            $aiResponse = Http::timeout(60)
+                ->withHeaders(['X-API-Key' => $this->apiKey])
+                ->post($this->aiBaseUrl . '/embed', [
+                    'photo_id'  => $photoId,
+                    'photo_url' => $r2Url,
+                ]);
 
-            if ($response->successful()) {
-                $aiData = $response->json();
-                $generatedId = (int) (substr(time(), -7) . rand(10, 99)); // Kita simpan angkanya di variabel
-
-                // Simpan ke Database
-                DB::table('demo_photos')->insert([
-                    'ai_photo_id' => $aiData['photo_id'] ?? null, // Simpan ID dari AI
-                    'filename'    => $fileName,
-                    'r2_url'      => $publicUrl,
-                    'faces_data'  => json_encode($aiData),
-                    'status'      => 'processed',
-                    'created_at'  => now(),
+            if ($aiResponse->successful()) {
+                // 4. Update DB: status embedded + simpan ai_photo_id
+                DB::table('demo_photos')->where('id', $photoId)->update([
+                    'ai_photo_id' => $aiResponse->json('photo_id') ?? $photoId,
+                    'status'      => 'embedded',
                     'updated_at'  => now(),
                 ]);
-
-                return response()->json([
-                    'success' => true, 
-                    'message' => 'Upload berhasil!',
-                    'url' => $publicUrl
-                ]);
+            } else {
+                Log::warning('AI /embed error: ' . $aiResponse->body());
             }
-            
-            // ====================================================
-            // 🚨 BAGIAN DEBUGGING: TANGKAP ERROR ASLI DARI AI
-            // ====================================================
+
             return response()->json([
-                'success' => false, 
-                'message' => 'Error dari AI (' . $response->status() . '): ' . $response->body()
-            ], 500);
+                'success' => true,
+                'message' => 'Upload berhasil! Status: ' . ($aiResponse->successful() ? 'Embedded ✅' : 'Uploaded (AI pending) ⚠️'),
+                'url'     => $r2Url,
+            ]);
 
         } catch (\Exception $e) {
-            // ====================================================
-            // 🚨 BAGIAN DEBUGGING: TANGKAP ERROR DARI LARAVEL
-            // ====================================================
-            return response()->json([
-                'success' => false, 
-                'message' => 'Error Sistem Laravel: ' . $e->getMessage()
-            ], 500);
+            Log::error('Upload error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
-
-    // ==========================================
-    // HALAMAN 2: SEARCH WAJAH (SELFIE)
-    // ==========================================
-    
-    // Kita siapkan fungsinya dari sekarang biar route web.php kamu nggak error
+    // ─── HALAMAN 2: SEARCH ────────────────────────────────
     public function searchView()
     {
         return view('demo.search');
@@ -104,9 +86,85 @@ class DemoController extends Controller
 
     public function searchProcess(Request $request)
     {
-        // Nanti logika pencarian muka/selfie kita taruh di sini
-        return response()->json(['message' => 'Fitur search segera hadir!']);
+        $request->validate(['selfie' => 'required|image|max:10240']);
+
+        try {
+            $file     = $request->file('selfie');
+            $fileName = 'selfie_' . time() . '.jpg';
+            $r2Path   = 'demo-selfies/' . $fileName;
+
+            // 1. Upload selfie ke R2
+            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            $selfieUrl = env('AWS_URL') . '/' . $r2Path;
+
+            // 2. Simpan runner ke DB
+            $runnerId = DB::table('demo_runners')->insertGetId([
+                'selfie_url' => $selfieUrl,
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // 3. Enroll selfie ke FastAPI /enroll
+            $enrollRes = Http::timeout(60)
+                ->withHeaders(['X-API-Key' => $this->apiKey])
+                ->post($this->aiBaseUrl . '/enroll', [
+                    'runner_id'  => $runnerId,
+                    'selfie_url' => $selfieUrl,
+                ]);
+
+            if (!$enrollRes->successful()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal enroll: ' . $enrollRes->body()
+                ], 500);
+            }
+
+            // 4. Update runner status
+            DB::table('demo_runners')->where('id', $runnerId)->update([
+                'ai_runner_id' => $enrollRes->json('runner_id') ?? $runnerId,
+                'status'       => 'enrolled',
+                'updated_at'   => now(),
+            ]);
+
+            // 5. Search ke FastAPI /search
+            $searchRes = Http::timeout(60)
+                ->withHeaders(['X-API-Key' => $this->apiKey])
+                ->post($this->aiBaseUrl . '/search', [
+                    'runner_id' => $runnerId,
+                ]);
+
+            if (!$searchRes->successful()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal search: ' . $searchRes->body()
+                ], 500);
+            }
+
+            // 6. Ambil foto dari DB berdasarkan photo_id hasil AI
+            $matches   = $searchRes->json('matches') ?? [];
+            $photoIds  = collect($matches)->pluck('photo_id')->toArray();
+            $scores    = collect($matches)->keyBy('photo_id');
+
+            $photos = DB::table('demo_photos')
+                ->whereIn('ai_photo_id', $photoIds)
+                ->get()
+                ->map(function ($p) use ($scores) {
+                    $p->score = round(($scores[$p->ai_photo_id]->score ?? 0) * 100, 1);
+                    return $p;
+                })
+                ->sortByDesc('score')
+                ->values();
+
+            return response()->json([
+                'success' => true,
+                'count'   => $photos->count(),
+                'photos'  => $photos,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Search error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }
-
-
