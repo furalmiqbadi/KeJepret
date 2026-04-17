@@ -170,7 +170,7 @@ class DemoController extends Controller
                 ->map(function ($p) use ($scores) {
                     $scoreData = $scores->get((string) $p->ai_photo_id);
                     $raw = $scoreData['score'] ?? $scoreData->score ?? 0;
-                    $p->score = round($raw * 100); // kalau AI return 0.0–1.0
+                    $p->score = round($raw);
                     return $p;
                 })
                 ->sortByDesc('score')
