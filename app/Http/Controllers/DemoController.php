@@ -34,8 +34,8 @@ class DemoController extends Controller
             $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
             $r2Path   = 'demo-photos/' . $fileName;
 
-            // 1. Upload ke R2
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            // 1. Upload ke R2 (tanpa 'public' — R2 tidak support ACL)
+            Storage::disk('s3')->put($r2Path, file_get_contents($file));
             $r2Url = env('AWS_URL') . '/' . $r2Path;
 
             // 2. Simpan ke DB (status: uploaded)
@@ -93,8 +93,8 @@ class DemoController extends Controller
             $fileName = 'selfie_' . time() . '.jpg';
             $r2Path   = 'demo-selfies/' . $fileName;
 
-            // 1. Upload selfie ke R2
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            // 1. Upload selfie ke R2 (tanpa 'public' — R2 tidak support ACL)
+            Storage::disk('s3')->put($r2Path, file_get_contents($file));
             $selfieUrl = env('AWS_URL') . '/' . $r2Path;
 
             // 2. Simpan runner ke DB
@@ -147,7 +147,7 @@ class DemoController extends Controller
                 ->withHeaders(['X-API-Key' => $this->apiKey])
                 ->post($this->aiBaseUrl . '/search', [
                     'runner_id'  => $runnerId,
-                    'photo_ids'  => $allPhotoIds,  // wajib dikirim!
+                    'photo_ids'  => $allPhotoIds,
                 ]);
 
             if (!$searchRes->successful()) {
@@ -167,7 +167,7 @@ class DemoController extends Controller
                 ->whereIn('ai_photo_id', $photoIds)
                 ->get()
                 ->map(function ($p) use ($scores) {
-                    // score dari AI sudah dalam format 0-100 (sudah *100 di AI)
+                    // score dari AI sudah dalam format 0-100
                     $p->score = $scores[$p->ai_photo_id]->score ?? 0;
                     return $p;
                 })
