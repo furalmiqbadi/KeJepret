@@ -1,155 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cari Foto Saya - KeJepret</title>
+    <title>KeJepret Demo – Cari Foto Saya</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
 </head>
-<body class="bg-gray-100 p-5 md:p-10">
-    <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-bold text-blue-600 mb-2">🔍 KeJepret Search Demo</h1>
-            <p class="text-gray-600">Cukup upload selfie, AI akan mencarikan foto kamu di database.</p>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-xl">
+        <!-- Header Demo -->
+        <div class="mb-6 text-center">
+            <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">🎬 Demo Mode</span>
+            <h1 class="text-2xl font-bold mt-3 text-gray-800">KeJepret – Cari Foto Kamu</h1>
+            <p class="text-gray-500 text-sm mt-1">Upload selfie kamu, AI akan mencocokkan dengan foto event yang tersedia.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="md:col-span-1">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <h2 class="font-bold text-lg mb-4">Ambil Selfie</h2>
-                    
-                    <form id="searchForm" enctype="multipart/form-data" class="space-y-4">
-                        @csrf
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 transition cursor-pointer">
-                            <input type="file" name="selfie" id="selfieInput" class="hidden" accept="image/*" required>
-                            <label for="selfieInput" class="cursor-pointer">
-                                <div id="previewContainer" class="mb-2 hidden">
-                                    <img id="imagePreview" src="#" class="max-h-48 mx-auto rounded-lg shadow-sm">
-                                </div>
-                                <div id="uploadPlaceholder">
-                                    <span class="text-4xl">📸</span>
-                                    <p class="text-sm text-gray-500 mt-2">Klik untuk pilih foto selfie</p>
-                                </div>
-                            </label>
-                        </div>
+        <!-- Form Search -->
+        <form id="searchForm" enctype="multipart/form-data">
+            @csrf
+            <label class="block mb-2 text-sm font-medium text-gray-700">Upload Selfie Kamu (JPG/PNG)</label>
+            <input type="file" name="selfie" id="selfieInput" accept="image/*"
+                class="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2 mb-4">
 
-                        <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all active:scale-95">
-                            Cari Wajah Saya!
-                        </button>
-                    </form>
-                </div>
+            <!-- Preview Selfie -->
+            <div id="previewBox" class="hidden mb-4">
+                <img id="selfiePreview" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-400">
             </div>
 
-            <div class="md:col-span-2">
-                <div class="bg-white p-6 rounded-2xl shadow-lg min-h-[400px] border border-gray-200">
-                    <h2 class="font-bold text-lg mb-4">Hasil Pencarian:</h2>
-                    
-                    <div id="statusAlert" class="hidden p-3 rounded-lg mb-4 text-center font-medium"></div>
+            <button type="submit"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                🔍 Cari Foto Saya
+            </button>
+        </form>
 
-                    <div id="loader" class="hidden flex-col items-center justify-center py-20">
-                        <div class="loading-spinner mb-4"></div>
-                        <p class="text-gray-500 animate-pulse">AI sedang mencocokkan wajah...</p>
-                    </div>
+        <!-- Status -->
+        <div id="statusBox" class="mt-4 hidden p-4 rounded-lg text-sm"></div>
 
-                    <div id="resultsGrid" class="grid grid-cols-2 gap-4">
-                        <p class="col-span-2 text-center text-gray-400 mt-20">Belum ada hasil. Silakan upload selfie di sebelah kiri.</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Hasil -->
+        <div id="resultsBox" class="mt-8 hidden">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">🏃 Foto Kamu Ditemukan</h2>
+            <div id="resultsGrid" class="grid grid-cols-2 gap-3"></div>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="{{ url('/demo/upload') }}" class="text-blue-600 hover:underline text-sm">← Kembali ke Upload Foto</a>
         </div>
     </div>
 
     <script>
-        const selfieInput = document.getElementById('selfieInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewContainer = document.getElementById('previewContainer');
-        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-        const searchForm = document.getElementById('searchForm');
-        const btnSubmit = document.getElementById('btnSubmit');
-        const resultsGrid = document.getElementById('resultsGrid');
-        const loader = document.getElementById('loader');
-        const statusAlert = document.getElementById('statusAlert');
-
-        // Preview Foto saat dipilih
-        selfieInput.onchange = evt => {
-            const [file] = selfieInput.files;
+        // Preview selfie
+        document.getElementById('selfieInput').addEventListener('change', function() {
+            const file = this.files[0];
             if (file) {
-                imagePreview.src = URL.createObjectURL(file);
-                previewContainer.classList.remove('hidden');
-                uploadPlaceholder.classList.add('hidden');
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('selfiePreview').src = e.target.result;
+                    document.getElementById('previewBox').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
             }
-        }
+        });
 
-        // Proses Form via AJAX
-        searchForm.onsubmit = async (e) => {
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Reset UI
-            resultsGrid.innerHTML = '';
-            statusAlert.classList.add('hidden');
-            loader.classList.remove('hidden');
-            btnSubmit.disabled = true;
-            btnSubmit.classList.add('opacity-50');
+            const formData = new FormData(this);
+            const statusBox = document.getElementById('statusBox');
+            const resultsBox = document.getElementById('resultsBox');
+            const resultsGrid = document.getElementById('resultsGrid');
 
-            const formData = new FormData(searchForm);
+            statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-blue-50 text-blue-700';
+            statusBox.classList.remove('hidden');
+            statusBox.textContent = '⏳ AI sedang mencari wajah kamu di foto event...';
+            resultsBox.classList.add('hidden');
 
             try {
-                const response = await fetch("{{ route('demo.search.process') }}", {
+                const res = await fetch('{{ url('/demo/search') }}', {
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+                    body: formData
                 });
+                const data = await res.json();
 
-                const res = await response.json();
-
-                if (res.success) {
-                    // Tampilkan Pesan Sukses
-                    statusAlert.innerText = res.message || "Pencarian Berhasil!";
-                    statusAlert.className = "p-3 rounded-lg mb-4 text-center font-medium bg-green-100 text-green-700";
-                    statusAlert.classList.remove('hidden');
-
-                    if (res.data && res.data.length > 0) {
-                        res.data.forEach(item => {
-                            const card = `
-                                <div class="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all border border-gray-100">
-                                    <img src="${item.r2_url}" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-500">
-                                    <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
-                                        <a href="${item.r2_url}" target="_blank" class="text-xs text-white hover:underline font-bold">Buka Foto Original →</a>
-                                    </div>
-                                </div>
-                            `;
-                            resultsGrid.innerHTML += card;
-                        });
+                if (data.success) {
+                    if (data.count === 0) {
+                        statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-yellow-50 text-yellow-700';
+                        statusBox.textContent = '😔 Wajah kamu tidak ditemukan di foto event.';
                     } else {
-                        resultsGrid.innerHTML = `<p class="col-span-2 text-center text-gray-400 mt-20">Wajah tidak ditemukan di foto event manapun. 😢</p>`;
+                        statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-green-50 text-green-700';
+                        statusBox.textContent = `✅ Ditemukan ${data.count} foto!`;
+
+                        resultsGrid.innerHTML = data.photos.map(photo => `
+                            <div class="relative rounded-lg overflow-hidden border shadow">
+                                <img src="${photo.r2_url}" class="w-full h-36 object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs px-2 py-1 flex justify-between">
+                                    <span>${photo.filename}</span>
+                                    <span class="text-green-300 font-bold">${photo.score}%</span>
+                                </div>
+                            </div>
+                        `).join('');
+                        resultsBox.classList.remove('hidden');
                     }
                 } else {
-                    throw new Error(res.message || "Gagal memproses AI.");
+                    statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-red-50 text-red-700';
+                    statusBox.textContent = '❌ ' + data.message;
                 }
-
             } catch (err) {
-                statusAlert.innerText = "Error: " + err.message;
-                statusAlert.className = "p-3 rounded-lg mb-4 text-center font-medium bg-red-100 text-red-700";
-                statusAlert.classList.remove('hidden');
-            } finally {
-                loader.classList.add('hidden');
-                btnSubmit.disabled = false;
-                btnSubmit.classList.remove('opacity-50');
+                statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-red-50 text-red-700';
+                statusBox.textContent = '❌ Error: ' + err.message;
             }
-        };
+        });
     </script>
+
 </body>
 </html>
