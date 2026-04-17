@@ -137,7 +137,7 @@
 
             submitBtn.disabled = false;
             submitBtn.textContent = '🚀 Upload & Embed';
-            setTimeout(() => location.reload(), 1500);
+            setTimeout(() => window.location.href = '{{ url('/demo/upload') }}', 1500);
         });
     </script>
 
