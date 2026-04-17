@@ -81,7 +81,7 @@
                 if (data.success) {
                     statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-green-50 text-green-700';
                     statusBox.textContent = '✅ ' + data.message;
-                    setTimeout(() => location.reload(), 1500);
+                    setTimeout(() => window.location.href = '{{ url('/demo/upload') }}', 1500);
                 } else {
                     statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-red-50 text-red-700';
                     statusBox.textContent = '❌ ' + data.message;
