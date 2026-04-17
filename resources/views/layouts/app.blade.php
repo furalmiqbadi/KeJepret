@@ -40,7 +40,10 @@
         <div class="flex-1 md:ml-64 transition-all duration-300">
             <!-- Mobile Header -->
             <header class="md:hidden bg-white border-b border-gray-100 p-4 flex items-center justify-between sticky top-0 z-40">
+            <a href="{{ route('home') }}" class="flex items-center gap-2">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 h-8 object-contain">
                 <span class="text-lg font-black text-gray-900 uppercase italic tracking-tighter text-blue-600">KeJepret</span>
+            </a>
                 <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                 </div>
