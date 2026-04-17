@@ -1,10 +1,10 @@
 <aside class="hidden md:flex flex-col w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0 z-50">
     <!-- Logo -->
     <div class="p-6 flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-        </div>
-        <span class="text-xl font-black text-gray-900 tracking-tighter uppercase italic">KeJepret</span>
+        <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <img src="{{ asset('images/logo.png') }}" alt="KeJepret Logo" class="w-10 h-10 object-contain">
+            <span class="text-xl font-black text-gray-900 tracking-tighter uppercase italic">KeJepret</span>
+        </a>
     </div>
 
     <!-- Navigation Menu -->
