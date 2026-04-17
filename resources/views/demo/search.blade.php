@@ -10,23 +10,21 @@
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
 
     <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-xl">
-        <!-- Header Demo -->
         <div class="mb-6 text-center">
             <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">🎬 Demo Mode</span>
             <h1 class="text-2xl font-bold mt-3 text-gray-800">KeJepret – Cari Foto Kamu</h1>
             <p class="text-gray-500 text-sm mt-1">Upload selfie kamu, AI akan mencocokkan dengan foto event yang tersedia.</p>
         </div>
 
-        <!-- Form Search -->
         <form id="searchForm" enctype="multipart/form-data">
             @csrf
             <label class="block mb-2 text-sm font-medium text-gray-700">Upload Selfie Kamu (JPG/PNG)</label>
             <input type="file" name="selfie" id="selfieInput" accept="image/*"
                 class="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2 mb-4">
 
-            <!-- Preview Selfie -->
-            <div id="previewBox" class="hidden mb-4">
+            <div id="previewBox" class="hidden mb-4 text-center">
                 <img id="selfiePreview" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-400">
+                <p class="text-xs text-gray-400 mt-1">Selfie Preview</p>
             </div>
 
             <button type="submit"
@@ -35,10 +33,8 @@
             </button>
         </form>
 
-        <!-- Status -->
         <div id="statusBox" class="mt-4 hidden p-4 rounded-lg text-sm"></div>
 
-        <!-- Hasil -->
         <div id="resultsBox" class="mt-8 hidden">
             <h2 class="text-lg font-semibold text-gray-700 mb-3">🏃 Foto Kamu Ditemukan</h2>
             <div id="resultsGrid" class="grid grid-cols-2 gap-3"></div>
@@ -50,7 +46,6 @@
     </div>
 
     <script>
-        // Preview selfie
         document.getElementById('selfieInput').addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -66,13 +61,13 @@
         document.getElementById('searchForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
-            const statusBox = document.getElementById('statusBox');
+            const statusBox  = document.getElementById('statusBox');
             const resultsBox = document.getElementById('resultsBox');
             const resultsGrid = document.getElementById('resultsGrid');
 
             statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-blue-50 text-blue-700';
             statusBox.classList.remove('hidden');
-            statusBox.textContent = '⏳ AI sedang mencari wajah kamu di foto event...';
+            statusBox.innerHTML = '⏳ AI sedang mencari wajah kamu di foto event... (bisa 10-30 detik)';
             resultsBox.classList.add('hidden');
 
             try {
@@ -86,17 +81,24 @@
                 if (data.success) {
                     if (data.count === 0) {
                         statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-yellow-50 text-yellow-700';
-                        statusBox.textContent = '😔 Wajah kamu tidak ditemukan di foto event.';
+                        statusBox.textContent = '😔 Wajah kamu tidak ditemukan di foto event. Coba upload foto yang lebih jelas.';
                     } else {
                         statusBox.className = 'mt-4 p-4 rounded-lg text-sm bg-green-50 text-green-700';
-                        statusBox.textContent = `✅ Ditemukan ${data.count} foto!`;
+                        statusBox.textContent = `✅ Ditemukan ${data.count} foto yang cocok!`;
 
                         resultsGrid.innerHTML = data.photos.map(photo => `
-                            <div class="relative rounded-lg overflow-hidden border shadow">
-                                <img src="${photo.r2_url}" class="w-full h-36 object-cover">
-                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs px-2 py-1 flex justify-between">
-                                    <span>${photo.filename}</span>
-                                    <span class="text-green-300 font-bold">${photo.score}%</span>
+                            <div class="relative rounded-lg overflow-hidden border shadow bg-gray-100">
+                                <img src="${photo.r2_url}"
+                                     referrerpolicy="no-referrer"
+                                     class="w-full h-40 object-cover"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                <div class="w-full h-40 hidden items-center justify-center bg-gray-200 text-gray-400 text-xs flex-col gap-1">
+                                    <span class="text-3xl">🖼️</span>
+                                    <span>Foto di R2</span>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs px-2 py-1 flex justify-between items-center">
+                                    <span class="truncate max-w-[65%]">${photo.filename}</span>
+                                    <span class="text-green-300 font-bold text-sm">${photo.score}%</span>
                                 </div>
                             </div>
                         `).join('');
