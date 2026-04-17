@@ -161,14 +161,13 @@ class DemoController extends Controller
             // Response AI pakai key "matched" bukan "matches"
             $matches  = $searchRes->json('matched') ?? [];
             $photoIds = collect($matches)->pluck('photo_id')->toArray();
-            $scores   = collect($matches)->keyBy('photo_id');
+            $scores = collect($matches)->keyBy('photo_id');
 
             $photos = DB::table('demo_photos')
                 ->whereIn('ai_photo_id', $photoIds)
                 ->get()
                 ->map(function ($p) use ($scores) {
-                    // score dari AI sudah dalam format 0-100
-                    $p->score = $scores[$p->ai_photo_id]->score ?? 0;
+                    $p->score = $scores[(int)$p->ai_photo_id]->score ?? 0; // cast ke int!
                     return $p;
                 })
                 ->sortByDesc('score')
