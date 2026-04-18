@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('photo_id')
                   ->constrained('photos')
                   ->cascadeOnDelete();
-            $table->string('ai_photo_id', 100);
+            $table->string('ai_photo_id')->nullable();
             $table->integer('face_index')->default(0);
             $table->timestamps();
         });
