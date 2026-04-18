@@ -31,7 +31,10 @@ class SearchController extends Controller
 
         // 2. Kirim ke FastAPI
         try {
-            $payload = ['selfie_url' => $selfieUrl];
+            $payload = [
+                'selfie_url' => $selfieUrl,
+                'runner_id'  => (string) $user->id,
+            ];
             if ($request->event_id) {
                 $payload['event_id'] = (string) $request->event_id;
             }
@@ -105,7 +108,7 @@ class SearchController extends Controller
             $response = Http::withHeaders([
                 'X-API-Key' => env('AI_API_KEY'),
             ])->timeout(30)->post(env('AI_BASE_URL') . '/enroll', [
-                'user_id'    => (string) $user->id,
+                'runner_id'  => (string) $user->id,
                 'selfie_url' => $selfieUrl,
             ]);
 
