@@ -112,17 +112,14 @@ class SearchController extends Controller
                 'selfie_url' => $selfieUrl,
             ]);
 
-            if (!$response->successful()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Enroll gagal.',
-                ], 500);
-            }
-
             return response()->json([
-                'success' => true,
-                'message' => 'Wajah berhasil didaftarkan.',
-                'data'    => $response->json(),
+                'status'  => $response->status(),
+                'body'    => $response->body(),
+                'ai_url'  => env('AI_BASE_URL') . '/enroll',
+                'payload' => [
+                    'runner_id'  => (string) $user->id,
+                    'selfie_url' => $selfieUrl,
+                ],
             ]);
 
         } catch (\Exception $e) {
