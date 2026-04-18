@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Photo;
-use App\Models\SearchHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -71,15 +70,6 @@ class SearchController extends Controller
                 ->sortByDesc('similarity_score')
                 ->values();
 
-            // 4. Simpan history
-            SearchHistory::create([
-                'user_id'       => $user->id,
-                'selfie_path'   => $selfiePath,
-                'event_id'      => $request->event_id,
-                'results_count' => count($photoIds),
-                'status'        => 'success',
-            ]);
-
             return response()->json([
                 'success' => true,
                 'message' => count($photoIds) . ' foto ditemukan',
@@ -87,14 +77,6 @@ class SearchController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            SearchHistory::create([
-                'user_id'       => $user->id,
-                'selfie_path'   => $selfiePath,
-                'event_id'      => $request->event_id,
-                'results_count' => 0,
-                'status'        => 'failed',
-            ]);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
@@ -146,20 +128,5 @@ class SearchController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
             ], 500);
         }
-    }
-
-    // ═══════════════════════════════
-    // RIWAYAT PENCARIAN
-    // ═══════════════════════════════
-    public function history(Request $request)
-    {
-        $histories = SearchHistory::where('user_id', $request->user()->id)
-            ->latest()
-            ->paginate(10);
-
-        return response()->json([
-            'success' => true,
-            'data'    => $histories,
-        ]);
     }
 }
