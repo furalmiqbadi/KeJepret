@@ -148,29 +148,15 @@ class PhotoController extends Controller
         try {
             $response = Http::withHeaders([
                 'X-API-Key' => env('AI_API_KEY'),
-            ])->post(env('AI_BASE_URL') . '/embed-photo', [
-                'photo_id'  => (string) $photo->id,
-                'photo_url' => $photo->r2_url,
+            ])->timeout(30)->post(env('AI_BASE_URL') . '/embed-photo', [
+                'photo_id'  => $photo->id,  // integer, bukan string
+                'photo_url' => env('AWS_URL') . '/' . $photo->watermark_path,  // public URL
             ]);
 
             if ($response->successful()) {
-                $data = $response->json();
-
-                $photo->update([
-                    'ai_photo_id'  => $data['photo_id'] ?? (string) $photo->id,
-                    'embed_status' => 'embedded',
-                ]);
-
-                $faces = $data['faces'] ?? [['face_index' => 0]];
-                foreach ($faces as $index => $face) {
-                    PhotoEmbedding::create([
-                        'photo_id'    => $photo->id,
-                        'ai_photo_id' => $data['photo_id'] ?? (string) $photo->id,
-                        'face_index'  => $face['face_index'] ?? $index,
-                    ]);
-                }
+                $photo->update(['embed_status' => 'embedded']);
             } else {
-                \Log::error('Embed response failed: ' . $response->status() . ' - ' . $response->body());
+                \Log::error('Embed failed: ' . $response->status() . ' - ' . $response->body());
                 $photo->update(['embed_status' => 'failed']);
             }
         } catch (\Exception $e) {
