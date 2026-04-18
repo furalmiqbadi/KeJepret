@@ -29,44 +29,72 @@ class SearchController extends Controller
         Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
         $selfieUrl  = env('AWS_URL') . '/' . $selfiePath;
 
-        // 2. Kirim ke FastAPI
         try {
-            $payload = [
-                'selfie_url' => $selfieUrl,
-                'runner_id'  => (string) $user->id,
-            ];
-            if ($request->event_id) {
-                $payload['event_id'] = (string) $request->event_id;
+            // 2. Enroll otomatis (upsert — aman dipanggil tiap search)
+            Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
+                ->timeout(30)
+                ->post(env('AI_BASE_URL') . '/enroll', [
+                    'runner_id'  => $user->id,
+                    'selfie_url' => $selfieUrl,
+                ]);
+
+            // 3. Ambil semua photo_id dari DB
+            $photoIds = Photo::where('is_active', true)
+                ->when($request->event_id, fn($q) => $q->where('event_id', $request->event_id))
+                ->pluck('id')
+                ->toArray();
+
+            if (empty($photoIds)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => '0 foto ditemukan',
+                    'data'    => [],
+                ]);
             }
 
-            $response = Http::withHeaders([
-                'X-API-Key' => env('AI_API_KEY'),
-            ])->timeout(30)->post(env('AI_BASE_URL') . '/search', $payload);
+            // 4. Kirim ke FastAPI /search
+            $response = Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
+                ->timeout(60)
+                ->post(env('AI_BASE_URL') . '/search', [
+                    'runner_id'  => $user->id,
+                    'photo_ids'  => $photoIds,
+                ]);
 
             if (!$response->successful()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Pencarian gagal, coba lagi.',
+                    'message' => 'Pencarian gagal.',
+                    'debug'   => $response->json(),
                 ], 500);
             }
 
-            $aiResult   = $response->json();
-            $photoIds   = collect($aiResult['results'] ?? [])->pluck('photo_id')->toArray();
-            $similarity = collect($aiResult['results'] ?? [])->keyBy('photo_id');
+            $aiResult = $response->json();
+            $matched  = collect($aiResult['matched'] ?? []);
 
-            // 3. Ambil foto dari DB
-            $photos = Photo::whereIn('id', $photoIds)
+            if ($matched->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => '0 foto ditemukan',
+                    'data'    => [],
+                ]);
+            }
+
+            // 5. Ambil foto dari DB berdasarkan matched photo_id
+            $matchedIds = $matched->pluck('photo_id')->toArray();
+            $scoreMap   = $matched->keyBy('photo_id');
+
+            $photos = Photo::whereIn('id', $matchedIds)
                 ->where('is_active', true)
                 ->with(['photographer:id,name'])
                 ->get()
-                ->map(function ($photo) use ($similarity) {
+                ->map(function ($photo) use ($scoreMap) {
                     return [
                         'photo_id'         => $photo->id,
                         'watermark_url'    => env('AWS_URL') . '/' . $photo->watermark_path,
                         'price'            => $photo->price,
                         'category'         => $photo->category,
                         'photographer'     => $photo->photographer->name ?? '-',
-                        'similarity_score' => $similarity[$photo->id]['similarity'] ?? 0,
+                        'similarity_score' => $scoreMap[$photo->id]['score'] ?? 0,
                         'event_id'         => $photo->event_id,
                     ];
                 })
@@ -75,7 +103,7 @@ class SearchController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => count($photoIds) . ' foto ditemukan',
+                'message' => count($matchedIds) . ' foto ditemukan',
                 'data'    => $photos,
             ]);
 
@@ -108,7 +136,7 @@ class SearchController extends Controller
             $response = Http::withHeaders([
                 'X-API-Key' => env('AI_API_KEY'),
             ])->timeout(30)->post(env('AI_BASE_URL') . '/enroll', [
-                'runner_id'  => (string) $user->id,
+                'runner_id'  => $user->id,
                 'selfie_url' => $selfieUrl,
             ]);
 
@@ -116,6 +144,7 @@ class SearchController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Enroll gagal.',
+                    'debug'   => $response->json(),
                 ], 500);
             }
 
