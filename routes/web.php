@@ -13,7 +13,7 @@ use App\Http\Controllers\Web\DownloadController;
 use Illuminate\Support\Facades\Route;
 
 // ══════════════════════════════════════════
-// EXISTING ROUTES — JANGAN DIHAPUS!
+// PUBLIC ROUTES — FE Landing Page
 // ══════════════════════════════════════════
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/kejepret', [HomeController::class, 'kejepret'])->name('kejepret');
@@ -21,25 +21,14 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/koleksi', [HomeController::class, 'koleksi'])->name('koleksi');
 Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
 
+// ══════════════════════════════════════════
+// DEMO ROUTES
+// ══════════════════════════════════════════
 Route::prefix('demo')->group(function () {
     Route::get('/upload', [DemoController::class, 'uploadView'])->name('demo.upload');
     Route::post('/upload/process', [DemoController::class, 'uploadProcess'])->name('demo.upload.process');
     Route::get('/search', [DemoController::class, 'searchView'])->name('demo.search');
     Route::post('/search/process', [DemoController::class, 'searchProcess'])->name('demo.search.process');
-});
-
-// ══════════════════════════════════════════
-// TEST ROUTES — Hapus setelah testing selesai!
-// ══════════════════════════════════════════
-Route::prefix('test')->group(function () {
-    Route::get('/auth',     fn() => view('test.auth'))->name('test.auth');
-    Route::get('/cart',     fn() => view('test.cart'))->name('test.cart');
-    Route::get('/order',    fn() => view('test.order'))->name('test.order');
-    Route::get('/photo',    fn() => view('test.photo'))->name('test.photo');
-    Route::get('/search',   fn() => view('test.search'))->name('test.search');
-    Route::get('/balance',  fn() => view('test.balance'))->name('test.balance');
-    Route::get('/admin',    fn() => view('test.admin'))->name('test.admin');
-    Route::get('/download', fn() => view('test.download'))->name('test.download');
 });
 
 // ══════════════════════════════════════════
