@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\Photo;
+use App\Models\SearchSession;
+use App\Models\SearchResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -16,7 +19,11 @@ class SearchController extends Controller
     // ══════════════════════════════════════════
     public function showSearch()
     {
-        return view('search.index');
+        $events = Event::where('is_active', true)
+            ->orderBy('event_date', 'desc')
+            ->get();
+
+        return view('runner.search', compact('events'));
     }
 
     // ══════════════════════════════════════════
@@ -36,10 +43,21 @@ class SearchController extends Controller
         $filename   = 'selfie_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         $selfiePath = 'selfies/temp/' . $filename;
         Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
-        $selfieUrl  = env('AWS_URL') . '/' . $selfiePath;
+
+        // Buat SearchSession awal dengan status pending
+        $session = SearchSession::create([
+            'user_id'        => $user->id,
+            'event_id'       => $request->event_id ?? null,
+            'selfie_r2_path' => $selfiePath,
+            'enroll_status'  => 'pending',
+            'search_status'  => 'pending',
+            'result_count'   => 0,
+        ]);
+
+        $selfieUrl = env('AWS_URL') . '/' . $selfiePath;
 
         try {
-            // Enroll otomatis (upsert wajah)
+            // Enroll otomatis (upsert wajah ke AI)
             Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
                 ->timeout(30)
                 ->post(env('AI_BASE_URL') . '/enroll', [
@@ -47,15 +65,17 @@ class SearchController extends Controller
                     'selfie_url' => $selfieUrl,
                 ]);
 
-            // Ambil semua photo_id yang aktif dari tabel photos
-            // Kolom: is_active (boolean), event_id (nullable FK ke events)
+            $session->update(['enroll_status' => 'enrolled']);
+
+            // Ambil semua photo_id yang aktif
             $photoIds = Photo::where('is_active', true)
                 ->when($request->event_id, fn($q) => $q->where('event_id', $request->event_id))
                 ->pluck('id')
                 ->toArray();
 
             if (empty($photoIds)) {
-                return back()->with('info', '0 foto ditemukan.');
+                $session->update(['search_status' => 'completed', 'result_count' => 0]);
+                return back()->with('info', '0 foto ditemukan untuk event ini.');
             }
 
             // Kirim ke FastAPI /search
@@ -67,24 +87,40 @@ class SearchController extends Controller
                 ]);
 
             if (!$response->successful()) {
+                $session->update(['search_status' => 'failed']);
                 return back()->with('error', 'Pencarian gagal. Coba lagi.');
             }
 
-            $aiResult   = $response->json();
-            $matched    = collect($aiResult['matched'] ?? []);
+            $aiResult = $response->json();
+            $matched  = collect($aiResult['matched'] ?? []);
 
             if ($matched->isEmpty()) {
+                $session->update(['search_status' => 'completed', 'result_count' => 0]);
                 return back()->with('info', '0 foto ditemukan.');
             }
+
+            // Simpan hasil ke search_results
+            foreach ($matched as $item) {
+                SearchResult::create([
+                    'session_id'       => $session->id,
+                    'photo_id'         => $item['photo_id'],
+                    'similarity_score' => $item['score'] ?? 0,
+                ]);
+            }
+
+            // Update session: completed
+            $session->update([
+                'search_status' => 'completed',
+                'result_count'  => $matched->count(),
+            ]);
 
             $matchedIds = $matched->pluck('photo_id')->toArray();
             $scoreMap   = $matched->keyBy('photo_id');
 
-            // Ambil foto dari DB berdasarkan matched IDs
-            // Kolom photos: id, watermark_path, price, category, photographer_id, event_id, is_active
+            // Ambil foto dari DB
             $photos = Photo::whereIn('id', $matchedIds)
                 ->where('is_active', true)
-                ->with(['photographer:id,name'])
+                ->with(['photographer:id,name', 'event:id,name'])
                 ->get()
                 ->map(function ($photo) use ($scoreMap) {
                     return [
@@ -93,6 +129,7 @@ class SearchController extends Controller
                         'price'            => $photo->price,
                         'category'         => $photo->category,
                         'photographer'     => $photo->photographer->name ?? '-',
+                        'event_name'       => $photo->event->name ?? '-',
                         'similarity_score' => $scoreMap[$photo->id]['score'] ?? 0,
                         'event_id'         => $photo->event_id,
                     ];
@@ -100,9 +137,10 @@ class SearchController extends Controller
                 ->sortByDesc('similarity_score')
                 ->values();
 
-            return view('search.results', compact('photos'));
+            return view('runner.search-results', compact('photos', 'session'));
 
         } catch (\Exception $e) {
+            $session->update(['search_status' => 'failed']);
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -112,7 +150,7 @@ class SearchController extends Controller
     // ══════════════════════════════════════════
     public function showEnroll()
     {
-        return view('search.enroll');
+        return view('runner.enroll');
     }
 
     // ══════════════════════════════════════════
@@ -144,7 +182,7 @@ class SearchController extends Controller
                 return back()->with('error', 'Enroll wajah gagal. Coba lagi.');
             }
 
-            return back()->with('success', 'Wajah berhasil didaftarkan!');
+            return back()->with('success', 'Wajah berhasil didaftarkan! Kamu sekarang bisa mencari fotomu.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -156,7 +194,11 @@ class SearchController extends Controller
     // ══════════════════════════════════════════
     public function history()
     {
-        // Sama seperti API: fitur history belum tersedia
-        return view('search.history');
+        $sessions = SearchSession::where('user_id', Auth::id())
+            ->with('event:id,name,location,event_date')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('runner.search-history', compact('sessions'));
     }
 }
