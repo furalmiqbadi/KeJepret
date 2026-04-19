@@ -68,7 +68,6 @@
                 <span class="material-symbols-outlined text-[150px]">photo_camera</span>
             </div>
 
-            {{-- Global Error --}}
             @if ($errors->any())
                 <div class="flex items-start gap-3 bg-red-50 border border-red-100 text-red-600 rounded-2xl px-5 py-4">
                     <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
@@ -113,8 +112,12 @@
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">lock</span>
-                            <input type="password" name="password" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="password" name="password" id="password_foto" placeholder="••••••••"
+                                class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <button type="button" onclick="togglePassword('password_foto', 'eye_foto')"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]" id="eye_foto">visibility</span>
+                            </button>
                         </div>
                     </div>
 
@@ -123,8 +126,12 @@
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Konfirmasi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">verified_user</span>
-                            <input type="password" name="password_confirmation" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="password" name="password_confirmation" id="password_foto_confirm" placeholder="••••••••"
+                                class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <button type="button" onclick="togglePassword('password_foto_confirm', 'eye_foto_confirm')"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]" id="eye_foto_confirm">visibility</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -140,7 +147,6 @@
                     </div>
                 </div>
 
-                {{-- Syarat & Ketentuan --}}
                 <div class="px-2">
                     <label class="flex items-center gap-3 cursor-pointer group">
                         <input type="checkbox" required class="w-4 h-4 rounded border-slate-200 text-blue-600 focus:ring-blue-500">
@@ -170,5 +176,19 @@
             &copy; 2026 KEJEPRET STUDIO &bull; PHOTOGRAPHER REGISTRATION
         </p>
     </div>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+    </script>
 </body>
 </html>
