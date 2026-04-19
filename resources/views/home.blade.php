@@ -13,6 +13,16 @@ $events = [
 
 {{-- ===== HERO ===== --}}
 <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-16 text-center">
+    @if(session('user_role') === 'fotografer')
+    <div class="inline-flex items-center gap-2 bg-green-50 text-green-700 rounded-full px-4 py-2 border border-green-100 mb-8 animate-bounce">
+        <span class="material-symbols-outlined text-sm">photo_camera</span>
+        <span class="text-xs font-bold uppercase tracking-widest">Mode Fotografer Aktif</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-gray-900 mb-6">
+        Halo Fotografer!<br>
+        <span class="text-gray-900">Siap untuk </span><span class="text-green-600">Upload Foto?</span>
+    </h1>
+    @else
     <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-gray-100 mb-8">
         <span class="flex gap-0.5">
             <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
@@ -26,6 +36,7 @@ $events = [
         Temukan Foto Larimu<br>
         <span class="text-gray-900">dari </span><span class="text-blue-600">Setiap Event</span>
     </h1>
+    @endif
     <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
         Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Resolusi tinggi, harga terjangkau.
     </p>

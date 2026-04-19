@@ -15,10 +15,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'face_enrolled',
+        'profile_face_url',
         'role',
-        'phone',
-        'avatar',
-        'is_active',
     ];
 
     protected $hidden = [
