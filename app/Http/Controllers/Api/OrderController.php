@@ -24,21 +24,30 @@ class OrderController extends Controller
 
         $total = $cartItems->sum('price');
 
+        $platformFee = $total * 0.15;
+        $photographerAmount = $total - $platformFee;
+
         $orderId = DB::table('orders')->insertGetId([
-            'user_id'    => $userId,
-            'total'      => $total,
-            'status'     => 'pending',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'user_id'             => $userId,
+            'order_code'          => 'ORD-' . strtoupper(uniqid()),
+            'total_amount'        => $total,
+            'platform_fee'        => $platformFee,
+            'photographer_amount' => $photographerAmount,
+            'status'              => 'pending',
+            'expired_at'          => now()->addHours(24),
+            'created_at'          => now(),
+            'updated_at'          => now(),
         ]);
 
         foreach ($cartItems as $item) {
             DB::table('order_items')->insert([
-                'order_id'   => $orderId,
-                'photo_id'   => $item->photo_id,
-                'price'      => $item->price,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'order_id'            => $orderId,
+                'photo_id'            => $item->photo_id,
+                'photographer_id'     => $item->photographer_id,
+                'price'               => $item->price,
+                'photographer_amount' => $item->price * 0.85,
+                'download_token'      => \Illuminate\Support\Str::uuid(),
+                'created_at'          => now(),
             ]);
         }
 

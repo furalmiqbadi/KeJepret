@@ -59,8 +59,8 @@ class CartController extends Controller
         DB::table('cart_items')->insert([
             'user_id'    => $userId,
             'photo_id'   => $photoId,
+            'price'      => DB::table('photos')->where('id', $photoId)->value('price'),
             'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         return response()->json(['success' => true, 'message' => 'Foto berhasil ditambahkan ke cart']);
