@@ -129,18 +129,22 @@
             <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
         {{-- Keluar (merah) --}}
-        <a href="#" class="flex items-center justify-between p-4 hover:bg-red-50 transition-colors group">
+        <form action="{{ route('logout') }}" method="POST" id="logout-form" class="hidden">
+            @csrf
+        </form>
+        <button onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+           class="w-full flex items-center justify-between p-4 hover:bg-red-50 transition-colors group text-left outline-none border-none bg-transparent">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center">
-                    <svg class="w-4.5 h-4.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    <svg class="w-4.5 h-4.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                 </div>
                 <div>
-                    <p class="text-sm font-bold text-red-500">Keluar</p>
-                    <p class="text-xs text-gray-400">Logout dari akun ini</p>
+                    <p class="text-sm font-bold text-red-600">Keluar</p>
+                    <p class="text-xs text-gray-400 font-semibold">Logout dari akun ini</p>
                 </div>
             </div>
-            <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
+            <svg class="w-4 h-4 text-gray-300 group-hover:text-red-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
     </div>
 
 </div>
