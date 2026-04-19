@@ -39,8 +39,6 @@
     <div class="grid-pattern"></div>
 
     <div class="w-full max-w-lg space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-
-        {{-- Logo --}}
         <div class="flex flex-col items-center gap-4">
             <a href="/" class="flex items-center gap-3 group">
                 <div class="w-14 h-14 bg-blue-600 rounded-[1.25rem] flex items-center justify-center text-white shadow-2xl shadow-blue-500/40 group-hover:scale-110 transition-transform duration-500">
@@ -54,15 +52,13 @@
             </div>
         </div>
 
-        {{-- Info Banner Verifikasi --}}
         <div class="flex items-start gap-3 bg-blue-50 border border-blue-100 text-blue-700 rounded-2xl px-5 py-4">
             <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">info</span>
             <p class="text-xs font-bold leading-relaxed">
-                Akun fotografer memerlukan verifikasi oleh admin sebelum dapat mengunggah foto. Proses verifikasi biasanya memakan waktu 1x24 jam.
+                Akun fotografer memerlukan verifikasi admin. Upload KTP diperlukan untuk proses verifikasi sebelum dapat mengunggah foto.
             </p>
         </div>
 
-        {{-- Register Card --}}
         <div class="bg-white p-10 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100 space-y-8 relative overflow-hidden">
             <div class="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none transform translate-x-4 -translate-y-4">
                 <span class="material-symbols-outlined text-[150px]">photo_camera</span>
@@ -79,71 +75,64 @@
                 </div>
             @endif
 
-            <form action="{{ route('register.photographer.post') }}" method="POST" class="space-y-6 relative z-10">
+            <form action="{{ route('register.photographer.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6 relative z-10">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Nama --}}
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Nama Lengkap</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">person</span>
-                            <input type="text" name="name" placeholder="John Doe"
-                                value="{{ old('name') }}"
-                                class="w-full bg-slate-50 border {{ $errors->has('name') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="text" name="name" placeholder="John Doe" value="{{ old('name') }}" class="w-full bg-slate-50 border {{ $errors->has('name') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
                     </div>
 
-                    {{-- Email --}}
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
-                            <input type="email" name="email" placeholder="nama@email.com"
-                                value="{{ old('email') }}"
-                                class="w-full bg-slate-50 border {{ $errors->has('email') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}" class="w-full bg-slate-50 border {{ $errors->has('email') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Password --}}
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">lock</span>
-                            <input type="password" name="password" id="password_foto" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
-                            <button type="button" onclick="togglePassword('password_foto', 'eye_foto')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                            <input type="password" name="password" id="password_foto" placeholder="••••••••" class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <button type="button" onclick="togglePassword('password_foto', 'eye_foto')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
                                 <span class="material-symbols-outlined text-[20px]" id="eye_foto">visibility</span>
                             </button>
                         </div>
                     </div>
 
-                    {{-- Konfirmasi Password --}}
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Konfirmasi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">verified_user</span>
-                            <input type="password" name="password_confirmation" id="password_foto_confirm" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
-                            <button type="button" onclick="togglePassword('password_foto_confirm', 'eye_foto_confirm')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                            <input type="password" name="password_confirmation" id="password_foto_confirm" placeholder="••••••••" class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <button type="button" onclick="togglePassword('password_foto_confirm', 'eye_foto_confirm')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
                                 <span class="material-symbols-outlined text-[20px]" id="eye_foto_confirm">visibility</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {{-- No. Telepon --}}
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">No. Telepon <span class="normal-case tracking-normal font-medium">(opsional)</span></label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">phone</span>
-                        <input type="text" name="phone" placeholder="08xxxxxxxxxx"
-                            value="{{ old('phone') }}"
-                            class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                        <input type="text" name="phone" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Upload KTP</label>
+                    <div class="bg-slate-50 border {{ $errors->has('ktp_photo') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl px-4 py-4">
+                        <input type="file" name="ktp_photo" accept="image/png,image/jpeg,image/jpg" class="block w-full text-sm font-bold text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-blue-700">
+                        <p class="text-xs text-slate-400 font-medium mt-2">Format JPG/PNG, maksimal 5MB.</p>
                     </div>
                 </div>
 

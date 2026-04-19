@@ -9,20 +9,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
-    // ═══════════════════════════════
-    // SHOW FORM LOGIN
-    // ═══════════════════════════════
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // ═══════════════════════════════
-    // LOGIN
-    // ═══════════════════════════════
     public function login(Request $request)
     {
         $request->validate([
@@ -44,6 +39,10 @@ class AuthController extends Controller
             ])->withInput();
         }
 
+        if ($user->is_banned) {
+            return redirect()->route('banned')->with('banned_reason', $user->banned_reason);
+        }
+
         Auth::login($user);
 
         return match ($user->role) {
@@ -54,17 +53,11 @@ class AuthController extends Controller
         };
     }
 
-    // ═══════════════════════════════
-    // SHOW FORM REGISTER (Runner)
-    // ═══════════════════════════════
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    // ═══════════════════════════════
-    // REGISTER (Runner)
-    // ═══════════════════════════════
     public function register(Request $request)
     {
         $request->validate([
@@ -87,24 +80,19 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    // ═══════════════════════════════
-    // SHOW FORM REGISTER FOTOGRAFER
-    // ═══════════════════════════════
     public function showRegisterPhotographer()
     {
         return view('auth.register-photographer');
     }
 
-    // ═══════════════════════════════
-    // REGISTER FOTOGRAFER
-    // ═══════════════════════════════
     public function registerPhotographer(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'phone'    => 'nullable|string|max:20',
+            'name'      => 'required|string|max:100',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|string|min:8|confirmed',
+            'phone'     => 'nullable|string|max:20',
+            'ktp_photo' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
         $user = User::create([
@@ -115,8 +103,17 @@ class AuthController extends Controller
             'phone'    => $request->phone,
         ]);
 
+        $ktpPath = null;
+        if ($request->hasFile('ktp_photo')) {
+            $file = $request->file('ktp_photo');
+            $filename = 'ktp_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $ktpPath = 'photographers/ktp/' . $filename;
+            Storage::disk('s3')->put($ktpPath, file_get_contents($file), 'private');
+        }
+
         PhotographerProfile::create([
             'user_id'             => $user->id,
+            'ktp_photo'           => $ktpPath,
             'verification_status' => 'pending',
         ]);
 
@@ -131,9 +128,6 @@ class AuthController extends Controller
         return redirect()->route('photographer.portfolio');
     }
 
-    // ═══════════════════════════════
-    // LOGOUT
-    // ═══════════════════════════════
     public function logout(Request $request)
     {
         Auth::logout();
@@ -143,9 +137,6 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    // ═══════════════════════════════
-    // DASHBOARD — redirect sesuai role
-    // ═══════════════════════════════
     public function dashboard()
     {
         $user = Auth::user();

@@ -12,25 +12,19 @@ use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\DownloadController;
 use Illuminate\Support\Facades\Route;
 
-// ══════════════════════════════════════════
-// ROOT — Redirect ke halaman utama
-// ══════════════════════════════════════════
 Route::get('/', function () {
     return redirect()->route('home');
 });
 
-// ══════════════════════════════════════════
-// PUBLIC ROUTES — Frontend
-// ══════════════════════════════════════════
 Route::get('/home',          [HomeController::class, 'index'])->name('home');
 Route::get('/event',         [HomeController::class, 'event'])->name('event');
 Route::get('/event/{id}',    [HomeController::class, 'eventDetail'])->name('event.detail');
 Route::get('/search',        [SearchController::class, 'showSearch'])->name('search');
 Route::get('/profil',        [HomeController::class, 'profil'])->name('profil');
+Route::get('/banned', function () {
+    return view('banned');
+})->name('banned');
 
-// ══════════════════════════════════════════
-// AUTH ROUTES (Guest only)
-// ══════════════════════════════════════════
 Route::middleware('guest')->group(function () {
     Route::get('/login',    [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login',   [AuthController::class, 'login'])->name('login.post');
@@ -40,17 +34,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register/photographer',[AuthController::class, 'registerPhotographer'])->name('register.photographer.post');
 });
 
-// ══════════════════════════════════════════
-// AUTHENTICATED ROUTES
-// ══════════════════════════════════════════
 Route::middleware('auth')->group(function () {
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
-    // ════════════════════════════════
-    // RUNNER ROUTES
-    // ════════════════════════════════
     Route::middleware('role:runner')->prefix('runner')->group(function () {
         Route::get('/search',          [SearchController::class, 'showSearch'])->name('runner.search');
         Route::post('/search',         [SearchController::class, 'search'])->name('runner.search.post');
@@ -67,10 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{token}',[DownloadController::class, 'download'])->name('download');
     });
 
-    // ════════════════════════════════
-    // PHOTOGRAPHER ROUTES
-    // ════════════════════════════════
-    Route::middleware('role:photographer')->prefix('photographer')->group(function () {
+    Route::middleware(['role:photographer', 'banned'])->prefix('photographer')->group(function () {
         Route::get('/portfolio',              [PhotoController::class, 'index'])->name('photographer.portfolio');
         Route::get('/upload',                 [PhotoController::class, 'showUpload'])->name('photographer.upload');
         Route::post('/upload',                [PhotoController::class, 'upload'])->name('photographer.upload.post');
@@ -80,10 +64,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/withdraw',              [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
     });
 
-    // ════════════════════════════════
-    // ADMIN ROUTES (non-Filament)
-    // Catatan: events sudah dihandle Filament di /admin
-    // ════════════════════════════════
     Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::get('/dashboard',                    [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/photographers/pending',        [AdminController::class, 'pendingPhotographers'])->name('admin.photographers.pending');
