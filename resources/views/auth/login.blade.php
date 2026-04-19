@@ -121,10 +121,14 @@
                 </button>
             </form>
 
-            <div class="text-center pt-2">
+            <div class="text-center pt-2 space-y-2">
                 <p class="text-sm font-medium text-slate-400">
                     Belum punya akun? 
                     <a href="{{ route('register') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar Gratis</a>
+                </p>
+                <p class="text-sm font-medium text-slate-400">
+                    Kamu fotografer? 
+                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar di Sini</a>
                 </p>
             </div>
         </div>

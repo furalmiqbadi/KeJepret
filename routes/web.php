@@ -13,9 +13,18 @@ use App\Http\Controllers\Web\DownloadController;
 use Illuminate\Support\Facades\Route;
 
 // ══════════════════════════════════════════
+// ROOT — Redirect ke login / dashboard
+// ══════════════════════════════════════════
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
+})->name('home');
+
+// ══════════════════════════════════════════
 // PUBLIC ROUTES — FE Landing Page
 // ══════════════════════════════════════════
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/kejepret', [HomeController::class, 'kejepret'])->name('kejepret');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/koleksi', [HomeController::class, 'koleksi'])->name('koleksi');
