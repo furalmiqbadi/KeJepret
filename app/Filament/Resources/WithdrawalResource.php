@@ -4,8 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WithdrawalResource\Pages;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -31,9 +31,9 @@ class WithdrawalResource extends Resource
         return 4;
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema->components([
+        return $form->schema([
             Textarea::make('rejection_reason')
                 ->label('Alasan Penolakan')
                 ->nullable(),
