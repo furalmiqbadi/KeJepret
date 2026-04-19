@@ -15,9 +15,21 @@ use Illuminate\Support\Facades\DB;
 class PhotographerResource extends Resource
 {
     protected static ?string $model = \App\Models\User::class;
-    protected static ?string $navigationIcon  = 'heroicon-o-identification';
-    protected static ?string $navigationLabel = 'Verifikasi Fotografer';
-    protected static ?int    $navigationSort  = 3;
+
+    public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-identification';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Verifikasi Fotografer';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 3;
+    }
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {

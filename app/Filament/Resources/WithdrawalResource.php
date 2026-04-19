@@ -15,9 +15,21 @@ use Illuminate\Support\Facades\DB;
 class WithdrawalResource extends Resource
 {
     protected static ?string $model = \App\Models\Withdrawal::class;
-    protected static ?string $navigationIcon  = 'heroicon-o-banknotes';
-    protected static ?string $navigationLabel = 'Withdrawal';
-    protected static ?int    $navigationSort  = 4;
+
+    public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-banknotes';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Withdrawal';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 4;
+    }
 
     public static function form(Form $form): Form
     {

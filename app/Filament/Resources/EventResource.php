@@ -21,9 +21,21 @@ use Illuminate\Support\Str;
 class EventResource extends Resource
 {
     protected static ?string $model = \App\Models\Event::class;
-    protected static ?string $navigationIcon  = 'heroicon-o-calendar-days';
-    protected static ?string $navigationLabel = 'Events';
-    protected static ?int    $navigationSort  = 2;
+
+    public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-calendar-days';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Events';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 2;
+    }
 
     public static function form(Form $form): Form
     {
