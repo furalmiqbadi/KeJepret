@@ -34,8 +34,8 @@ class DemoController extends Controller
             $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
             $r2Path   = 'demo-photos/' . $fileName;
 
-            // 1. Upload ke R2
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            // 1. Upload ke R2 (tanpa 'public' — R2 tidak support ACL)
+            Storage::disk('s3')->put($r2Path, file_get_contents($file));
             $r2Url = env('AWS_URL') . '/' . $r2Path;
 
             // 2. Simpan ke DB (status: uploaded)
@@ -47,10 +47,10 @@ class DemoController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // 3. Kirim ke FastAPI /embed
+            // 3. Kirim ke FastAPI /embed-photo (BUKAN /embed)
             $aiResponse = Http::timeout(60)
                 ->withHeaders(['X-API-Key' => $this->apiKey])
-                ->post($this->aiBaseUrl . '/embed', [
+                ->post($this->aiBaseUrl . '/embed-photo', [
                     'photo_id'  => $photoId,
                     'photo_url' => $r2Url,
                 ]);
@@ -63,7 +63,7 @@ class DemoController extends Controller
                     'updated_at'  => now(),
                 ]);
             } else {
-                Log::warning('AI /embed error: ' . $aiResponse->body());
+                Log::warning('AI /embed-photo error: ' . $aiResponse->body());
             }
 
             return response()->json([
@@ -93,8 +93,8 @@ class DemoController extends Controller
             $fileName = 'selfie_' . time() . '.jpg';
             $r2Path   = 'demo-selfies/' . $fileName;
 
-            // 1. Upload selfie ke R2
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'public');
+            // 1. Upload selfie ke R2 (tanpa 'public' — R2 tidak support ACL)
+            Storage::disk('s3')->put($r2Path, file_get_contents($file));
             $selfieUrl = env('AWS_URL') . '/' . $r2Path;
 
             // 2. Simpan runner ke DB
@@ -127,11 +127,27 @@ class DemoController extends Controller
                 'updated_at'   => now(),
             ]);
 
-            // 5. Search ke FastAPI /search
+            // 5. Ambil semua ai_photo_id yang sudah embedded dari DB
+            $allPhotoIds = DB::table('demo_photos')
+                ->where('status', 'embedded')
+                ->pluck('ai_photo_id')
+                ->toArray();
+
+            if (empty($allPhotoIds)) {
+                return response()->json([
+                    'success' => true,
+                    'count'   => 0,
+                    'photos'  => [],
+                    'message' => 'Belum ada foto event yang diproses AI.',
+                ]);
+            }
+
+            // 6. Search ke FastAPI /search dengan runner_id + photo_ids
             $searchRes = Http::timeout(60)
                 ->withHeaders(['X-API-Key' => $this->apiKey])
                 ->post($this->aiBaseUrl . '/search', [
-                    'runner_id' => $runnerId,
+                    'runner_id'  => $runnerId,
+                    'photo_ids'  => $allPhotoIds,
                 ]);
 
             if (!$searchRes->successful()) {
@@ -141,16 +157,20 @@ class DemoController extends Controller
                 ], 500);
             }
 
-            // 6. Ambil foto dari DB berdasarkan photo_id hasil AI
-            $matches   = $searchRes->json('matches') ?? [];
-            $photoIds  = collect($matches)->pluck('photo_id')->toArray();
-            $scores    = collect($matches)->keyBy('photo_id');
+            // 7. Ambil foto dari DB berdasarkan photo_id hasil AI
+            // Response AI pakai key "matched" bukan "matches"
+            $matches  = $searchRes->json('matched') ?? [];
+            $photoIds = collect($matches)->pluck('photo_id')->toArray();
+            // SESUDAH (fix)
+            $scores = collect($matches)->keyBy(fn($m) => (string) $m['photo_id']);
 
             $photos = DB::table('demo_photos')
                 ->whereIn('ai_photo_id', $photoIds)
                 ->get()
                 ->map(function ($p) use ($scores) {
-                    $p->score = round(($scores[$p->ai_photo_id]->score ?? 0) * 100, 1);
+                    $scoreData = $scores->get((string) $p->ai_photo_id);
+                    $raw = $scoreData['score'] ?? $scoreData->score ?? 0;
+                    $p->score = round($raw);
                     return $p;
                 })
                 ->sortByDesc('score')
