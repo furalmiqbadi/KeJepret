@@ -70,99 +70,106 @@
 
     {{-- ===== CARI FOTO ===== --}}
     @auth
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-6"
+         x-data="eventSearch()" x-init="init()">
 
         {{-- Header --}}
         <div class="px-6 py-5 border-b border-gray-50">
             <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">TEMUKAN FOTOMU</p>
             <h2 class="text-xl font-black text-gray-900">Cari Foto di Event Ini</h2>
-            <p class="text-sm text-gray-400 mt-1">Gunakan selfie atau unggah file foto untuk menemukan fotomu.</p>
+            <p class="text-sm text-gray-400 mt-1">Ambil selfie langsung atau upload file — AI akan mencarikan fotomu di event ini.</p>
         </div>
 
-        {{-- Tabs --}}
-        <div class="flex border-b border-gray-100" id="search-tabs">
-            <button onclick="switchTab('selfie')" id="tab-selfie"
-                class="flex-1 flex items-center justify-center gap-2 py-4 text-sm font-black border-b-2 border-blue-600 text-blue-600 transition-all">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-                Selfie AI
-                <span class="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-bold">Utama</span>
+        {{-- Tab Toggle --}}
+        <div class="grid grid-cols-2 gap-2 bg-slate-100 rounded-2xl p-1 mx-6 mt-5">
+            <button type="button" @click="mode = 'camera'"
+                :class="mode === 'camera' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'"
+                class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Kamera
             </button>
-            <button onclick="switchTab('file')" id="tab-file"
-                class="flex-1 flex items-center justify-center gap-2 py-4 text-sm font-bold text-gray-400 border-b-2 border-transparent transition-all hover:text-gray-600">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <button type="button" @click="mode = 'file'"
+                :class="mode === 'file' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'"
+                class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 Upload File
             </button>
         </div>
 
-        {{-- Tab: Selfie AI --}}
-        <div id="panel-selfie" class="p-6">
-            <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="event_id" value="{{ $event->id }}">
-                <input type="hidden" name="search_type" value="selfie">
+        <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data"
+              class="p-6 space-y-5" @submit="prepareSubmit">
+            @csrf
+            {{-- event_id otomatis dari event yang sedang dibuka --}}
+            <input type="hidden" name="event_id" value="{{ $event->id }}">
+            <input type="hidden" name="selfie_base64" x-ref="selfieBase64">
+            <input type="file" name="selfie" x-ref="selfieFile" accept="image/png,image/jpeg,image/jpg"
+                class="hidden" @change="onFileChange">
 
-                <div id="selfie-dropzone"
-                    onclick="document.getElementById('selfie-input').click()"
-                    class="border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-blue-300 hover:bg-blue-50/30 transition-all cursor-pointer group">
-                    <div class="w-14 h-14 bg-gray-100 group-hover:bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3 transition-colors">
-                        <svg class="w-7 h-7 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            {{-- MODE KAMERA --}}
+            <div x-show="mode === 'camera'" x-transition>
+                <div class="relative rounded-2xl overflow-hidden bg-black aspect-square">
+                    <video x-ref="video" autoplay playsinline muted
+                        class="w-full h-full object-cover" x-show="!capturedImage"></video>
+                    <img :src="capturedImage" x-show="capturedImage"
+                        class="w-full h-full object-cover">
+
+                    {{-- Ring panduan --}}
+                    <div x-show="!capturedImage" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="w-48 h-48 rounded-full border-4 border-white/50 border-dashed"></div>
                     </div>
-                    <p class="font-black text-gray-700 text-sm mb-1">Unggah foto selfie kamu</p>
-                    <p class="text-xs text-gray-400 mb-3">AI akan mencocokkan wajahmu dari semua foto di event ini</p>
-                    <div class="flex items-center justify-center gap-2">
-                        <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">JPG, PNG</span>
-                        <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Maks 10MB</span>
+
+                    {{-- Tombol capture / retake --}}
+                    <div class="absolute bottom-4 inset-x-0 flex justify-center gap-4">
+                        <template x-if="!capturedImage">
+                            <button type="button" @click="capture"
+                                class="w-16 h-16 bg-white rounded-full border-4 border-blue-600 shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full"></div>
+                            </button>
+                        </template>
+                        <template x-if="capturedImage">
+                            <button type="button" @click="retake"
+                                class="px-5 py-2.5 bg-white/90 backdrop-blur rounded-2xl font-bold text-sm text-gray-800 shadow hover:bg-white transition flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Ulangi
+                            </button>
+                        </template>
                     </div>
-                    <div id="selfie-preview" class="hidden mt-4">
-                        <img id="selfie-preview-img" src="" alt="" class="w-24 h-24 rounded-2xl object-cover mx-auto border-4 border-blue-200">
-                        <p id="selfie-preview-name" class="text-xs font-bold text-blue-600 mt-2"></p>
-                    </div>
+                    <canvas x-ref="canvas" class="hidden"></canvas>
                 </div>
-                <input type="file" id="selfie-input" name="selfie" accept="image/*" class="hidden" onchange="previewSelfie(this)">
+                <p class="text-xs text-gray-400 font-medium text-center mt-2">Posisikan wajah di dalam lingkaran lalu tekan tombol bulat.</p>
+            </div>
 
-                <button type="submit"
-                    class="w-full mt-4 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-2xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Cari Fotomu dengan AI
-                </button>
-            </form>
-        </div>
-
-        {{-- Tab: Upload File --}}
-        <div id="panel-file" class="p-6 hidden">
-            <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="event_id" value="{{ $event->id }}">
-                <input type="hidden" name="search_type" value="file">
-
-                <div id="file-dropzone"
-                    onclick="document.getElementById('file-input').click()"
-                    class="border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-blue-300 hover:bg-blue-50/30 transition-all cursor-pointer group">
-                    <div class="w-14 h-14 bg-gray-100 group-hover:bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3 transition-colors">
-                        <svg class="w-7 h-7 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                    </div>
-                    <p class="font-black text-gray-700 text-sm mb-1">Upload foto dari event ini</p>
-                    <p class="text-xs text-gray-400 mb-3">Unggah foto yang sudah kamu punya dari event ini untuk dicari yang lebih bagus</p>
-                    <div class="flex items-center justify-center gap-2">
-                        <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">JPG, PNG</span>
-                        <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Maks 10MB</span>
-                    </div>
-                    <div id="file-preview" class="hidden mt-4">
-                        <img id="file-preview-img" src="" alt="" class="w-24 h-24 rounded-2xl object-cover mx-auto border-4 border-blue-200">
-                        <p id="file-preview-name" class="text-xs font-bold text-blue-600 mt-2"></p>
-                    </div>
+            {{-- MODE FILE --}}
+            <div x-show="mode === 'file'" x-transition>
+                <div class="bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition"
+                    @click="$refs.selfieFile.click()">
+                    <template x-if="!filePreview">
+                        <div>
+                            <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            <p class="text-sm font-bold text-slate-500">Klik untuk pilih foto</p>
+                            <p class="text-xs text-slate-400 mt-1">JPG / PNG, maks 5MB</p>
+                        </div>
+                    </template>
+                    <template x-if="filePreview">
+                        <div>
+                            <img :src="filePreview" class="w-40 h-40 object-cover rounded-xl mx-auto">
+                            <p class="text-xs font-bold text-blue-600 mt-3">Foto dipilih. Klik untuk ganti.</p>
+                        </div>
+                    </template>
                 </div>
-                <input type="file" id="file-input" name="photo_file" accept="image/*" class="hidden" onchange="previewFile(this)">
+            </div>
 
-                <button type="submit"
-                    class="w-full mt-4 py-4 bg-gray-900 hover:bg-gray-800 text-white font-black text-sm rounded-2xl transition-all flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Cari dengan File Foto
-                </button>
-            </form>
-        </div>
-
+            {{-- Tombol Submit --}}
+            <button type="submit"
+                :disabled="mode === 'camera' ? !capturedImage : !fileSelected"
+                :class="(mode === 'camera' ? !capturedImage : !fileSelected) ? 'opacity-40 cursor-not-allowed' : 'hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/25'"
+                class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm uppercase italic tracking-[0.1em] transition-all flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                Cari Fotoku di Event Ini
+            </button>
+        </form>
     </div>
+
     @else
     {{-- Guest: minta login dulu --}}
     <div class="bg-blue-50 border border-blue-100 rounded-3xl p-8 text-center mb-6">
@@ -172,12 +179,8 @@
         <h3 class="font-black text-gray-900 text-lg mb-2">Login untuk Mencari Foto</h3>
         <p class="text-sm text-gray-500 mb-5">Kamu perlu login terlebih dahulu untuk mencari foto di event ini.</p>
         <div class="flex gap-3 justify-center">
-            <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl transition-colors shadow-md shadow-blue-200">
-                Masuk Sekarang
-            </a>
-            <a href="{{ route('register') }}" class="px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold text-sm rounded-xl border border-gray-200 transition-colors">
-                Daftar Gratis
-            </a>
+            <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl transition-colors shadow-md shadow-blue-200">Masuk Sekarang</a>
+            <a href="{{ route('register') }}" class="px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold text-sm rounded-xl border border-gray-200 transition-colors">Daftar Gratis</a>
         </div>
     </div>
     @endauth
@@ -192,45 +195,80 @@
 
 </div>
 
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
-function switchTab(tab) {
-    const tabs    = ['selfie', 'file'];
-    tabs.forEach(t => {
-        const btn   = document.getElementById('tab-' + t);
-        const panel = document.getElementById('panel-' + t);
-        if (t === tab) {
-            btn.classList.add('border-blue-600', 'text-blue-600');
-            btn.classList.remove('border-transparent', 'text-gray-400');
-            panel.classList.remove('hidden');
-        } else {
-            btn.classList.remove('border-blue-600', 'text-blue-600');
-            btn.classList.add('border-transparent', 'text-gray-400');
-            panel.classList.add('hidden');
+function eventSearch() {
+    return {
+        mode: 'camera',
+        capturedImage: null,
+        filePreview: null,
+        fileSelected: false,
+        stream: null,
+
+        async init() {
+            await this.startCamera();
+            this.$watch('mode', async (val) => {
+                if (val === 'camera') {
+                    await this.startCamera();
+                } else {
+                    this.stopCamera();
+                }
+            });
+        },
+
+        async startCamera() {
+            this.capturedImage = null;
+            try {
+                this.stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } }
+                });
+                this.$refs.video.srcObject = this.stream;
+            } catch (e) {
+                this.mode = 'file';
+            }
+        },
+
+        stopCamera() {
+            if (this.stream) {
+                this.stream.getTracks().forEach(t => t.stop());
+                this.stream = null;
+            }
+        },
+
+        capture() {
+            const video  = this.$refs.video;
+            const canvas = this.$refs.canvas;
+            canvas.width  = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            this.capturedImage = canvas.toDataURL('image/jpeg', 0.9);
+            this.stopCamera();
+        },
+
+        retake() {
+            this.capturedImage = null;
+            this.startCamera();
+        },
+
+        onFileChange(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            this.fileSelected = true;
+            const reader = new FileReader();
+            reader.onload = (ev) => { this.filePreview = ev.target.result; };
+            reader.readAsDataURL(file);
+        },
+
+        prepareSubmit(e) {
+            if (this.mode === 'camera') {
+                if (!this.capturedImage) { e.preventDefault(); return; }
+                this.$refs.selfieBase64.value = this.capturedImage;
+            }
+        },
+
+        destroy() {
+            this.stopCamera();
         }
-    });
-}
-
-function previewSelfie(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById('selfie-preview-img').src = e.target.result;
-            document.getElementById('selfie-preview-name').textContent = input.files[0].name;
-            document.getElementById('selfie-preview').classList.remove('hidden');
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function previewFile(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById('file-preview-img').src = e.target.result;
-            document.getElementById('file-preview-name').textContent = input.files[0].name;
-            document.getElementById('file-preview').classList.remove('hidden');
-        };
-        reader.readAsDataURL(input.files[0]);
     }
 }
 </script>
