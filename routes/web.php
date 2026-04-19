@@ -25,7 +25,7 @@ Route::get('/', function () {
 Route::get('/home',          [HomeController::class, 'index'])->name('home');
 Route::get('/event',         [HomeController::class, 'event'])->name('event');
 Route::get('/event/{id}',    [HomeController::class, 'eventDetail'])->name('event.detail');
-Route::get('/search',        [HomeController::class, 'search'])->name('search');
+Route::get('/search',        [SearchController::class, 'showSearch'])->name('search');
 Route::get('/profil',        [HomeController::class, 'profil'])->name('profil');
 
 // ══════════════════════════════════════════
@@ -81,18 +81,14 @@ Route::middleware('auth')->group(function () {
     });
 
     // ════════════════════════════════
-    // ADMIN ROUTES
+    // ADMIN ROUTES (non-Filament)
+    // Catatan: events sudah dihandle Filament di /admin
     // ════════════════════════════════
     Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::get('/dashboard',                    [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/photographers/pending',        [AdminController::class, 'pendingPhotographers'])->name('admin.photographers.pending');
         Route::post('/photographers/{id}/verify',   [AdminController::class, 'verifyPhotographer'])->name('admin.photographers.verify');
         Route::post('/photographers/{id}/reject',   [AdminController::class, 'rejectPhotographer'])->name('admin.photographers.reject');
-        Route::get('/events',                       [AdminController::class, 'listEvents'])->name('admin.events.index');
-        Route::get('/events/create',                [AdminController::class, 'showCreateEvent'])->name('admin.events.create');
-        Route::post('/events',                      [AdminController::class, 'createEvent'])->name('admin.events.store');
-        Route::get('/events/{id}/edit',             [AdminController::class, 'showEditEvent'])->name('admin.events.edit');
-        Route::put('/events/{id}',                  [AdminController::class, 'updateEvent'])->name('admin.events.update');
         Route::get('/withdrawals/pending',          [AdminController::class, 'pendingWithdrawals'])->name('admin.withdrawals.pending');
         Route::post('/withdrawals/{id}/approve',    [AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
         Route::post('/withdrawals/{id}/reject',     [AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject');
