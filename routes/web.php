@@ -22,10 +22,11 @@ Route::get('/', function () {
 // ══════════════════════════════════════════
 // PUBLIC ROUTES — Frontend
 // ══════════════════════════════════════════
-Route::get('/home',   [HomeController::class, 'index'])->name('home');
-Route::get('/event',  [HomeController::class, 'event'])->name('event');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
-Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
+Route::get('/home',          [HomeController::class, 'index'])->name('home');
+Route::get('/event',         [HomeController::class, 'event'])->name('event');
+Route::get('/event/{id}',    [HomeController::class, 'eventDetail'])->name('event.detail');
+Route::get('/search',        [HomeController::class, 'search'])->name('search');
+Route::get('/profil',        [HomeController::class, 'profil'])->name('profil');
 
 // ══════════════════════════════════════════
 // AUTH ROUTES (Guest only)

@@ -13,13 +13,12 @@ class HomeController extends Controller
     // ═══════════════════════════════
     public function index()
     {
-        // 6 event terbaru yang aktif untuk ditampilkan di home
         $events = Event::where('is_active', true)
+            ->withCount('photos')
             ->orderBy('event_date', 'desc')
             ->limit(6)
             ->get();
 
-        // Total foto & event untuk stats
         $totalPhotos = Photo::where('is_active', true)->count();
         $totalEvents = Event::where('is_active', true)->count();
 
@@ -31,9 +30,8 @@ class HomeController extends Controller
     // ═══════════════════════════════
     public function event(Request $request)
     {
-        $query = Event::where('is_active', true);
+        $query = Event::where('is_active', true)->withCount('photos');
 
-        // Filter pencarian nama atau lokasi
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->q . '%')
@@ -41,12 +39,10 @@ class HomeController extends Controller
             });
         }
 
-        // Filter kota
         if ($request->filled('city')) {
             $query->where('location', 'like', '%' . $request->city . '%');
         }
 
-        // Filter tanggal
         if ($request->filled('date')) {
             $query->whereDate('event_date', $request->date);
         }
@@ -57,14 +53,32 @@ class HomeController extends Controller
     }
 
     // ═══════════════════════════════
+    // EVENT DETAIL
+    // ═══════════════════════════════
+    public function eventDetail($id)
+    {
+        $event = Event::where('is_active', true)
+            ->withCount('photos')
+            ->findOrFail($id);
+
+        return view('event-detail', compact('event'));
+    }
+
+    // ═══════════════════════════════
     // SEARCH — Halaman Pencarian Foto
     // ═══════════════════════════════
     public function search(Request $request)
     {
-        // Ambil semua event aktif untuk dropdown/filter
-        $events = Event::where('is_active', true)
-            ->orderBy('event_date', 'desc')
-            ->get();
+        $query = Event::where('is_active', true)->withCount('photos');
+
+        if ($request->filled('q')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('location', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        $events = $query->orderBy('event_date', 'desc')->get();
 
         return view('search', compact('events'));
     }
