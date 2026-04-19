@@ -13,55 +13,6 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // ═══════════════════════════════
-    // SHOW FORM REGISTER
-    // ═══════════════════════════════
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
-
-    // ═══════════════════════════════
-    // REGISTER
-    // ═══════════════════════════════
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name'                  => 'required|string|max:100',
-            'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|string|min:8|confirmed',
-            'role'                  => 'required|in:runner,photographer',
-            'phone'                 => 'nullable|string|max:20',
-        ]);
-
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => $request->password,
-            'role'     => $request->role,
-            'phone'    => $request->phone,
-        ]);
-
-        // Jika fotografer → buat profil + saldo otomatis
-        if ($user->isPhotographer()) {
-            PhotographerProfile::create([
-                'user_id'             => $user->id,
-                'verification_status' => 'pending',
-            ]);
-
-            PhotographerBalance::create([
-                'photographer_id' => $user->id,
-                'balance'         => 0,
-                'total_earned'    => 0,
-            ]);
-        }
-
-        // Login otomatis setelah register
-        Auth::login($user);
-
-        return redirect()->route('dashboard');
-    }
-
-    // ═══════════════════════════════
     // SHOW FORM LOGIN
     // ═══════════════════════════════
     public function showLogin()
@@ -95,13 +46,91 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        // Redirect berdasarkan role
         return match ($user->role) {
             'admin'        => redirect()->route('admin.dashboard'),
             'photographer' => redirect()->route('photographer.dashboard'),
             'runner'       => redirect()->route('runner.dashboard'),
-            default        => redirect()->route('dashboard'),
+            default        => redirect()->route('home'),
         };
+    }
+
+    // ═══════════════════════════════
+    // SHOW FORM REGISTER (Runner)
+    // ═══════════════════════════════
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    // ═══════════════════════════════
+    // REGISTER (Runner)
+    // ═══════════════════════════════
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name'                  => 'required|string|max:100',
+            'email'                 => 'required|email|unique:users,email',
+            'password'              => 'required|string|min:8|confirmed',
+            'phone'                 => 'nullable|string|max:20',
+        ]);
+
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'runner',
+            'phone'    => $request->phone,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('runner.dashboard');
+    }
+
+    // ═══════════════════════════════
+    // SHOW FORM REGISTER FOTOGRAFER
+    // ═══════════════════════════════
+    public function showRegisterPhotographer()
+    {
+        return view('auth.register-photographer');
+    }
+
+    // ═══════════════════════════════
+    // REGISTER FOTOGRAFER
+    // ═══════════════════════════════
+    public function registerPhotographer(Request $request)
+    {
+        $request->validate([
+            'name'                  => 'required|string|max:100',
+            'email'                 => 'required|email|unique:users,email',
+            'password'              => 'required|string|min:8|confirmed',
+            'phone'                 => 'nullable|string|max:20',
+        ]);
+
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'photographer',
+            'phone'    => $request->phone,
+        ]);
+
+        // Buat profil fotografer otomatis — status pending verifikasi admin
+        PhotographerProfile::create([
+            'user_id'             => $user->id,
+            'verification_status' => 'pending',
+        ]);
+
+        // Buat saldo fotografer otomatis
+        PhotographerBalance::create([
+            'photographer_id' => $user->id,
+            'balance'         => 0,
+            'total_earned'    => 0,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('photographer.dashboard');
     }
 
     // ═══════════════════════════════
@@ -127,7 +156,7 @@ class AuthController extends Controller
             'admin'        => redirect()->route('admin.dashboard'),
             'photographer' => redirect()->route('photographer.dashboard'),
             'runner'       => redirect()->route('runner.dashboard'),
-            default        => abort(403),
+            default        => redirect()->route('home'),
         };
     }
 }
