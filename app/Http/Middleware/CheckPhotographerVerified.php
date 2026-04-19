@@ -12,10 +12,7 @@ class CheckPhotographerVerified
         $user = $request->user();
 
         if (!$user->photographerProfile || !$user->photographerProfile->isVerified()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Akun fotografer belum diverifikasi admin.',
-            ], 403);
+            return redirect()->route('photographer.waiting');
         }
 
         return $next($request);
