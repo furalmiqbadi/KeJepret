@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Storage;
 class AdminController extends Controller
 {
     public function pendingPhotographers()
@@ -66,7 +66,17 @@ class AdminController extends Controller
             'event_date'  => 'required|date',
             'location'    => 'required|string',
             'description' => 'nullable|string',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // ← TAMBAH INI
         ]);
+
+        // ← TAMBAH LOGIC UPLOAD INI
+        $coverImagePath = null;
+        if ($request->hasFile('cover_image')) {
+            $file           = $request->file('cover_image');
+            $filename       = 'event_cover_' . time() . '.' . $file->getClientOriginalExtension();
+            $coverImagePath = 'events/covers/' . $filename;
+            Storage::disk('s3')->put($coverImagePath, file_get_contents($file), 'public');
+        }
 
         $id = DB::table('events')->insertGetId([
             'name'        => $request->name,
@@ -74,6 +84,7 @@ class AdminController extends Controller
             'event_date'  => $request->event_date,
             'location'    => $request->location,
             'description' => $request->description,
+            'cover_image' => $coverImagePath, // ← TAMBAH INI
             'created_by'  => $request->user()->id,
             'is_active'   => true,
             'created_at'  => now(),
