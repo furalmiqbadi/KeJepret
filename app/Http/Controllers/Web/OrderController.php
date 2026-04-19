@@ -32,11 +32,10 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart kamu kosong.');
         }
 
-        $total               = $cartItems->sum('price');
-        $platformFee         = $total * 0.15;
-        $photographerAmount  = $total - $platformFee;
+        $total              = $cartItems->sum('price');
+        $platformFee        = $total * 0.15;
+        $photographerAmount = $total - $platformFee;
 
-        // Buat order di tabel orders
         $orderId = DB::table('orders')->insertGetId([
             'user_id'             => $userId,
             'order_code'          => 'ORD-' . strtoupper(uniqid()),
@@ -49,7 +48,6 @@ class OrderController extends Controller
             'updated_at'          => now(),
         ]);
 
-        // Buat order_items dari setiap item cart
         foreach ($cartItems as $item) {
             DB::table('order_items')->insert([
                 'order_id'            => $orderId,
@@ -62,7 +60,7 @@ class OrderController extends Controller
             ]);
         }
 
-        // Kosongkan cart
+        // Kosongkan cart setelah order dibuat
         DB::table('cart_items')->where('user_id', $userId)->delete();
 
         return redirect()->route('order.detail', $orderId)
@@ -77,9 +75,9 @@ class OrderController extends Controller
         $orders = DB::table('orders')
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
 
-        return view('order.history', compact('orders'));
+        return view('runner.order-history', compact('orders'));
     }
 
     // ═══════════════════════════════════════════
@@ -104,9 +102,13 @@ class OrderController extends Controller
                 'photos.category',
                 'photos.watermark_path'
             )
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->watermark_url = env('AWS_URL') . '/' . $item->watermark_path;
+                return $item;
+            });
 
-        return view('order.detail', compact('order', 'items'));
+        return view('runner.order-detail', compact('order', 'items'));
     }
 
     // ═══════════════════════════════════════════
@@ -132,7 +134,7 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
-            // 1. Update status order → paid
+            // 1. Update status order -> paid
             DB::table('orders')
                 ->where('id', $id)
                 ->update(['status' => 'paid', 'updated_at' => now()]);
@@ -166,6 +168,7 @@ class OrderController extends Controller
                         'photographer_id' => $photographerId,
                         'balance'         => $newBalance,
                         'total_earned'    => $amount,
+                        'created_at'      => now(),
                         'updated_at'      => now(),
                     ]);
                 }
@@ -179,6 +182,7 @@ class OrderController extends Controller
                     'amount'          => $amount,
                     'balance_after'   => $newBalance,
                     'description'     => 'Penjualan foto - Order #' . $order->order_code,
+                    'created_at'      => now(),
                 ]);
             }
 
