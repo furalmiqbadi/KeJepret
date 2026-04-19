@@ -1,1 +1,0 @@
-{{-- TODO: Admin - List Event --}}
