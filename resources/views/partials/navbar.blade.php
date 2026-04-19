@@ -1,33 +1,64 @@
-<nav class="hidden md:block bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-                        <circle cx="12" cy="13" r="3" />
-                    </svg>
-                </div>
-                <span class="text-xl font-bold text-gray-900 tracking-tight uppercase italic">KeJepret</span>
+<div class="hidden md:flex fixed top-8 left-0 right-0 z-[100] items-center justify-between px-16 pointer-events-none">
+    <!-- Pill 1: Logo (Left) -->
+    <div class="glass h-14 rounded-2xl px-6 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
+        <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                <span class="material-symbols-outlined text-[20px]">camera_enhance</span>
             </div>
-            <div class="flex space-x-8">
-                <a href="{{ route('home') }}"
-                    class="{{ Route::is('home') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">Beranda</a>
-                <a href="{{ route('kejepret') }}"
-                    class="{{ Route::is('jepret') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">Jepret</a>
-                <a href="{{ route('search') }}"
-                    class="{{ Route::is('search') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">Search</a>
-                <a href="{{ route('koleksi') }}"
-                    class="{{ Route::is('koleksi') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">Koleksi</a>
-                <a href="{{ route('profil') }}"
-                    class="{{ Route::is('profil') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">Profil</a>
-            </div>
-            <div class="flex items-center">
-                <button
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Login</button>
-            </div>
+            <span class="text-xl font-black text-slate-900 tracking-tighter uppercase italic leading-none">KeJepret</span>
+        </a>
+    </div>
+
+    <!-- Pill 2: Navigation Links (Center) -->
+    <div class="glass h-14 rounded-2xl px-10 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto">
+        <div class="flex items-center gap-10">
+            @php
+                $links = [
+                    ['route' => 'home', 'label' => 'Beranda'],
+                    ['route' => 'kejepret', 'label' => 'Event'],
+                    ['route' => 'search', 'label' => 'Search Photo'],
+                    ['route' => 'koleksi', 'label' => 'Koleksi'],
+                ];
+            @endphp
+
+            @foreach($links as $link)
+                <a href="{{ route($link['route']) }}" 
+                   class="text-[11px] font-black uppercase tracking-[0.2em] italic transition-all duration-300 relative group {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-400 hover:text-slate-900' }}">
+                    {{ $link['label'] }}
+                    @if(Route::is($link['route']))
+                        <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full animate-in fade-in zoom-in duration-500"></span>
+                    @else
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 rounded-full group-hover:w-full transition-all duration-300"></span>
+                    @endif
+                </a>
+            @endforeach
         </div>
     </div>
-</nav>
+
+    <!-- Pill 3: Profile Avatar (Right) -->
+    <div class="pointer-events-auto">
+        @auth
+            <a href="{{ route('profil') }}" class="glass w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/10 border border-white/40 hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
+                <div class="w-full h-full rounded-xl bg-blue-600 flex items-center justify-center text-white text-lg font-black italic shadow-inner overflow-hidden border border-white/20">
+                    @if(Auth::user()->profile_face_url)
+                        <img src="{{ Auth::user()->profile_face_url }}" class="w-full h-full object-cover">
+                    @else
+                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                    @endif
+                </div>
+            </a>
+        @else
+            <a href="{{ route('login') }}" class="glass h-14 px-8 rounded-2xl flex items-center text-[11px] font-black uppercase italic shadow-2xl shadow-blue-500/10 border border-white/40 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                Login
+            </a>
+        @endauth
+    </div>
+</div>
+
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(100px);
+        -webkit-backdrop-filter: blur(100px);
+    }
+</style>
