@@ -12,10 +12,9 @@ class CreateEvent extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['slug']       = Str::slug($data['name'] . '-' . time());
+        $data['slug']       = Str::slug($data['name']) . '-' . time();
         $data['created_by'] = auth()->id();
-        $data['created_at'] = now();
-        $data['updated_at'] = now();
+
         return $data;
     }
 }
