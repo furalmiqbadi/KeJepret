@@ -8,7 +8,7 @@
             <span class="text-[9px] font-bold uppercase tracking-widest">Beranda</span>
         </a>
 
-        <a href="{{ route('kejepret') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('kejepret') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+        <a href="{{ route('event') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('event') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
@@ -20,13 +20,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
             <span class="text-[9px] font-bold uppercase tracking-widest">Cari Foto</span>
-        </a>
-
-        <a href="{{ route('koleksi') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('koleksi') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span class="text-[9px] font-bold uppercase tracking-widest">Koleksi</span>
         </a>
 
         <a href="{{ route('profil') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('profil') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">

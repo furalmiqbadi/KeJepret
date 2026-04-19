@@ -13,20 +13,20 @@
     <div class="glass h-14 rounded-2xl px-10 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto">
         <div class="flex items-center gap-10">
             @php
-                $links = [
-                    ['route' => 'home', 'label' => 'Beranda'],
-                    ['route' => 'kejepret', 'label' => 'Event'],
+                $navLinks = [
+                    ['route' => 'home',   'label' => 'Beranda'],
+                    ['route' => 'event',  'label' => 'Event'],
                     ['route' => 'search', 'label' => 'Search Photo'],
-                    ['route' => 'koleksi', 'label' => 'Koleksi'],
+                    ['route' => 'profil', 'label' => 'Profil'],
                 ];
             @endphp
 
-            @foreach($links as $link)
-                <a href="{{ route($link['route']) }}" 
+            @foreach($navLinks as $link)
+                <a href="{{ route($link['route']) }}"
                    class="text-[11px] font-black uppercase tracking-[0.2em] italic transition-all duration-300 relative group {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-400 hover:text-slate-900' }}">
                     {{ $link['label'] }}
                     @if(Route::is($link['route']))
-                        <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full animate-in fade-in zoom-in duration-500"></span>
+                        <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
                     @else
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 rounded-full group-hover:w-full transition-all duration-300"></span>
                     @endif
