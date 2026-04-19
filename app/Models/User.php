@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'face_enrolled',
         'profile_face_url',
+        'role',
     ];
 
     /**

@@ -21,6 +21,8 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register/fotografer', [AuthController::class, 'showRegisterFotografer'])->name('register.fotografer');
+Route::post('/register/fotografer', [AuthController::class, 'registerFotografer']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::prefix('demo')->group(function () {

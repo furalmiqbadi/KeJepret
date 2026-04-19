@@ -24,15 +24,19 @@
 <body class="bg-gray-100 text-gray-900 min-h-screen">
 
     {{-- Top Navbar --}}
-    @include('partials.navbar')
+    @if(!isset($hideNav))
+        @include('partials.navbar')
+    @endif
 
     {{-- Main Content --}}
-    <main class="pt-20 pb-24 md:pb-8">
+    <main class="{{ isset($hideNav) ? 'pt-0 pb-0' : 'pt-20 pb-24 md:pb-8' }}">
         @yield('content')
     </main>
 
     {{-- Bottom Navigation (Mobile) --}}
-    @include('partials.bottom-nav')
+    @if(!isset($hideNav))
+        @include('partials.bottom-nav')
+    @endif
 
 </body>
 </html>
