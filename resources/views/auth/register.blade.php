@@ -61,15 +61,31 @@
                 <span class="material-symbols-outlined text-[150px]">person_add</span>
             </div>
 
-            <form action="{{ route('register') }}" method="POST" class="space-y-6 relative z-10">
+            {{-- Global Error --}}
+            @if ($errors->any())
+                <div class="flex items-start gap-3 bg-red-50 border border-red-100 text-red-600 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
+                    <ul class="text-xs font-bold space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-6 relative z-10">
                 @csrf
-                
+                {{-- Role runner: hidden, ini halaman register untuk pengguna/runner --}}
+                <input type="hidden" name="role" value="runner">
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Nama Lengkap</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">person</span>
-                            <input type="text" name="name" placeholder="John Doe" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="text" name="name" placeholder="John Doe"
+                                value="{{ old('name') }}"
+                                class="w-full bg-slate-50 border {{ $errors->has('name') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
                     </div>
 
@@ -77,7 +93,9 @@
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
-                            <input type="email" name="email" placeholder="nama@email.com" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="email" name="email" placeholder="nama@email.com"
+                                value="{{ old('email') }}"
+                                class="w-full bg-slate-50 border {{ $errors->has('email') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
                     </div>
                 </div>
@@ -87,7 +105,8 @@
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">lock</span>
-                            <input type="password" name="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="password" name="password" placeholder="••••••••"
+                                class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
                     </div>
 
@@ -95,8 +114,19 @@
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Konfirmasi</label>
                         <div class="relative group">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">verified_user</span>
-                            <input type="password" name="password_confirmation" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            <input type="password" name="password_confirmation" placeholder="••••••••"
+                                class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                         </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">No. Telepon <span class="normal-case tracking-normal font-medium">(opsional)</span></label>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">phone</span>
+                        <input type="text" name="phone" placeholder="08xxxxxxxxxx"
+                            value="{{ old('phone') }}"
+                            class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                     </div>
                 </div>
 

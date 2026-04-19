@@ -65,14 +65,36 @@
                 <span class="material-symbols-outlined text-[150px]">key</span>
             </div>
 
-            <form action="{{ route('login') }}" method="POST" class="space-y-6 relative z-10">
+            {{-- Global Error --}}
+            @if ($errors->any())
+                <div class="flex items-start gap-3 bg-red-50 border border-red-100 text-red-600 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
+                    <ul class="text-xs font-bold space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- Session Status --}}
+            @if (session('status'))
+                <div class="flex items-center gap-3 bg-green-50 border border-green-100 text-green-600 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
+                    <p class="text-xs font-bold">{{ session('status') }}</p>
+                </div>
+            @endif
+
+            <form action="{{ route('login.post') }}" method="POST" class="space-y-6 relative z-10">
                 @csrf
                 
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
-                        <input type="email" name="email" placeholder="nama@email.com" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all" value="demo@kejepret.com">
+                        <input type="email" name="email" placeholder="nama@email.com"
+                            value="{{ old('email') }}"
+                            class="w-full bg-slate-50 border {{ $errors->has('email') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                     </div>
                 </div>
 
@@ -80,7 +102,8 @@
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">lock</span>
-                        <input type="password" name="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all" value="password">
+                        <input type="password" name="password" placeholder="••••••••"
+                            class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
                     </div>
                 </div>
 
@@ -98,15 +121,18 @@
                 </button>
             </form>
 
-            <div class="text-center pt-2">
+            <div class="text-center pt-2 space-y-2">
                 <p class="text-sm font-medium text-slate-400">
                     Belum punya akun? 
                     <a href="{{ route('register') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar Gratis</a>
                 </p>
+                <p class="text-sm font-medium text-slate-400">
+                    Kamu fotografer? 
+                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar di Sini</a>
+                </p>
             </div>
         </div>
 
-        <!-- Footer Info -->
         <p class="text-center text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
             &copy; 2026 KEJEPRET STUDIO &bull; PREMIUM ACCESS
         </p>
