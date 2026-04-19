@@ -1,36 +1,40 @@
-<nav class="md:hidden fixed bottom-6 left-6 right-6 z-[100] animate-in slide-in-from-bottom-8 duration-700">
-    <div class="glass rounded-[2rem] px-4 py-2 flex items-center justify-around shadow-2xl shadow-blue-500/10 border border-white/40">
-        @php
-            $links = [
-                ['route' => 'home', 'label' => 'Home', 'icon' => 'home'],
-                ['route' => 'kejepret', 'label' => 'Jepret', 'icon' => 'camera_enhance'],
-                ['route' => 'search', 'label' => 'Search', 'icon' => 'search'],
-                ['route' => 'koleksi', 'label' => 'Koleksi', 'icon' => 'collections'],
-                ['route' => 'profil', 'label' => 'Profil', 'icon' => 'person'],
-            ];
-        @endphp
+<nav class="md:hidden fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-gray-100 z-50 h-[4.5rem] shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+    <div class="flex h-full items-center justify-around px-2">
 
-        @foreach($links as $link)
-            <a href="{{ route($link['route']) }}" 
-               class="flex flex-col items-center justify-center p-2 rounded-2xl transition-all duration-300 relative {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-400 hover:text-slate-900' }}">
-                <span class="material-symbols-outlined text-[24px] {{ Route::is($link['route']) ? 'fill-1' : '' }}">
-                    {{ $link['icon'] }}
-                </span>
-                <span class="text-[9px] font-black uppercase tracking-tighter mt-1">{{ $link['label'] }}</span>
-                
-                @if(Route::is($link['route']))
-                    <span class="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"></span>
-                @endif
-            </a>
-        @endforeach
+        <a href="{{ route('home') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('home') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Beranda</span>
+        </a>
+
+        <a href="{{ route('kejepret') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('kejepret') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Event</span>
+        </a>
+
+        <a href="{{ route('search') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('search') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Cari Foto</span>
+        </a>
+
+        <a href="{{ route('koleksi') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('koleksi') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Koleksi</span>
+        </a>
+
+        <a href="{{ route('profil') }}" class="flex flex-col items-center justify-center w-full h-full gap-1 {{ Route::is('profil') ? 'text-blue-600' : 'text-gray-400' }} transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Profil</span>
+        </a>
+
     </div>
 </nav>
-
-<style>
-    .glass {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-    }
-    .fill-1 { font-variation-settings: 'FILL' 1; }
-</style>

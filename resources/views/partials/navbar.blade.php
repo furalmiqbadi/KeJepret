@@ -2,8 +2,8 @@
     <!-- Pill 1: Logo (Left) -->
     <div class="glass h-14 rounded-2xl px-6 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
         <a href="{{ route('home') }}" class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
-                <span class="material-symbols-outlined text-[20px]">camera_enhance</span>
+            <div class="w-10 h-10 overflow-hidden flex items-center justify-center">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
             </div>
             <span class="text-xl font-black text-slate-900 tracking-tighter uppercase italic leading-none">KeJepret</span>
         </a>
@@ -57,8 +57,8 @@
 
 <style>
     .glass {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(100px);
-        -webkit-backdrop-filter: blur(100px);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
     }
 </style>
