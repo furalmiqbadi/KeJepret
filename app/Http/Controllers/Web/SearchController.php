@@ -28,23 +28,54 @@ class SearchController extends Controller
 
     // ══════════════════════════════════════════
     // SEARCH BY SELFIE (Runner)
+    // Mendukung 2 input: file upload atau base64 dari kamera
     // ══════════════════════════════════════════
     public function search(Request $request)
     {
+        // Validasi: salah satu dari file atau base64 wajib ada
         $request->validate([
-            'selfie'   => 'required|image|mimes:jpg,jpeg,png|max:5120',
-            'event_id' => 'nullable|exists:events,id',
+            'selfie'        => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'selfie_base64' => 'nullable|string',
+            'event_id'      => 'nullable|exists:events,id',
         ]);
+
+        if (!$request->hasFile('selfie') && !$request->filled('selfie_base64')) {
+            return back()->with('error', 'Selfie wajib diisi. Gunakan kamera atau upload file.');
+        }
 
         $user = Auth::user();
 
-        // Upload selfie ke R2
-        $file       = $request->file('selfie');
-        $filename   = 'selfie_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $selfiePath = 'selfies/temp/' . $filename;
-        Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
+        // ── Proses selfie: file atau base64 ──
+        $filename   = 'selfie_' . $user->id . '_' . time();
+        $selfiePath = 'selfies/temp/' . $filename . '.jpg';
 
-        // Buat SearchSession awal dengan status pending
+        if ($request->hasFile('selfie')) {
+            // Input dari file upload
+            $file       = $request->file('selfie');
+            $filename  .= '.' . $file->getClientOriginalExtension();
+            $selfiePath = 'selfies/temp/' . $filename;
+            Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
+        } else {
+            // Input dari kamera (base64)
+            $base64Data = $request->input('selfie_base64');
+
+            // Strip header data:image/jpeg;base64,
+            if (str_contains($base64Data, ',')) {
+                $base64Data = explode(',', $base64Data)[1];
+            }
+
+            $imageData = base64_decode($base64Data);
+
+            if (!$imageData) {
+                return back()->with('error', 'Data kamera tidak valid. Coba lagi.');
+            }
+
+            Storage::disk('s3')->put($selfiePath, $imageData, 'private');
+        }
+
+        $selfieUrl = env('AWS_URL') . '/' . $selfiePath;
+
+        // Buat SearchSession awal
         $session = SearchSession::create([
             'user_id'        => $user->id,
             'event_id'       => $request->event_id ?? null,
@@ -54,10 +85,8 @@ class SearchController extends Controller
             'result_count'   => 0,
         ]);
 
-        $selfieUrl = env('AWS_URL') . '/' . $selfiePath;
-
         try {
-            // Enroll otomatis (upsert wajah ke AI)
+            // Enroll otomatis ke AI (upsert, tidak disimpan permanen)
             Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
                 ->timeout(30)
                 ->post(env('AI_BASE_URL') . '/enroll', [
@@ -67,7 +96,7 @@ class SearchController extends Controller
 
             $session->update(['enroll_status' => 'enrolled']);
 
-            // Ambil semua photo_id yang aktif
+            // Ambil semua photo_id aktif
             $photoIds = Photo::where('is_active', true)
                 ->when($request->event_id, fn($q) => $q->where('event_id', $request->event_id))
                 ->pluck('id')
@@ -75,7 +104,7 @@ class SearchController extends Controller
 
             if (empty($photoIds)) {
                 $session->update(['search_status' => 'completed', 'result_count' => 0]);
-                return back()->with('info', '0 foto ditemukan untuk event ini.');
+                return back()->with('info', 'Belum ada foto untuk event ini.');
             }
 
             // Kirim ke FastAPI /search
@@ -96,7 +125,7 @@ class SearchController extends Controller
 
             if ($matched->isEmpty()) {
                 $session->update(['search_status' => 'completed', 'result_count' => 0]);
-                return back()->with('info', '0 foto ditemukan.');
+                return back()->with('info', 'Tidak ada foto yang cocok dengan wajahmu.');
             }
 
             // Simpan hasil ke search_results
@@ -108,7 +137,6 @@ class SearchController extends Controller
                 ]);
             }
 
-            // Update session: completed
             $session->update([
                 'search_status' => 'completed',
                 'result_count'  => $matched->count(),
@@ -117,7 +145,6 @@ class SearchController extends Controller
             $matchedIds = $matched->pluck('photo_id')->toArray();
             $scoreMap   = $matched->keyBy('photo_id');
 
-            // Ambil foto dari DB
             $photos = Photo::whereIn('id', $matchedIds)
                 ->where('is_active', true)
                 ->with(['photographer:id,name', 'event:id,name'])
@@ -146,47 +173,11 @@ class SearchController extends Controller
     }
 
     // ══════════════════════════════════════════
-    // SHOW FORM ENROLL
+    // SHOW FORM ENROLL — redirect ke search
     // ══════════════════════════════════════════
     public function showEnroll()
     {
-        return view('runner.enroll');
-    }
-
-    // ══════════════════════════════════════════
-    // ENROLL WAJAH (Runner)
-    // ══════════════════════════════════════════
-    public function enroll(Request $request)
-    {
-        $request->validate([
-            'selfie' => 'required|image|mimes:jpg,jpeg,png|max:5120',
-        ]);
-
-        $user = Auth::user();
-
-        $file       = $request->file('selfie');
-        $filename   = 'enroll_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $selfiePath = 'selfies/enroll/' . $filename;
-        Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
-        $selfieUrl  = env('AWS_URL') . '/' . $selfiePath;
-
-        try {
-            $response = Http::withHeaders([
-                'X-API-Key' => env('AI_API_KEY'),
-            ])->timeout(30)->post(env('AI_BASE_URL') . '/enroll', [
-                'runner_id'  => $user->id,
-                'selfie_url' => $selfieUrl,
-            ]);
-
-            if (!$response->successful()) {
-                return back()->with('error', 'Enroll wajah gagal. Coba lagi.');
-            }
-
-            return back()->with('success', 'Wajah berhasil didaftarkan! Kamu sekarang bisa mencari fotomu.');
-
-        } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        return redirect()->route('runner.search');
     }
 
     // ══════════════════════════════════════════
