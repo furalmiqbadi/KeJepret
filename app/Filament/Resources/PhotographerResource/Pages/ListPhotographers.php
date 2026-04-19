@@ -8,4 +8,9 @@ use Filament\Resources\Pages\ListRecords;
 class ListPhotographers extends ListRecords
 {
     protected static string $resource = PhotographerResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

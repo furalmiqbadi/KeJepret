@@ -8,4 +8,9 @@ use Filament\Resources\Pages\ListRecords;
 class ListWithdrawals extends ListRecords
 {
     protected static string $resource = WithdrawalResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }
