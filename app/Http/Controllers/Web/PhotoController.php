@@ -3,25 +3,31 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
-    // ══════════════════════════════
+    // ════════════════════════════════
     // SHOW FORM UPLOAD
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function showUpload()
     {
-        return view('photo.upload');
+        $events = Event::where('is_active', true)
+            ->orderBy('event_date', 'desc')
+            ->get();
+
+        return view('photographer.upload', compact('events'));
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // UPLOAD FOTO (Fotografer)
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function upload(Request $request)
     {
         $request->validate([
@@ -48,17 +54,18 @@ class PhotoController extends Controller
             // 3. Simpan ke DB
             $photo = Photo::create([
                 'photographer_id' => $photographer->id,
-                'event_id'        => $request->event_id,
+                'event_id'        => $request->event_id ?? null,
                 'filename'        => $filename,
                 'r2_path'         => $r2Path,
                 'r2_url'          => $r2Url,
                 'watermark_path'  => $watermarkPath,
                 'price'           => $request->price,
                 'embed_status'    => 'pending',
-                'category'        => $request->category,
+                'category'        => $request->category ?? null,
+                'is_active'       => true,
             ]);
 
-            // 4. Kirim ke FastAPI
+            // 4. Kirim ke FastAPI untuk embedding
             $this->embedPhoto($photo);
 
             $results[] = [
@@ -68,38 +75,26 @@ class PhotoController extends Controller
             ];
         }
 
-        return redirect()->route('photographer.photos')
+        return redirect()->route('photographer.portfolio')
             ->with('success', count($results) . ' foto berhasil diupload.');
     }
 
-    // ══════════════════════════════
-    // LIST FOTO MILIK FOTOGRAFER
-    // ══════════════════════════════
+    // ════════════════════════════════
+    // PORTFOLIO — LIST FOTO MILIK FOTOGRAFER
+    // ════════════════════════════════
     public function index()
     {
         $photos = Photo::where('photographer_id', Auth::id())
-            ->with('event')
+            ->with('event:id,name')
             ->latest()
             ->paginate(20);
 
-        return view('photo.index', compact('photos'));
+        return view('photographer.portfolio', compact('photos'));
     }
 
-    // ══════════════════════════════
-    // SHOW FORM UPDATE HARGA
-    // ══════════════════════════════
-    public function showUpdatePrice($id)
-    {
-        $photo = Photo::where('id', $id)
-            ->where('photographer_id', Auth::id())
-            ->firstOrFail();
-
-        return view('photo.update-price', compact('photo'));
-    }
-
-    // ══════════════════════════════
+    // ════════════════════════════════
     // UPDATE HARGA FOTO
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function updatePrice(Request $request, $id)
     {
         $request->validate([
@@ -112,13 +107,13 @@ class PhotoController extends Controller
 
         $photo->update(['price' => $request->price]);
 
-        return redirect()->route('photographer.photos')
-            ->with('success', 'Harga foto berhasil diupdate.');
+        return redirect()->route('photographer.portfolio')
+            ->with('success', 'Harga foto berhasil diperbarui.');
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // PRIVATE: Generate Watermark
-    // ══════════════════════════════
+    // ════════════════════════════════
     private function generateWatermark($file, string $filename): string
     {
         $manager = new \Intervention\Image\ImageManager(
@@ -151,9 +146,9 @@ class PhotoController extends Controller
         return $watermarkPath;
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // PRIVATE: Embed ke FastAPI
-    // ══════════════════════════════
+    // ════════════════════════════════
     private function embedPhoto(Photo $photo): void
     {
         try {
@@ -167,11 +162,11 @@ class PhotoController extends Controller
             if ($response->successful()) {
                 $photo->update(['embed_status' => 'embedded']);
             } else {
-                \Log::error('Embed failed: ' . $response->status() . ' - ' . $response->body());
+                Log::error('Embed failed photo_id=' . $photo->id . ' status=' . $response->status());
                 $photo->update(['embed_status' => 'failed']);
             }
         } catch (\Exception $e) {
-            \Log::error('Embed failed: ' . $e->getMessage());
+            Log::error('Embed exception photo_id=' . $photo->id . ' msg=' . $e->getMessage());
             $photo->update(['embed_status' => 'failed']);
         }
     }
