@@ -3,22 +3,10 @@
 @section('content')
 
 @php
-$events = [
-    ['title'=>'Jakarta Marathon 2026',  'date'=>'15 Jun 2026', 'city'=>'Jakarta',  'photos'=>'2.340', 'img'=>'photo-1552674605-db6ffd4facb5', 'hot'=>true],
-    ['title'=>'Bali Fun Run',           'date'=>'22 Jul 2026', 'city'=>'Bali',     'photos'=>'1.120', 'img'=>'photo-1571008887538-b36bb32f4571', 'hot'=>false],
-    ['title'=>'Bandung Trail Run',      'date'=>'5 Agu 2026',  'city'=>'Bandung',  'photos'=>'890',   'img'=>'photo-1486218119243-13883505764c', 'hot'=>false],
-    ['title'=>'Surabaya Night Run',     'date'=>'19 Agu 2026', 'city'=>'Surabaya', 'photos'=>'1.560', 'img'=>'photo-1461896836934-bd45ba8fcf9b', 'hot'=>true],
-];
 $steps = [
     ['num'=>'01','title'=>'Cari Event-mu','desc'=>'Ketik nama event marathon atau kota yang kamu ikuti. Filter berdasarkan kota atau tanggal.','icon'=>'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
     ['num'=>'02','title'=>'Pilih & Beli Foto','desc'=>'Temukan fotomu lewat nomor BIB atau km marker. Bayar mudah, harga mulai Rp 20.000.','icon'=>'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
     ['num'=>'03','title'=>'Download Selamanya','desc'=>'Foto resolusi tinggi langsung tersimpan di koleksimu. Download kapan saja, tanpa batas.','icon'=>'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'],
-];
-$stats = [
-    ['val'=>'120.000+', 'label'=>'Foto tersedia'],
-    ['val'=>'25+ Kota', 'label'=>'Di seluruh Indonesia'],
-    ['val'=>'15.000+', 'label'=>'Pelari terdaftar'],
-    ['val'=>'4.9/5',   'label'=>'Rating pengguna'],
 ];
 $testimonials = [
     ['name'=>'Andi Wijaya',   'event'=>'Jakarta Marathon 2025', 'avatar'=>'AW', 'color'=>'bg-blue-100 text-blue-700',   'quote'=>'Langsung ketemu foto saya di finish line. Kualitasnya sangat bagus dan harganya sangat terjangkau.'],
@@ -36,7 +24,7 @@ $testimonials = [
             <span class="w-2 h-2 rounded-full bg-blue-500"></span>
             <span class="w-2 h-2 rounded-full bg-green-400"></span>
         </span>
-        <span class="text-xs font-semibold text-gray-600">15.000+ pelari sudah pakai KeJepret</span>
+        <span class="text-xs font-semibold text-gray-600">{{ number_format($totalPhotos) }}+ foto tersedia di KeJepret</span>
     </div>
 
     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-gray-900 mb-6">
@@ -68,8 +56,12 @@ $testimonials = [
                 <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-lg">On Course</span>
                 <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-lg">Finish</span>
             </div>
-            <div class="h-20 rounded-xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400&h=160&q=80&fit=crop" alt="Foto lari" class="w-full h-full object-cover">
+            <div class="h-20 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+                @if($events->first() && $events->first()->cover_image)
+                    <img src="{{ env('AWS_URL') }}/{{ $events->first()->cover_image }}" alt="Cover" class="w-full h-full object-cover">
+                @else
+                    <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                @endif
             </div>
         </div>
 
@@ -81,24 +73,26 @@ $testimonials = [
                 <span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">KEPUASAN</span>
             </div>
             <div class="text-4xl font-black mb-0.5">4.9<span class="text-xl text-blue-300">/5</span></div>
-            <p class="text-blue-200 text-xs mb-5">Rating dari 15.000+ pelari</p>
+            <p class="text-blue-200 text-xs mb-5">Rating dari pengguna setia KeJepret</p>
             <div class="border-t border-white/20 pt-4">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200 mb-1">EVENT TERSEDIA</p>
-                <div class="text-3xl font-black">50+</div>
-                <p class="text-blue-200 text-xs">Event aktif di 25+ kota Indonesia</p>
+                <div class="text-3xl font-black">{{ $totalEvents }}+</div>
+                <p class="text-blue-200 text-xs">Event aktif di seluruh Indonesia</p>
             </div>
         </div>
 
         <div class="bg-gray-900 rounded-2xl p-5 text-left text-white shadow-sm relative overflow-hidden">
+            @if($events->count() > 1 && $events[1]->cover_image)
             <div class="absolute inset-0 opacity-20">
-                <img src="https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=400&h=300&q=60&fit=crop" alt="" class="w-full h-full object-cover">
+                <img src="{{ env('AWS_URL') }}/{{ $events[1]->cover_image }}" alt="" class="w-full h-full object-cover">
             </div>
+            @endif
             <div class="relative z-10">
                 <div class="flex items-center gap-1.5 mb-3">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                     <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Live</span>
                 </div>
-                <div class="text-3xl font-black mb-1">120.000+</div>
+                <div class="text-3xl font-black mb-1">{{ number_format($totalPhotos) }}+</div>
                 <p class="text-gray-300 text-xs mb-2">Foto Tersedia</p>
                 <p class="text-gray-400 text-xs mb-6">Diperbarui kapan saja, selalu ada.</p>
                 <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-white border border-white/30 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
@@ -112,12 +106,22 @@ $testimonials = [
 
     {{-- Stats Row --}}
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 py-8 border-t border-b border-gray-200">
-        @foreach($stats as $s)
         <div class="text-center">
-            <div class="text-xl sm:text-2xl font-black text-gray-900">{{ $s['val'] }}</div>
-            <div class="text-xs text-gray-400 font-semibold mt-1">{{ $s['label'] }}</div>
+            <div class="text-xl sm:text-2xl font-black text-gray-900">{{ number_format($totalPhotos) }}+</div>
+            <div class="text-xs text-gray-400 font-semibold mt-1">Foto tersedia</div>
         </div>
-        @endforeach
+        <div class="text-center">
+            <div class="text-xl sm:text-2xl font-black text-gray-900">{{ $totalEvents }}+ Event</div>
+            <div class="text-xs text-gray-400 font-semibold mt-1">Di seluruh Indonesia</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl sm:text-2xl font-black text-gray-900">15.000+</div>
+            <div class="text-xs text-gray-400 font-semibold mt-1">Pelari terdaftar</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl sm:text-2xl font-black text-gray-900">4.9/5</div>
+            <div class="text-xs text-gray-400 font-semibold mt-1">Rating pengguna</div>
+        </div>
     </div>
 
 </section>
@@ -159,22 +163,32 @@ $testimonials = [
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
+
+        @if($events->isEmpty())
+        <div class="text-center py-16 text-gray-400">
+            <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <p class="font-semibold text-sm">Belum ada event tersedia</p>
+        </div>
+        @else
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             @foreach($events as $event)
             <a href="{{ route('event') }}" class="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:shadow-black/8 hover:-translate-y-1 transition-all duration-300">
-                <div class="aspect-[4/3] overflow-hidden relative">
-                    <img src="https://images.unsplash.com/{{ $event['img'] }}?w=400&h=300&q=80&fit=crop"
-                         alt="{{ $event['title'] }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    @if($event['hot'])
-                    <span class="absolute top-2.5 left-2.5 bg-orange-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full">Populer</span>
+                <div class="aspect-[4/3] overflow-hidden relative bg-gray-100">
+                    @if($event->cover_image)
+                        <img src="{{ env('AWS_URL') }}/{{ $event->cover_image }}"
+                             alt="{{ $event->name }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center">
+                            <svg class="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
                     @endif
                     <span class="absolute top-2.5 right-2.5 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-bold px-2.5 py-1 rounded-full">
                         <svg class="w-3 h-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        {{ $event['city'] }}
+                        {{ Str::limit($event->location, 12) }}
                     </span>
                 </div>
                 <div class="p-4">
@@ -182,19 +196,14 @@ $testimonials = [
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        <span class="text-[11px] font-semibold">{{ $event['date'] }}</span>
+                        <span class="text-[11px] font-semibold">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}</span>
                     </div>
-                    <h3 class="font-black text-gray-900 text-sm leading-tight mb-2">{{ $event['title'] }}</h3>
-                    <div class="flex items-center gap-1.5 text-gray-400">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <span class="text-xs font-semibold">{{ $event['photos'] }} foto</span>
-                    </div>
+                    <h3 class="font-black text-gray-900 text-sm leading-tight">{{ $event->name }}</h3>
                 </div>
             </a>
             @endforeach
         </div>
+        @endif
     </div>
 </section>
 
@@ -228,11 +237,23 @@ $testimonials = [
                 </a>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                @foreach(['photo-1552674605-db6ffd4facb5','photo-1461896836934-bd45ba8fcf9b','photo-1571008887538-b36bb32f4571','photo-1486218119243-13883505764c'] as $img)
-                <div class="rounded-2xl overflow-hidden aspect-square">
-                    <img src="https://images.unsplash.com/{{ $img }}?w=300&h=300&q=80&fit=crop" alt="" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                @forelse($events->take(4) as $ev)
+                <div class="rounded-2xl overflow-hidden aspect-square bg-gray-100">
+                    @if($ev->cover_image)
+                        <img src="{{ env('AWS_URL') }}/{{ $ev->cover_image }}" alt="{{ $ev->name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                    @endif
                 </div>
-                @endforeach
+                @empty
+                @for($i = 0; $i < 4; $i++)
+                <div class="rounded-2xl overflow-hidden aspect-square bg-gray-100 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                @endfor
+                @endforelse
             </div>
         </div>
     </div>
@@ -302,7 +323,7 @@ $testimonials = [
                 </div>
                 <h3 class="font-black text-white mb-2">Jadi Fotografer</h3>
                 <p class="text-white/75 text-sm leading-relaxed mb-5">Bergabunglah sebagai mitra fotografer dan dapatkan penghasilan dari setiap foto yang terjual.</p>
-                <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 bg-white text-blue-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shadow">
+                <a href="{{ route('register.photographer') }}" class="inline-flex items-center gap-1.5 bg-white text-blue-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shadow">
                     Daftar Sekarang
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
