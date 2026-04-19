@@ -12,8 +12,6 @@ use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\DownloadController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AuthController;
-
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index']);
