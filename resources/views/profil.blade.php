@@ -20,31 +20,6 @@
         </div>
     </div>
 
-    {{-- Stats Row --}}
-    <div class="grid grid-cols-3 gap-3 mb-8">
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
-            <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-2">
-                <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            <div class="text-xl font-black text-gray-900">{{ $totalFoto ?? 0 }}</div>
-            <div class="text-[11px] text-gray-400 font-semibold">Foto Dibeli</div>
-        </div>
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
-            <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-2">
-                <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            <div class="text-xl font-black text-gray-900">{{ $totalEvent ?? 0 }}</div>
-            <div class="text-[11px] text-gray-400 font-semibold">Event</div>
-        </div>
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
-            <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-2">
-                <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            </div>
-            <div class="text-xl font-black text-gray-900">{{ $totalOrder ?? 0 }}</div>
-            <div class="text-[11px] text-gray-400 font-semibold">Order</div>
-        </div>
-    </div>
-
     {{-- Riwayat Pembelian --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-4">
         <div class="flex items-center justify-between mb-5">
@@ -81,7 +56,7 @@
         @endif
     </div>
 
-    {{-- Upgrade Fotografer Banner --}}
+    {{-- Banner Upgrade Fotografer --}}
     @if($user->role === 'runner')
     <div class="bg-blue-600 rounded-2xl p-6 mb-4 relative overflow-hidden">
         <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full"></div>
@@ -98,12 +73,12 @@
     </div>
     @endif
 
-    {{-- Settings Menu --}}
+    {{-- Menu --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50 overflow-hidden">
-        <a href="{{ route('order.history') }}" class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group">
+        <a href="{{ route('order.history') }}" class="flex items-center justify-between p-4 hover:bg-gray-50 transition group">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-                    <svg class="w-4 h-4 text-gray-500 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition">
+                    <svg class="w-4 h-4 text-gray-500 group-hover:text-blue-500 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
                 <div>
                     <p class="text-sm font-bold text-gray-900">Riwayat Order</p>
@@ -113,22 +88,9 @@
             <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
 
-        <a href="{{ route('runner.search.history') }}" class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-                    <svg class="w-4 h-4 text-gray-500 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-gray-900">Riwayat Pencarian</p>
-                    <p class="text-xs text-gray-400">Histori pencarian foto AI</p>
-                </div>
-            </div>
-            <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
-
         <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit" class="w-full flex items-center justify-between p-4 hover:bg-red-50 transition-colors group text-left">
+            <button type="submit" class="w-full flex items-center justify-between p-4 hover:bg-red-50 transition group text-left">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center">
                         <svg class="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
