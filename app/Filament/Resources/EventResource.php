@@ -16,8 +16,6 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EventResource extends Resource
@@ -25,7 +23,6 @@ class EventResource extends Resource
     protected static ?string $model = \App\Models\Event::class;
     protected static ?string $navigationIcon  = 'heroicon-o-calendar-days';
     protected static ?string $navigationLabel = 'Events';
-    protected static ?string $navigationGroup = 'Manajemen Konten';
     protected static ?int    $navigationSort  = 2;
 
     public static function form(Form $form): Form

@@ -7,7 +7,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -18,7 +17,6 @@ class PhotographerResource extends Resource
     protected static ?string $model = \App\Models\User::class;
     protected static ?string $navigationIcon  = 'heroicon-o-identification';
     protected static ?string $navigationLabel = 'Verifikasi Fotografer';
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
     protected static ?int    $navigationSort  = 3;
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder

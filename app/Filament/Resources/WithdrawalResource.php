@@ -17,7 +17,6 @@ class WithdrawalResource extends Resource
     protected static ?string $model = \App\Models\Withdrawal::class;
     protected static ?string $navigationIcon  = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Withdrawal';
-    protected static ?string $navigationGroup = 'Keuangan';
     protected static ?int    $navigationSort  = 4;
 
     public static function form(Form $form): Form
@@ -91,7 +90,6 @@ class WithdrawalResource extends Resource
                     ])
                     ->visible(fn ($record) => $record->status === 'pending')
                     ->action(function ($record, array $data) {
-                        // Kembalikan balance fotografer
                         $balance = DB::table('photographer_balances')
                             ->where('photographer_id', $record->photographer_id)
                             ->first();
@@ -105,7 +103,6 @@ class WithdrawalResource extends Resource
                                     'updated_at' => now(),
                                 ]);
 
-                            // Catat transaksi pengembalian
                             DB::table('balance_transactions')->insert([
                                 'photographer_id' => $record->photographer_id,
                                 'order_item_id'   => null,
