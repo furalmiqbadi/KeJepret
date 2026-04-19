@@ -11,19 +11,14 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function kejepret()
+    public function event()
     {
-        return view('kejepret');
+        return view('event');
     }
 
     public function search()
     {
         return view('search');
-    }
-
-    public function koleksi()
-    {
-        return view('koleksi');
     }
 
     public function profil()
