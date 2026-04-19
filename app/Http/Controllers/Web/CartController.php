@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
-    // ══════════════════════════════
+    // ════════════════════════════════
     // INDEX — Tampilkan semua item di cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function index()
     {
         $items = DB::table('cart_items')
@@ -26,16 +26,20 @@ class CartController extends Controller
                 'photos.category',
                 'users.name as photographer'
             )
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->watermark_url = env('AWS_URL') . '/' . $item->watermark_path;
+                return $item;
+            });
 
         $total = $items->sum('price');
 
-        return view('cart.index', compact('items', 'total'));
+        return view('runner.cart', compact('items', 'total'));
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // ADD — Tambah foto ke cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function add(Request $request)
     {
         $request->validate([
@@ -77,9 +81,9 @@ class CartController extends Controller
         return back()->with('success', 'Foto berhasil ditambahkan ke cart.');
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // REMOVE — Hapus item dari cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function remove($id)
     {
         $deleted = DB::table('cart_items')
