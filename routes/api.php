@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/checkout',        [OrderController::class, 'checkout']);
         Route::get('/orders',           [OrderController::class, 'history']);
         Route::get('/orders/{id}',      [OrderController::class, 'detail']);
+        Route::post('/orders/{id}/pay', [OrderController::class, 'manualPay']); // ← BARU
 
         Route::get('/download/{token}', [DownloadController::class, 'download']);
     });

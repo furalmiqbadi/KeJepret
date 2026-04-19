@@ -95,6 +95,95 @@ class OrderController extends Controller
         return response()->json(['success' => true, 'data' => ['order' => $order, 'items' => $items]]);
     }
 
+
+    public function manualPay(Request $request, $id)
+    {
+        $userId = $request->user()->id;
+
+        $order = DB::table('orders')
+            ->where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order tidak ditemukan'], 404);
+        }
+
+        if ($order->status !== 'pending') {
+            return response()->json(['success' => false, 'message' => 'Order sudah diproses sebelumnya'], 400);
+        }
+
+        DB::beginTransaction();
+        try {
+            // 1. Update status order jadi paid
+            DB::table('orders')
+                ->where('id', $id)
+                ->update(['status' => 'paid', 'updated_at' => now()]);
+
+            // 2. Ambil semua order items
+            $items = DB::table('order_items')
+                ->where('order_id', $id)
+                ->get();
+
+            foreach ($items as $item) {
+                $photographerId = $item->photographer_id;
+                $amount = $item->photographer_amount;
+
+                // 3. Cek apakah sudah ada record balance
+                $balance = DB::table('photographer_balances')
+                    ->where('photographer_id', $photographerId)
+                    ->first();
+
+                if ($balance) {
+                    // Update balance
+                    DB::table('photographer_balances')
+                        ->where('photographer_id', $photographerId)
+                        ->update([
+                            'balance'      => $balance->balance + $amount,
+                            'total_earned' => $balance->total_earned + $amount,
+                            'updated_at'   => now(),
+                        ]);
+                } else {
+                    // Insert baru
+                    DB::table('photographer_balances')->insert([
+                        'photographer_id' => $photographerId,
+                        'balance'         => $amount,
+                        'total_earned'    => $amount,
+                        'created_at'      => now(),
+                        'updated_at'      => now(),
+                    ]);
+                }
+
+                // 4. Catat balance transaction
+                DB::table('balance_transactions')->insert([
+                    'photographer_id' => $photographerId,
+                    'order_item_id'   => $item->id,
+                    'amount'          => $amount,
+                    'type'            => 'credit',
+                    'description'     => 'Penjualan foto - Order #' . $order->order_code,
+                    'created_at'      => now(),
+                    'updated_at'      => now(),
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran berhasil dikonfirmasi',
+                'data'    => [
+                    'order_id'   => (int) $id,
+                    'status'     => 'paid',
+                    'total'      => $order->total_amount,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Gagal: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function webhook(Request $request)
     {
         // TODO: Implementasi Tripay webhook
