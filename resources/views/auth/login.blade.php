@@ -128,7 +128,7 @@
                 </p>
                 <p class="text-sm font-medium text-slate-400">
                     Kamu fotografer? 
-                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar di Sini</a>
+                    <a href="/register/photographer" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar di Sini</a>
                 </p>
             </div>
         </div>
