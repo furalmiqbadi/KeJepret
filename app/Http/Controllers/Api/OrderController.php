@@ -60,7 +60,7 @@ class OrderController extends Controller
                 'order_id' => $orderId,
                 'total'    => $total,
                 'status'   => 'pending',
-                'note'     => 'Payment gateway (Tripay) belum diintegrasikan'
+                'note'     => 'Klik tombol bayar untuk konfirmasi pembayaran'
             ]
         ]);
     }
@@ -95,7 +95,6 @@ class OrderController extends Controller
         return response()->json(['success' => true, 'data' => ['order' => $order, 'items' => $items]]);
     }
 
-
     public function manualPay(Request $request, $id)
     {
         $userId = $request->user()->id;
@@ -127,7 +126,7 @@ class OrderController extends Controller
 
             foreach ($items as $item) {
                 $photographerId = $item->photographer_id;
-                $amount = $item->photographer_amount;
+                $amount         = $item->photographer_amount;
 
                 // 3. Cek apakah sudah ada record balance
                 $balance = DB::table('photographer_balances')
@@ -135,21 +134,20 @@ class OrderController extends Controller
                     ->first();
 
                 if ($balance) {
-                    // Update balance
+                    $newBalance = $balance->balance + $amount;
                     DB::table('photographer_balances')
                         ->where('photographer_id', $photographerId)
                         ->update([
-                            'balance'      => $balance->balance + $amount,
+                            'balance'      => $newBalance,
                             'total_earned' => $balance->total_earned + $amount,
                             'updated_at'   => now(),
                         ]);
                 } else {
-                    // Insert baru
+                    $newBalance = $amount;
                     DB::table('photographer_balances')->insert([
                         'photographer_id' => $photographerId,
-                        'balance'         => $amount,
+                        'balance'         => $newBalance,
                         'total_earned'    => $amount,
-                        'created_at'      => now(),
                         'updated_at'      => now(),
                     ]);
                 }
@@ -158,11 +156,11 @@ class OrderController extends Controller
                 DB::table('balance_transactions')->insert([
                     'photographer_id' => $photographerId,
                     'order_item_id'   => $item->id,
-                    'amount'          => $amount,
+                    'withdraw_id'     => null,
                     'type'            => 'credit',
+                    'amount'          => $amount,
+                    'balance_after'   => $newBalance,
                     'description'     => 'Penjualan foto - Order #' . $order->order_code,
-                    'created_at'      => now(),
-                    'updated_at'      => now(),
                 ]);
             }
 
@@ -172,9 +170,9 @@ class OrderController extends Controller
                 'success' => true,
                 'message' => 'Pembayaran berhasil dikonfirmasi',
                 'data'    => [
-                    'order_id'   => (int) $id,
-                    'status'     => 'paid',
-                    'total'      => $order->total_amount,
+                    'order_id' => (int) $id,
+                    'status'   => 'paid',
+                    'total'    => $order->total_amount,
                 ]
             ]);
 
