@@ -47,9 +47,9 @@ class AuthController extends Controller
         Auth::login($user);
 
         return match ($user->role) {
-            'admin'        => redirect()->route('admin.dashboard'),
-            'photographer' => redirect()->route('photographer.dashboard'),
-            'runner'       => redirect()->route('runner.dashboard'),
+            'admin'        => redirect()->route('filament.admin.pages.dashboard'),
+            'photographer' => redirect()->route('photographer.portfolio'),
+            'runner'       => redirect()->route('home'),
             default        => redirect()->route('home'),
         };
     }
@@ -68,10 +68,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'                  => 'required|string|max:100',
-            'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|string|min:8|confirmed',
-            'phone'                 => 'nullable|string|max:20',
+            'name'     => 'required|string|max:100',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'phone'    => 'nullable|string|max:20',
         ]);
 
         $user = User::create([
@@ -84,7 +84,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('runner.dashboard');
+        return redirect()->route('home');
     }
 
     // ═══════════════════════════════
@@ -101,10 +101,10 @@ class AuthController extends Controller
     public function registerPhotographer(Request $request)
     {
         $request->validate([
-            'name'                  => 'required|string|max:100',
-            'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|string|min:8|confirmed',
-            'phone'                 => 'nullable|string|max:20',
+            'name'     => 'required|string|max:100',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'phone'    => 'nullable|string|max:20',
         ]);
 
         $user = User::create([
@@ -115,13 +115,11 @@ class AuthController extends Controller
             'phone'    => $request->phone,
         ]);
 
-        // Buat profil fotografer otomatis — status pending verifikasi admin
         PhotographerProfile::create([
             'user_id'             => $user->id,
             'verification_status' => 'pending',
         ]);
 
-        // Buat saldo fotografer otomatis
         PhotographerBalance::create([
             'photographer_id' => $user->id,
             'balance'         => 0,
@@ -130,7 +128,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('photographer.dashboard');
+        return redirect()->route('photographer.portfolio');
     }
 
     // ═══════════════════════════════
@@ -153,9 +151,9 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return match ($user->role) {
-            'admin'        => redirect()->route('admin.dashboard'),
-            'photographer' => redirect()->route('photographer.dashboard'),
-            'runner'       => redirect()->route('runner.dashboard'),
+            'admin'        => redirect()->route('filament.admin.pages.dashboard'),
+            'photographer' => redirect()->route('photographer.portfolio'),
+            'runner'       => redirect()->route('home'),
             default        => redirect()->route('home'),
         };
     }
