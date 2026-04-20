@@ -131,9 +131,9 @@ class SearchController extends Controller
             // Simpan hasil ke search_results
             foreach ($matched as $item) {
                 SearchResult::create([
-                    'session_id'       => $session->id,
-                    'photo_id'         => $item['photo_id'],
-                    'similarity_score' => $item['score'] ?? 0,
+                    'search_session_id' => $session->id,
+                    'photo_id'          => $item['photo_id'],
+                    'similarity_score'  => $item['score'] ?? 0,
                 ]);
             }
 

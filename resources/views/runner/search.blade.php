@@ -137,6 +137,58 @@
     </div>
 </div>
 
+{{-- LOADING OVERLAY AI SEARCH --}}
+<div id="search-overlay" class="hidden fixed inset-0 bg-white/85 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="bg-white rounded-3xl shadow-2xl shadow-blue-500/10 border border-gray-100 p-10 flex flex-col items-center gap-5 max-w-xs w-full mx-4">
+
+        {{-- Spinner wajah --}}
+        <div class="relative w-20 h-20">
+            <svg class="w-20 h-20 text-blue-100" fill="none" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <svg class="animate-spin w-20 h-20 text-blue-600 absolute inset-0" fill="none" viewBox="0 0 24 24" style="animation-duration:1.2s;">
+                <path fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p class="text-lg font-black text-gray-900">AI Sedang Memindai...</p>
+            <p class="text-sm text-gray-400 mt-1">Mencocokkan wajahmu dengan ribuan foto</p>
+        </div>
+
+        {{-- Step progress --}}
+        <div class="w-full space-y-2">
+            <div id="step-enroll" class="flex items-center gap-3 px-3 py-2 bg-blue-50 rounded-xl transition-all duration-500">
+                <svg class="w-4 h-4 text-blue-600 animate-pulse shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <p class="text-xs font-bold text-blue-700">Mendaftarkan wajah ke AI...</p>
+            </div>
+            <div id="step-search" class="flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl transition-all duration-500">
+                <svg class="w-4 h-4 text-gray-300 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <p class="text-xs font-bold text-gray-400">Mencari foto yang cocok...</p>
+            </div>
+            <div id="step-done" class="flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl transition-all duration-500">
+                <svg class="w-4 h-4 text-gray-300 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <p class="text-xs font-bold text-gray-400">Menyiapkan hasil...</p>
+            </div>
+        </div>
+
+        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+            <div id="search-progress" class="h-full bg-blue-600 rounded-full transition-all duration-700" style="width:0%"></div>
+        </div>
+    </div>
+</div>
+
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
 function searchPage() {
@@ -206,6 +258,37 @@ function searchPage() {
                 if (!this.capturedImage) { e.preventDefault(); return; }
                 this.$refs.selfieBase64.value = this.capturedImage;
             }
+
+            // Tampilkan overlay loading
+            document.getElementById('search-overlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            const progress   = document.getElementById('search-progress');
+            const stepSearch = document.getElementById('step-search');
+            const stepDone   = document.getElementById('step-done');
+
+            // Step 1 aktif langsung
+            progress.style.width = '20%';
+
+            // Step 2 aktif setelah 1.5 detik
+            setTimeout(() => {
+                progress.style.width = '55%';
+                stepSearch.classList.replace('bg-gray-50', 'bg-blue-50');
+                stepSearch.querySelector('svg').classList.replace('text-gray-300', 'text-blue-600');
+                stepSearch.querySelector('svg').classList.add('animate-pulse');
+                stepSearch.querySelector('p').classList.replace('text-gray-400', 'text-blue-700');
+                stepSearch.querySelector('p').textContent = 'Mencari foto yang cocok...';
+            }, 1500);
+
+            // Step 3 aktif setelah 3.5 detik
+            setTimeout(() => {
+                progress.style.width = '85%';
+                stepDone.classList.replace('bg-gray-50', 'bg-blue-50');
+                stepDone.querySelector('svg').classList.replace('text-gray-300', 'text-blue-600');
+                stepDone.querySelector('svg').classList.add('animate-pulse');
+                stepDone.querySelector('p').classList.replace('text-gray-400', 'text-blue-700');
+                stepDone.querySelector('p').textContent = 'Menyiapkan hasil...';
+            }, 3500);
         },
 
         destroy() {

@@ -35,7 +35,7 @@
                 <img src="{{ $photo['watermark_url'] }}" alt="Foto"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] font-black px-2 py-1 rounded-full">
-                    {{ round($photo['similarity_score'] * 100) }}%
+                    {{ round($photo['similarity_score']) }}%
                 </div>
             </div>
 
