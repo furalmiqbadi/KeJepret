@@ -45,11 +45,19 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        // FIX 4: Photographer cek status verified/pending sebelum redirect
+        if ($user->role === 'photographer') {
+            $profile = $user->photographerProfile;
+            if (!$profile || $profile->verification_status !== 'verified') {
+                return redirect()->route('photographer.waiting');
+            }
+            return redirect()->route('photographer.portfolio');
+        }
+
         return match ($user->role) {
-            'admin'        => redirect()->route('filament.admin.pages.dashboard'),
-            'photographer' => redirect()->route('photographer.portfolio'),
-            'runner'       => redirect()->route('home'),
-            default        => redirect()->route('home'),
+            'admin'  => redirect()->route('filament.admin.pages.dashboard'),
+            'runner' => redirect()->route('home'),
+            default  => redirect()->route('home'),
         };
     }
 
@@ -125,7 +133,8 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('photographer.portfolio');
+        // FIX 4: Setelah register photographer status selalu pending, arahkan ke waiting
+        return redirect()->route('photographer.waiting');
     }
 
     public function logout(Request $request)
@@ -141,11 +150,19 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
+        // FIX 4: dashboard juga cek status photographer
+        if ($user->role === 'photographer') {
+            $profile = $user->photographerProfile;
+            if (!$profile || $profile->verification_status !== 'verified') {
+                return redirect()->route('photographer.waiting');
+            }
+            return redirect()->route('photographer.portfolio');
+        }
+
         return match ($user->role) {
-            'admin'        => redirect()->route('filament.admin.pages.dashboard'),
-            'photographer' => redirect()->route('photographer.portfolio'),
-            'runner'       => redirect()->route('home'),
-            default        => redirect()->route('home'),
+            'admin'  => redirect()->route('filament.admin.pages.dashboard'),
+            'runner' => redirect()->route('home'),
+            default  => redirect()->route('home'),
         };
     }
 }

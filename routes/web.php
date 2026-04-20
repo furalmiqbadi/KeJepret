@@ -16,7 +16,8 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::get('/home',          [HomeController::class, 'index'])->name('home');
+// FIX 3: Guard /home dan /profil — redirect photographer ke halaman mereka
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/event',         [HomeController::class, 'event'])->name('event');
 Route::get('/event/{id}',    [HomeController::class, 'eventDetail'])->name('event.detail');
 Route::get('/search',        [SearchController::class, 'showSearch'])->name('search');
@@ -54,14 +55,26 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{token}',[DownloadController::class, 'download'])->name('download');
     });
 
+    // FIX 1: Tambah route photographer.waiting
+    // FIX 2: Tambah middleware photographer.verified di group photographer
     Route::middleware(['role:photographer', 'banned'])->prefix('photographer')->group(function () {
-        Route::get('/portfolio',              [PhotoController::class, 'index'])->name('photographer.portfolio');
-        Route::get('/upload',                 [PhotoController::class, 'showUpload'])->name('photographer.upload');
-        Route::post('/upload',                [PhotoController::class, 'upload'])->name('photographer.upload.post');
-        Route::put('/photos/{id}/price',      [PhotoController::class, 'updatePrice'])->name('photographer.photos.price.post');
-        Route::get('/profil',                 [BalanceController::class, 'index'])->name('photographer.profil');
-        Route::get('/sales',                  [BalanceController::class, 'sales'])->name('balance.sales');
-        Route::post('/withdraw',              [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
+
+        // Route waiting — TANPA middleware photographer.verified
+        // agar photographer pending bisa akses halaman ini
+        Route::get('/waiting', function () {
+            return view('photographer.waiting');
+        })->name('photographer.waiting');
+
+        // Semua route di bawah ini butuh verified
+        Route::middleware('photographer.verified')->group(function () {
+            Route::get('/portfolio',              [PhotoController::class, 'index'])->name('photographer.portfolio');
+            Route::get('/upload',                 [PhotoController::class, 'showUpload'])->name('photographer.upload');
+            Route::post('/upload',                [PhotoController::class, 'upload'])->name('photographer.upload.post');
+            Route::put('/photos/{id}/price',      [PhotoController::class, 'updatePrice'])->name('photographer.photos.price.post');
+            Route::get('/profil',                 [BalanceController::class, 'index'])->name('photographer.profil');
+            Route::get('/sales',                  [BalanceController::class, 'sales'])->name('balance.sales');
+            Route::post('/withdraw',              [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
+        });
     });
 
     Route::middleware('role:admin')->prefix('admin')->group(function () {

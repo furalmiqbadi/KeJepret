@@ -31,10 +31,13 @@ class BalanceController extends Controller
     // ════════════════════════════════
     public function sales()
     {
+        $photographerId = Auth::id();
+
+        // Riwayat semua penjualan
         $sales = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('photos', 'order_items.photo_id', '=', 'photos.id')
-            ->where('photos.photographer_id', Auth::id())
+            ->where('photos.photographer_id', $photographerId)
             ->where('orders.status', 'paid')
             ->select(
                 'order_items.id',
@@ -48,9 +51,47 @@ class BalanceController extends Controller
             ->orderByDesc('orders.created_at')
             ->get();
 
-        $totalRevenue = $sales->sum('photographer_amount');
+        // Statistik foto
+        $totalFotos     = DB::table('photos')->where('photographer_id', $photographerId)->count();
+        $fotoTersedia   = DB::table('photos')->where('photographer_id', $photographerId)->where('is_active', true)->count();
+        $fotoTerjual    = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->distinct('order_items.photo_id')
+            ->count('order_items.photo_id');
 
-        return view('photographer.sales', compact('sales', 'totalRevenue'));
+        // Statistik pendapatan
+        $totalRevenue   = $sales->sum('photographer_amount');
+
+        $pendapatanBulanIni = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->whereMonth('orders.created_at', now()->month)
+            ->whereYear('orders.created_at', now()->year)
+            ->sum('order_items.photographer_amount');
+
+        $penjualanBulanIni = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->whereMonth('orders.created_at', now()->month)
+            ->whereYear('orders.created_at', now()->year)
+            ->count();
+
+        return view('photographer.sales', compact(
+            'sales',
+            'totalRevenue',
+            'totalFotos',
+            'fotoTersedia',
+            'fotoTerjual',
+            'pendapatanBulanIni',
+            'penjualanBulanIni'
+        ));
     }
 
     // ════════════════════════════════

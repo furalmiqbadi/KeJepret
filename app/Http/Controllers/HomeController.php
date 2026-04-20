@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,15 @@ class HomeController extends Controller
     // ═══════════════════════════════
     public function index()
     {
+        // FIX 5: Guard photographer — redirect ke halaman mereka
+        if (Auth::check() && Auth::user()->role === 'photographer') {
+            $profile = Auth::user()->photographerProfile;
+            if ($profile && $profile->verification_status === 'verified') {
+                return redirect()->route('photographer.portfolio');
+            }
+            return redirect()->route('photographer.waiting');
+        }
+
         $events = Event::where('is_active', true)
             ->withCount('photos')
             ->orderBy('event_date', 'desc')
@@ -88,6 +98,11 @@ class HomeController extends Controller
     // ═══════════════════════════════
     public function profil()
     {
+        // FIX 5: Guard photographer — redirect ke profil mereka
+        if (Auth::check() && Auth::user()->role === 'photographer') {
+            return redirect()->route('photographer.profil');
+        }
+
         return view('profil');
     }
 }

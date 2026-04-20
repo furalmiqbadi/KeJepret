@@ -1,7 +1,11 @@
 <div class="hidden md:flex fixed top-8 left-0 right-0 z-[100] items-center justify-between px-16 pointer-events-none">
     <!-- Pill 1: Logo (Left) -->
     <div class="glass h-14 rounded-2xl px-6 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
-        <a href="{{ route('home') }}" class="flex items-center gap-3">
+        @auth
+            <a href="{{ Auth::user()->role === 'photographer' ? route('photographer.portfolio') : route('home') }}" class="flex items-center gap-3">
+        @else
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+        @endauth
             <div class="w-10 h-10 overflow-hidden flex items-center justify-center">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
             </div>
@@ -12,14 +16,36 @@
     <!-- Pill 2: Navigation Links (Center) -->
     <div class="glass h-14 rounded-2xl px-10 flex items-center shadow-2xl shadow-blue-500/10 border border-white/40 pointer-events-auto">
         <div class="flex items-center gap-10">
-            @php
-                $navLinks = [
-                    ['route' => 'home',   'label' => 'Beranda'],
-                    ['route' => 'event',  'label' => 'Event'],
-                    ['route' => 'search', 'label' => 'Search Photo'],
-                    ['route' => 'profil', 'label' => 'Profil'],
-                ];
-            @endphp
+
+            @auth
+                @if(Auth::user()->role === 'photographer')
+                    @php
+                        $navLinks = [
+                            ['route' => 'photographer.portfolio', 'label' => 'Portfolio'],
+                            ['route' => 'photographer.upload',    'label' => 'Upload Foto'],
+                            ['route' => 'balance.sales',          'label' => 'Penjualan'],
+                            ['route' => 'photographer.profil',    'label' => 'Profil'],
+                        ];
+                    @endphp
+                @else
+                    @php
+                        $navLinks = [
+                            ['route' => 'home',   'label' => 'Beranda'],
+                            ['route' => 'event',  'label' => 'Event'],
+                            ['route' => 'search', 'label' => 'Search Photo'],
+                            ['route' => 'profil', 'label' => 'Profil'],
+                        ];
+                    @endphp
+                @endif
+            @else
+                @php
+                    $navLinks = [
+                        ['route' => 'home',   'label' => 'Beranda'],
+                        ['route' => 'event',  'label' => 'Event'],
+                        ['route' => 'search', 'label' => 'Search Photo'],
+                    ];
+                @endphp
+            @endauth
 
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}"
@@ -32,13 +58,19 @@
                     @endif
                 </a>
             @endforeach
+
         </div>
     </div>
 
     <!-- Pill 3: Profile Avatar (Right) -->
     <div class="pointer-events-auto">
         @auth
-            <a href="{{ route('profil') }}" class="glass w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/10 border border-white/40 hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
+            @php
+                $profilRoute = Auth::user()->role === 'photographer'
+                    ? route('photographer.profil')
+                    : route('profil');
+            @endphp
+            <a href="{{ $profilRoute }}" class="glass w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/10 border border-white/40 hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
                 <div class="w-full h-full rounded-xl bg-blue-600 flex items-center justify-center text-white text-lg font-black italic shadow-inner overflow-hidden border border-white/20">
                     @if(Auth::user()->profile_face_url)
                         <img src="{{ Auth::user()->profile_face_url }}" class="w-full h-full object-cover">
