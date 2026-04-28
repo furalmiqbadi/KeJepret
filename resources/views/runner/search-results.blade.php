@@ -43,8 +43,16 @@
 
             {{-- Foto Watermark --}}
             <div class="relative aspect-square overflow-hidden">
-                <img src="{{ $photo['watermark_url'] }}" alt="Foto"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <button
+                    type="button"
+                    class="preview-trigger block w-full h-full"
+                    data-preview-url="{{ $photo['watermark_url'] }}"
+                    data-preview-alt="Preview foto event {{ $photo['event_name'] }}"
+                    aria-label="Lihat preview foto"
+                >
+                    <img src="{{ $photo['watermark_url'] }}" alt="Foto"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </button>
                 <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] font-black px-2 py-1 rounded-full">
                     {{ round($photo['similarity_score']) }}%
                 </div>
@@ -85,6 +93,24 @@
     @endif
 
 </div>
+
+<div id="photo-preview-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/80" data-preview-close></div>
+    <div class="relative z-10 h-full w-full flex items-center justify-center p-4">
+        <div class="relative max-w-5xl w-full">
+            <button
+                type="button"
+                id="photo-preview-close"
+                class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 rounded-xl px-3 py-2 text-sm font-bold"
+                aria-label="Tutup preview"
+            >
+                Tutup
+            </button>
+            <img id="photo-preview-image" src="" alt="Preview foto" class="w-full max-h-[85vh] object-contain rounded-2xl bg-black/40">
+        </div>
+    </div>
+</div>
+
 <script>
 document.querySelectorAll('.add-to-cart-form').forEach((form) => {
     form.addEventListener('submit', async (event) => {
@@ -138,5 +164,36 @@ function showCartFlash(flash, message, success) {
     flash.classList.add(success ? 'text-green-700' : 'text-red-600');
     flash.querySelector('p').textContent = message;
 }
+
+const previewModal = document.getElementById('photo-preview-modal');
+const previewImage = document.getElementById('photo-preview-image');
+const previewClose = document.getElementById('photo-preview-close');
+
+document.querySelectorAll('.preview-trigger').forEach((button) => {
+    button.addEventListener('click', () => {
+        previewImage.src = button.dataset.previewUrl;
+        previewImage.alt = button.dataset.previewAlt || 'Preview foto';
+        previewModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    });
+});
+
+function closePreviewModal() {
+    previewModal.classList.add('hidden');
+    previewImage.src = '';
+    document.body.classList.remove('overflow-hidden');
+}
+
+previewClose.addEventListener('click', closePreviewModal);
+
+previewModal.querySelectorAll('[data-preview-close]').forEach((el) => {
+    el.addEventListener('click', closePreviewModal);
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !previewModal.classList.contains('hidden')) {
+        closePreviewModal();
+    }
+});
 </script>
 @endsection

@@ -119,13 +119,13 @@ class PhotoController extends Controller
         $watermarkFile = public_path('assets/watermark.png');
 
         if (file_exists($watermarkFile)) {
-            $watermark = $manager->decode(file_get_contents($watermarkFile))->scale(width: 200);
+            $watermark = $manager->decode(file_get_contents($watermarkFile))->scale(width: 300);
             $imgWidth  = $image->width();
             $imgHeight = $image->height();
 
-            for ($x = 0; $x < $imgWidth; $x += 220) {
-                for ($y = 0; $y < $imgHeight; $y += 220) {
-                    $image->insert($watermark, 'top-left', $x, $y);
+            for ($x = 0; $x < $imgWidth; $x += 280) {
+                for ($y = 0; $y < $imgHeight; $y += 280) {
+                    $image->insert($watermark, $x, $y);
                 }
             }
         }
