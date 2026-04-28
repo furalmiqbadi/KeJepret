@@ -9,11 +9,54 @@ use App\Models\SearchSession;
 use App\Models\SearchResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class SearchController extends Controller
 {
+    private function buildResultPhotos(SearchSession $session)
+    {
+        $userId = Auth::id();
+
+        $results = SearchResult::where('search_session_id', $session->id)->get();
+        $matchedIds = $results->pluck('photo_id')->toArray();
+        $scoreMap = $results->keyBy('photo_id');
+
+        $cartPhotoIds = DB::table('cart_items')
+            ->where('user_id', $userId)
+            ->whereIn('photo_id', $matchedIds)
+            ->pluck('photo_id')
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+
+        $cartCount = DB::table('cart_items')
+            ->where('user_id', $userId)
+            ->count();
+
+        $photos = Photo::whereIn('id', $matchedIds)
+            ->where('is_active', true)
+            ->with(['photographer:id,name', 'event:id,name'])
+            ->get()
+            ->map(function ($photo) use ($scoreMap, $cartPhotoIds) {
+                return [
+                    'photo_id'         => $photo->id,
+                    'watermark_url'    => env('AWS_URL') . '/' . $photo->watermark_path,
+                    'price'            => $photo->price,
+                    'category'         => $photo->category,
+                    'photographer'     => $photo->photographer->name ?? '-',
+                    'event_name'       => $photo->event->name ?? '-',
+                    'similarity_score' => $scoreMap[$photo->id]->similarity_score ?? 0,
+                    'event_id'         => $photo->event_id,
+                    'in_cart'          => in_array((int) $photo->id, $cartPhotoIds, true),
+                ];
+            })
+            ->sortByDesc('similarity_score')
+            ->values();
+
+        return compact('photos', 'cartCount');
+    }
+
     // ══════════════════════════════════════════
     // SHOW FORM SEARCH
     // ══════════════════════════════════════════
@@ -142,29 +185,9 @@ class SearchController extends Controller
                 'result_count'  => $matched->count(),
             ]);
 
-            $matchedIds = $matched->pluck('photo_id')->toArray();
-            $scoreMap   = $matched->keyBy('photo_id');
+            ['photos' => $photos, 'cartCount' => $cartCount] = $this->buildResultPhotos($session);
 
-            $photos = Photo::whereIn('id', $matchedIds)
-                ->where('is_active', true)
-                ->with(['photographer:id,name', 'event:id,name'])
-                ->get()
-                ->map(function ($photo) use ($scoreMap) {
-                    return [
-                        'photo_id'         => $photo->id,
-                        'watermark_url'    => env('AWS_URL') . '/' . $photo->watermark_path,
-                        'price'            => $photo->price,
-                        'category'         => $photo->category,
-                        'photographer'     => $photo->photographer->name ?? '-',
-                        'event_name'       => $photo->event->name ?? '-',
-                        'similarity_score' => $scoreMap[$photo->id]['score'] ?? 0,
-                        'event_id'         => $photo->event_id,
-                    ];
-                })
-                ->sortByDesc('similarity_score')
-                ->values();
-
-            return view('runner.search-results', compact('photos', 'session'));
+            return view('runner.search-results', compact('photos', 'session', 'cartCount'));
 
         } catch (\Exception $e) {
             $session->update(['search_status' => 'failed']);
@@ -178,6 +201,18 @@ class SearchController extends Controller
     public function showEnroll()
     {
         return redirect()->route('runner.search');
+    }
+
+    public function results($id)
+    {
+        $session = SearchSession::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->where('search_status', 'completed')
+            ->firstOrFail();
+
+        ['photos' => $photos, 'cartCount' => $cartCount] = $this->buildResultPhotos($session);
+
+        return view('runner.search-results', compact('photos', 'session', 'cartCount'));
     }
 
     // ══════════════════════════════════════════

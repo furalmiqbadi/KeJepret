@@ -17,51 +17,66 @@ class OrderController extends Controller
     {
         $userId = Auth::id();
 
-        $cartItems = DB::table('cart_items')
-            ->join('photos', 'cart_items.photo_id', '=', 'photos.id')
-            ->where('cart_items.user_id', $userId)
-            ->select(
-                'cart_items.id as cart_id',
-                'photos.id as photo_id',
-                'photos.price',
-                'photos.photographer_id'
-            )
-            ->get();
+        try {
+            $orderId = DB::transaction(function () use ($userId) {
+                $cartItems = DB::table('cart_items')
+                    ->join('photos', 'cart_items.photo_id', '=', 'photos.id')
+                    ->where('cart_items.user_id', $userId)
+                    ->where('photos.is_active', true)
+                    ->select(
+                        'cart_items.id as cart_id',
+                        'photos.id as photo_id',
+                        'photos.price',
+                        'photos.photographer_id'
+                    )
+                    ->lockForUpdate()
+                    ->get();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Cart kamu kosong.');
+                if ($cartItems->isEmpty()) {
+                    return null;
+                }
+
+                $total              = $cartItems->sum('price');
+                $platformFee        = $total * 0.15;
+                $photographerAmount = $total - $platformFee;
+
+                $orderId = DB::table('orders')->insertGetId([
+                    'user_id'             => $userId,
+                    'order_code'          => 'ORD-' . strtoupper(uniqid()),
+                    'total_amount'        => $total,
+                    'platform_fee'        => $platformFee,
+                    'photographer_amount' => $photographerAmount,
+                    'status'              => 'pending',
+                    'expired_at'          => now()->addHours(24),
+                    'created_at'          => now(),
+                    'updated_at'          => now(),
+                ]);
+
+                foreach ($cartItems as $item) {
+                    DB::table('order_items')->insert([
+                        'order_id'            => $orderId,
+                        'photo_id'            => $item->photo_id,
+                        'photographer_id'     => $item->photographer_id,
+                        'price'               => $item->price,
+                        'photographer_amount' => $item->price * 0.85,
+                        'download_token'      => Str::uuid(),
+                        'created_at'          => now(),
+                    ]);
+                }
+
+                DB::table('cart_items')->where('user_id', $userId)->delete();
+
+                return $orderId;
+            });
+        } catch (\Exception $e) {
+            return redirect()->route('cart.index')
+                ->with('error', 'Gagal membuat order. Coba lagi.');
         }
 
-        $total              = $cartItems->sum('price');
-        $platformFee        = $total * 0.15;
-        $photographerAmount = $total - $platformFee;
-
-        $orderId = DB::table('orders')->insertGetId([
-            'user_id'             => $userId,
-            'order_code'          => 'ORD-' . strtoupper(uniqid()),
-            'total_amount'        => $total,
-            'platform_fee'        => $platformFee,
-            'photographer_amount' => $photographerAmount,
-            'status'              => 'pending',
-            'expired_at'          => now()->addHours(24),
-            'created_at'          => now(),
-            'updated_at'          => now(),
-        ]);
-
-        foreach ($cartItems as $item) {
-            DB::table('order_items')->insert([
-                'order_id'            => $orderId,
-                'photo_id'            => $item->photo_id,
-                'photographer_id'     => $item->photographer_id,
-                'price'               => $item->price,
-                'photographer_amount' => $item->price * 0.85,
-                'download_token'      => Str::uuid(),
-                'created_at'          => now(),
-            ]);
+        if (!$orderId) {
+            return redirect()->route('cart.index')
+                ->with('error', 'Cart kamu kosong atau foto sudah tidak tersedia.');
         }
-
-        // Kosongkan cart setelah order dibuat
-        DB::table('cart_items')->where('user_id', $userId)->delete();
 
         return redirect()->route('order.detail', $orderId)
             ->with('success', 'Order berhasil dibuat. Silakan lakukan pembayaran.');
@@ -132,69 +147,82 @@ class OrderController extends Controller
                 ->with('error', 'Order sudah diproses sebelumnya.');
         }
 
-        DB::beginTransaction();
         try {
-            // 1. Update status order -> paid
-            DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => 'paid', 'updated_at' => now()]);
-
-            // 2. Ambil semua order_items
-            $items = DB::table('order_items')
-                ->where('order_id', $id)
-                ->get();
-
-            foreach ($items as $item) {
-                $photographerId = $item->photographer_id;
-                $amount         = $item->photographer_amount;
-
-                // 3. Update/insert photographer_balances
-                $balance = DB::table('photographer_balances')
-                    ->where('photographer_id', $photographerId)
+            DB::transaction(function () use ($id, $userId) {
+                $order = DB::table('orders')
+                    ->where('id', $id)
+                    ->where('user_id', $userId)
+                    ->lockForUpdate()
                     ->first();
 
-                if ($balance) {
-                    $newBalance = $balance->balance + $amount;
-                    DB::table('photographer_balances')
-                        ->where('photographer_id', $photographerId)
-                        ->update([
-                            'balance'      => $newBalance,
-                            'total_earned' => $balance->total_earned + $amount,
-                            'updated_at'   => now(),
-                        ]);
-                } else {
-                    $newBalance = $amount;
-                    DB::table('photographer_balances')->insert([
-                        'photographer_id' => $photographerId,
-                        'balance'         => $newBalance,
-                        'total_earned'    => $amount,
-                        'created_at'      => now(),
-                        'updated_at'      => now(),
-                    ]);
+                if (!$order) {
+                    abort(404, 'Order tidak ditemukan.');
                 }
 
-                // 4. Catat di balance_transactions
-                DB::table('balance_transactions')->insert([
-                    'photographer_id' => $photographerId,
-                    'order_item_id'   => $item->id,
-                    'withdraw_id'     => null,
-                    'type'            => 'credit',
-                    'amount'          => $amount,
-                    'balance_after'   => $newBalance,
-                    'description'     => 'Penjualan foto - Order #' . $order->order_code,
-                    'created_at'      => now(),
-                ]);
-            }
+                if ($order->status !== 'pending') {
+                    throw new \RuntimeException('Order sudah diproses sebelumnya.');
+                }
 
-            DB::commit();
+                DB::table('orders')
+                    ->where('id', $id)
+                    ->update([
+                        'status'     => 'paid',
+                        'paid_at'    => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                $items = DB::table('order_items')
+                    ->where('order_id', $id)
+                    ->get();
+
+                foreach ($items as $item) {
+                    $photographerId = $item->photographer_id;
+                    $amount         = $item->photographer_amount;
+
+                    $balance = DB::table('photographer_balances')
+                        ->where('photographer_id', $photographerId)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($balance) {
+                        $newBalance = $balance->balance + $amount;
+                        DB::table('photographer_balances')
+                            ->where('photographer_id', $photographerId)
+                            ->update([
+                                'balance'      => $newBalance,
+                                'total_earned' => $balance->total_earned + $amount,
+                                'updated_at'   => now(),
+                            ]);
+                    } else {
+                        $newBalance = $amount;
+                        DB::table('photographer_balances')->insert([
+                            'photographer_id' => $photographerId,
+                            'balance'         => $newBalance,
+                            'total_earned'    => $amount,
+                            'created_at'      => now(),
+                            'updated_at'      => now(),
+                        ]);
+                    }
+
+                    DB::table('balance_transactions')->insert([
+                        'photographer_id' => $photographerId,
+                        'order_item_id'   => $item->id,
+                        'withdraw_id'     => null,
+                        'type'            => 'credit',
+                        'amount'          => $amount,
+                        'balance_after'   => $newBalance,
+                        'description'     => 'Penjualan foto - Order #' . $order->order_code,
+                        'created_at'      => now(),
+                    ]);
+                }
+            });
 
             return redirect()->route('order.detail', $id)
                 ->with('success', 'Pembayaran berhasil dikonfirmasi!');
 
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->route('order.detail', $id)
-                ->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
+                ->with('error', 'Gagal memproses pembayaran. ' . $e->getMessage());
         }
     }
 }

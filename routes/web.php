@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:runner')->prefix('runner')->group(function () {
         Route::get('/search',          [SearchController::class, 'showSearch'])->name('runner.search');
         Route::post('/search',         [SearchController::class, 'search'])->name('runner.search.post');
+        Route::get('/search/results/{id}', [SearchController::class, 'results'])->name('runner.search.results');
         Route::get('/enroll',          [SearchController::class, 'showEnroll'])->name('runner.enroll');
         Route::post('/enroll',         [SearchController::class, 'enroll'])->name('runner.enroll.post');
         Route::get('/search/history',  [SearchController::class, 'history'])->name('runner.search.history');
