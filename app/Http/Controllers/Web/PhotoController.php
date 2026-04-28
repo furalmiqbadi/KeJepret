@@ -49,50 +49,60 @@ class PhotoController extends Controller
 
         $photographer = Auth::user();
         $results = [];
+        $failedFiles = [];
 
         foreach ($request->file('photos') as $file) {
-            // 1. Simpan foto ASLI ke R2
-            $filename = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
-            $r2Path = 'photos/original/'.$filename;
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'private');
-            $r2Url = env('AWS_URL').'/'.$r2Path;
-
-            // 2. Generate WATERMARK
             try {
+                // 1. Simpan foto ASLI ke R2
+                $filename = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+                $r2Path = 'photos/original/'.$filename;
+                Storage::disk('s3')->put($r2Path, file_get_contents($file), 'private');
+                $r2Url = env('AWS_URL').'/'.$r2Path;
+
+                // 2. Generate WATERMARK
                 $watermarkPath = $this->generateWatermark($file, $filename);
-            } catch (\RuntimeException $e) {
-                Log::error('Watermark generation failed filename='.$filename.' msg='.$e->getMessage());
 
-                return back()->withInput()
-                    ->with('error', 'Gagal membuat watermark foto. Pastikan file watermark tersedia dan valid.');
+                // 3. Simpan ke DB
+                $photo = Photo::create([
+                    'photographer_id' => $photographer->id,
+                    'event_id' => $request->event_id ?? null,
+                    'filename' => $filename,
+                    'r2_path' => $r2Path,
+                    'r2_url' => $r2Url,
+                    'watermark_path' => $watermarkPath,
+                    'price' => $request->price,
+                    'embed_status' => 'pending',
+                    'category' => $request->category ?? null,
+                    'is_active' => true,
+                ]);
+
+                // 4. Kirim ke FastAPI untuk embedding
+                $this->embedPhoto($photo);
+
+                $results[] = [
+                    'photo_id' => $photo->id,
+                    'filename' => $filename,
+                    'embed_status' => $photo->fresh()->embed_status,
+                ];
+            } catch (\Throwable $e) {
+                Log::error('Upload photo failed original='.$file->getClientOriginalName().' msg='.$e->getMessage());
+                $failedFiles[] = $file->getClientOriginalName();
             }
+        }
 
-            // 3. Simpan ke DB
-            $photo = Photo::create([
-                'photographer_id' => $photographer->id,
-                'event_id' => $request->event_id ?? null,
-                'filename' => $filename,
-                'r2_path' => $r2Path,
-                'r2_url' => $r2Url,
-                'watermark_path' => $watermarkPath,
-                'price' => $request->price,
-                'embed_status' => 'pending',
-                'category' => $request->category ?? null,
-                'is_active' => true,
-            ]);
+        if (count($results) === 0) {
+            return back()->withInput()
+                ->with('error', 'Semua upload gagal. Cek file dan coba lagi.');
+        }
 
-            // 4. Kirim ke FastAPI untuk embedding
-            $this->embedPhoto($photo);
-
-            $results[] = [
-                'photo_id' => $photo->id,
-                'filename' => $filename,
-                'embed_status' => $photo->fresh()->embed_status,
-            ];
+        $successMessage = count($results).' foto berhasil diupload.';
+        if (! empty($failedFiles)) {
+            $successMessage .= ' '.count($failedFiles).' foto gagal diproses.';
         }
 
         return redirect()->route('photographer.portfolio')
-            ->with('success', count($results).' foto berhasil diupload.');
+            ->with('success', $successMessage)
+            ->with('error', ! empty($failedFiles) ? 'File gagal: '.implode(', ', $failedFiles) : null);
     }
 
     // ════════════════════════════════

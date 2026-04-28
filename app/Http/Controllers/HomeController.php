@@ -107,9 +107,7 @@ class HomeController extends Controller
         // FIX 6: Ambil 3 order terakhir untuk riwayat pembelian
         $recentOrders = DB::table('orders')
             ->where('user_id', Auth::id())
-            ->where('status', 'paid')
             ->orderByDesc('created_at')
-            ->limit(3)
             ->get();
 
         return view('profil', compact('recentOrders'));

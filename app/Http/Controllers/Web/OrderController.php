@@ -150,6 +150,19 @@ class OrderController extends Controller
                 ->with('error', 'Order sudah diproses sebelumnya.');
         }
 
+        if ($order->expired_at && now()->greaterThan($order->expired_at)) {
+            DB::table('orders')
+                ->where('id', $id)
+                ->where('status', 'pending')
+                ->update([
+                    'status' => 'expired',
+                    'updated_at' => now(),
+                ]);
+
+            return redirect()->route('order.detail', $id)
+                ->with('error', 'Order sudah expired dan tidak bisa dibayar.');
+        }
+
         try {
             DB::transaction(function () use ($id, $userId) {
                 $order = DB::table('orders')
@@ -164,6 +177,17 @@ class OrderController extends Controller
 
                 if ($order->status !== 'pending') {
                     throw new \RuntimeException('Order sudah diproses sebelumnya.');
+                }
+
+                if ($order->expired_at && now()->greaterThan($order->expired_at)) {
+                    DB::table('orders')
+                        ->where('id', $id)
+                        ->update([
+                            'status' => 'expired',
+                            'updated_at' => now(),
+                        ]);
+
+                    throw new \RuntimeException('Order sudah expired dan tidak bisa dibayar.');
                 }
 
                 DB::table('orders')

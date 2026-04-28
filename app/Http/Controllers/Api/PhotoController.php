@@ -7,6 +7,7 @@ use App\Models\Photo;
 use App\Models\PhotoEmbedding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
@@ -26,45 +27,65 @@ class PhotoController extends Controller
 
         $photographer = $request->user();
         $results      = [];
+        $failedCount  = 0;
 
         foreach ($request->file('photos') as $file) {
-            // 1. Simpan foto ASLI ke R2
-            $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $r2Path   = 'photos/original/' . $filename;
-            Storage::disk('s3')->put($r2Path, file_get_contents($file), 'private');
-            $r2Url    = env('AWS_URL') . '/' . $r2Path;
+            try {
+                // 1. Simpan foto ASLI ke R2
+                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $r2Path   = 'photos/original/' . $filename;
+                Storage::disk('s3')->put($r2Path, file_get_contents($file), 'private');
+                $r2Url    = env('AWS_URL') . '/' . $r2Path;
 
-            // 2. Generate WATERMARK
-            $watermarkPath = $this->generateWatermark($file, $filename);
+                // 2. Generate WATERMARK
+                $watermarkPath = $this->generateWatermark($file, $filename);
 
-            // 3. Simpan ke DB
-            $photo = Photo::create([
-                'photographer_id' => $photographer->id,
-                'event_id'        => $request->event_id,
-                'filename'        => $filename,
-                'r2_path'         => $r2Path,
-                'r2_url'          => $r2Url,
-                'watermark_path'  => $watermarkPath,
-                'price'           => $request->price,
-                'embed_status'    => 'pending',
-                'category'        => $request->category,
-            ]);
+                // 3. Simpan ke DB
+                $photo = Photo::create([
+                    'photographer_id' => $photographer->id,
+                    'event_id'        => $request->event_id,
+                    'filename'        => $filename,
+                    'r2_path'         => $r2Path,
+                    'r2_url'          => $r2Url,
+                    'watermark_path'  => $watermarkPath,
+                    'price'           => $request->price,
+                    'embed_status'    => 'pending',
+                    'category'        => $request->category,
+                ]);
 
-            // 4. Kirim ke FastAPI
-            $this->embedPhoto($photo);
+                // 4. Kirim ke FastAPI
+                $this->embedPhoto($photo);
 
-            $results[] = [
-                'photo_id'     => $photo->id,
-                'filename'     => $filename,
-                'embed_status' => $photo->fresh()->embed_status,
-            ];
+                $results[] = [
+                    'status'       => 'success',
+                    'photo_id'     => $photo->id,
+                    'filename'     => $filename,
+                    'embed_status' => $photo->fresh()->embed_status,
+                ];
+            } catch (\Throwable $e) {
+                $failedCount++;
+                Log::error('API upload failed original='.$file->getClientOriginalName().' msg='.$e->getMessage());
+                $results[] = [
+                    'status' => 'failed',
+                    'filename' => $file->getClientOriginalName(),
+                    'message' => 'Gagal memproses file ini.',
+                ];
+            }
+        }
+
+        if (count($results) === $failedCount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Semua file gagal diproses.',
+                'data' => $results,
+            ], 422);
         }
 
         return response()->json([
             'success' => true,
-            'message' => count($results) . ' foto berhasil diupload',
+            'message' => (count($results) - $failedCount) . ' foto berhasil diupload'.($failedCount > 0 ? ' dan '.$failedCount.' gagal diproses' : ''),
             'data'    => $results,
-        ], 201);
+        ], $failedCount > 0 ? 207 : 201);
     }
 
     // ═══════════════════════════════
