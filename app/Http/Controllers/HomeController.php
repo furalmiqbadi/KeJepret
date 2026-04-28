@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -103,6 +104,14 @@ class HomeController extends Controller
             return redirect()->route('photographer.profil');
         }
 
-        return view('profil');
+        // FIX 6: Ambil 3 order terakhir untuk riwayat pembelian
+        $recentOrders = DB::table('orders')
+            ->where('user_id', Auth::id())
+            ->where('status', 'paid')
+            ->orderByDesc('created_at')
+            ->limit(3)
+            ->get();
+
+        return view('profil', compact('recentOrders'));
     }
 }

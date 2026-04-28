@@ -38,15 +38,17 @@ class DownloadController extends Controller
             abort(404, 'File tidak ditemukan atau belum dibayar.');
         }
 
-        // Generate temporary URL dari R2 (berlaku 5 menit)
-        $url = Storage::disk('s3')->temporaryUrl($item->r2_path, now()->addMinutes(5));
-
         // Catat waktu download di kolom downloaded_at
         DB::table('order_items')
             ->where('id', $item->item_id)
             ->update(['downloaded_at' => now()]);
 
-        // Redirect langsung ke signed URL R2 → browser otomatis download
-        return redirect()->away($url);
+        // Force download via Laravel response stream (bukan redirect)
+        $fileContent = Storage::disk('s3')->get($item->r2_path);
+        $filename = $item->filename;
+
+        return response($fileContent)
+            ->header('Content-Type', 'application/octet-stream')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 }
