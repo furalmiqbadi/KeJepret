@@ -35,7 +35,7 @@
             <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
                     <p class="font-black text-gray-900 truncate">{{ $order->order_code }}</p>
-                    <p class="text-xs text-gray-400 font-semibold mt-1">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</p>
+                    <p class="text-xs text-gray-400 font-semibold mt-1">{{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</p>
                     <p class="text-sm font-black text-blue-600 mt-3">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
                 </div>
 

@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Photo;
-use App\Models\SearchSession;
 use App\Models\SearchResult;
+use App\Models\SearchSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class SearchController extends Controller
@@ -40,15 +41,15 @@ class SearchController extends Controller
             ->get()
             ->map(function ($photo) use ($scoreMap, $cartPhotoIds) {
                 return [
-                    'photo_id'         => $photo->id,
-                    'watermark_url'    => env('AWS_URL') . '/' . $photo->watermark_path,
-                    'price'            => $photo->price,
-                    'category'         => $photo->category,
-                    'photographer'     => $photo->photographer->name ?? '-',
-                    'event_name'       => $photo->event->name ?? '-',
+                    'photo_id' => $photo->id,
+                    'watermark_url' => env('AWS_URL').'/'.$photo->watermark_path,
+                    'price' => $photo->price,
+                    'category' => $photo->category,
+                    'photographer' => $photo->photographer->name ?? '-',
+                    'event_name' => $photo->event->name ?? '-',
                     'similarity_score' => $scoreMap[$photo->id]->similarity_score ?? 0,
-                    'event_id'         => $photo->event_id,
-                    'in_cart'          => in_array((int) $photo->id, $cartPhotoIds, true),
+                    'event_id' => $photo->event_id,
+                    'in_cart' => in_array((int) $photo->id, $cartPhotoIds, true),
                 ];
             })
             ->sortByDesc('similarity_score')
@@ -77,26 +78,26 @@ class SearchController extends Controller
     {
         // Validasi: salah satu dari file atau base64 wajib ada
         $request->validate([
-            'selfie'        => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'selfie' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'selfie_base64' => 'nullable|string',
-            'event_id'      => 'nullable|exists:events,id',
+            'event_id' => 'nullable|exists:events,id',
         ]);
 
-        if (!$request->hasFile('selfie') && !$request->filled('selfie_base64')) {
+        if (! $request->hasFile('selfie') && ! $request->filled('selfie_base64')) {
             return back()->with('error', 'Selfie wajib diisi. Gunakan kamera atau upload file.');
         }
 
         $user = Auth::user();
 
         // ── Proses selfie: file atau base64 ──
-        $filename   = 'selfie_' . $user->id . '_' . time();
-        $selfiePath = 'selfies/temp/' . $filename . '.jpg';
+        $filename = 'selfie_'.$user->id.'_'.time();
+        $selfiePath = 'selfies/temp/'.$filename.'.jpg';
 
         if ($request->hasFile('selfie')) {
             // Input dari file upload
-            $file       = $request->file('selfie');
-            $filename  .= '.' . $file->getClientOriginalExtension();
-            $selfiePath = 'selfies/temp/' . $filename;
+            $file = $request->file('selfie');
+            $filename .= '.'.$file->getClientOriginalExtension();
+            $selfiePath = 'selfies/temp/'.$filename;
             Storage::disk('s3')->put($selfiePath, file_get_contents($file), 'private');
         } else {
             // Input dari kamera (base64)
@@ -109,65 +110,76 @@ class SearchController extends Controller
 
             $imageData = base64_decode($base64Data);
 
-            if (!$imageData) {
+            if (! $imageData) {
                 return back()->with('error', 'Data kamera tidak valid. Coba lagi.');
             }
 
             Storage::disk('s3')->put($selfiePath, $imageData, 'private');
         }
 
-        $selfieUrl = env('AWS_URL') . '/' . $selfiePath;
+        $selfieUrl = env('AWS_URL').'/'.$selfiePath;
 
         // Buat SearchSession awal
         $session = SearchSession::create([
-            'user_id'        => $user->id,
-            'event_id'       => $request->event_id ?? null,
+            'user_id' => $user->id,
+            'event_id' => $request->event_id ?? null,
             'selfie_r2_path' => $selfiePath,
-            'enroll_status'  => 'pending',
-            'search_status'  => 'pending',
-            'result_count'   => 0,
+            'enroll_status' => 'pending',
+            'search_status' => 'pending',
+            'result_count' => 0,
         ]);
 
         try {
             // Enroll otomatis ke AI (upsert, tidak disimpan permanen)
-            Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
+            $enrollResponse = Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
                 ->timeout(30)
-                ->post(env('AI_BASE_URL') . '/enroll', [
-                    'runner_id'  => $user->id,
+                ->post(env('AI_BASE_URL').'/enroll', [
+                    'runner_id' => $user->id,
                     'selfie_url' => $selfieUrl,
                 ]);
+
+            if (! $enrollResponse->successful()) {
+                Log::warning('AI enroll failed for search_session='.$session->id.' status='.$enrollResponse->status());
+                $session->update(['enroll_status' => 'failed', 'search_status' => 'failed']);
+
+                return back()->with('error', 'Pencarian gagal saat memproses selfie. Coba lagi.');
+            }
 
             $session->update(['enroll_status' => 'enrolled']);
 
             // Ambil semua photo_id aktif
             $photoIds = Photo::where('is_active', true)
-                ->when($request->event_id, fn($q) => $q->where('event_id', $request->event_id))
+                ->when($request->event_id, fn ($q) => $q->where('event_id', $request->event_id))
                 ->pluck('id')
                 ->toArray();
 
             if (empty($photoIds)) {
                 $session->update(['search_status' => 'completed', 'result_count' => 0]);
+
                 return back()->with('info', 'Belum ada foto untuk event ini.');
             }
 
             // Kirim ke FastAPI /search
             $response = Http::withHeaders(['X-API-Key' => env('AI_API_KEY')])
                 ->timeout(60)
-                ->post(env('AI_BASE_URL') . '/search', [
+                ->post(env('AI_BASE_URL').'/search', [
                     'runner_id' => $user->id,
                     'photo_ids' => $photoIds,
                 ]);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
+                Log::warning('AI search failed for search_session='.$session->id.' status='.$response->status());
                 $session->update(['search_status' => 'failed']);
+
                 return back()->with('error', 'Pencarian gagal. Coba lagi.');
             }
 
             $aiResult = $response->json();
-            $matched  = collect($aiResult['matched'] ?? []);
+            $matched = collect($aiResult['matched'] ?? []);
 
             if ($matched->isEmpty()) {
                 $session->update(['search_status' => 'completed', 'result_count' => 0]);
+
                 return back()->with('info', 'Tidak ada foto yang cocok dengan wajahmu.');
             }
 
@@ -175,14 +187,14 @@ class SearchController extends Controller
             foreach ($matched as $item) {
                 SearchResult::create([
                     'search_session_id' => $session->id,
-                    'photo_id'          => $item['photo_id'],
-                    'similarity_score'  => $item['score'] ?? 0,
+                    'photo_id' => $item['photo_id'],
+                    'similarity_score' => $item['score'] ?? 0,
                 ]);
             }
 
             $session->update([
                 'search_status' => 'completed',
-                'result_count'  => $matched->count(),
+                'result_count' => $matched->count(),
             ]);
 
             ['photos' => $photos, 'cartCount' => $cartCount] = $this->buildResultPhotos($session);
@@ -190,8 +202,10 @@ class SearchController extends Controller
             return view('runner.search-results', compact('photos', 'session', 'cartCount'));
 
         } catch (\Exception $e) {
+            Log::error('Search failed for search_session='.($session->id ?? 'unknown').' msg='.$e->getMessage());
             $session->update(['search_status' => 'failed']);
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+
+            return back()->with('error', 'Terjadi kesalahan saat mencari foto. Coba lagi.');
         }
     }
 

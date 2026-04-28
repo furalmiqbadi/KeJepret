@@ -127,7 +127,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-400 text-xs">
-                                    {{ \Carbon\Carbon::parse($item->sold_at)->format('d M Y, H:i') }}
+                                    {{ \Carbon\Carbon::parse($item->sold_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                                 </td>
                             </tr>
                         @endforeach

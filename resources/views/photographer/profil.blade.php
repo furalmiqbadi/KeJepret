@@ -70,7 +70,7 @@
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Jumlah</label>
                                 <div class="relative mt-1">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400">Rp</span>
-                                    <input type="number" name="amount" min="50000" step="10000" placeholder="50000"
+                                    <input type="number" name="amount" min="50000" step="1000" placeholder="50000"
                                         class="w-full bg-slate-50 border border-slate-100 rounded-xl pl-10 pr-3 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-100">
                                 </div>
                             </div>
@@ -142,6 +142,53 @@
                 <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
         </form>
+    </div>
+
+    {{-- Riwayat Withdrawal --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-sm font-black uppercase tracking-widest text-gray-900">Riwayat Withdrawal</h2>
+                <p class="text-xs text-gray-400 font-semibold mt-1">10 pengajuan terakhir</p>
+            </div>
+            <span class="text-xs text-gray-400 font-semibold">{{ $withdrawals->count() }} data</span>
+        </div>
+
+        @if($withdrawals->isEmpty())
+            <div class="py-12 text-center">
+                <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <p class="text-gray-400 font-semibold text-sm">Belum ada pengajuan withdrawal</p>
+            </div>
+        @else
+            <div class="divide-y divide-gray-50">
+                @foreach($withdrawals as $withdrawal)
+                    <div class="p-5">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="min-w-0">
+                                <p class="text-base font-black text-gray-900">Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-400 font-semibold mt-1 truncate">
+                                    {{ $withdrawal->bank_name }} • {{ $withdrawal->bank_account_number }} • {{ $withdrawal->bank_account_name }}
+                                </p>
+                                <p class="text-[11px] text-gray-400 font-semibold mt-2">
+                                    {{ \Carbon\Carbon::parse($withdrawal->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                </p>
+
+                                @if($withdrawal->rejection_reason)
+                                <p class="text-xs font-semibold text-red-500 mt-2">Alasan: {{ $withdrawal->rejection_reason }}</p>
+                                @endif
+                            </div>
+
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black shrink-0
+                                {{ $withdrawal->status === 'approved' ? 'bg-green-50 text-green-600' : ($withdrawal->status === 'transferred' ? 'bg-blue-50 text-blue-600' : ($withdrawal->status === 'rejected' ? 'bg-red-50 text-red-500' : 'bg-yellow-50 text-yellow-600')) }}">
+                                {{ strtoupper($withdrawal->status) }}
+                            </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
 </div>

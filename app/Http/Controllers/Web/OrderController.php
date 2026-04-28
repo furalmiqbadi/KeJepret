@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -36,31 +36,31 @@ class OrderController extends Controller
                     return null;
                 }
 
-                $total              = $cartItems->sum('price');
-                $platformFee        = $total * 0.15;
+                $total = $cartItems->sum('price');
+                $platformFee = $total * 0.15;
                 $photographerAmount = $total - $platformFee;
 
                 $orderId = DB::table('orders')->insertGetId([
-                    'user_id'             => $userId,
-                    'order_code'          => 'ORD-' . strtoupper(uniqid()),
-                    'total_amount'        => $total,
-                    'platform_fee'        => $platformFee,
+                    'user_id' => $userId,
+                    'order_code' => 'ORD-'.strtoupper(uniqid()),
+                    'total_amount' => $total,
+                    'platform_fee' => $platformFee,
                     'photographer_amount' => $photographerAmount,
-                    'status'              => 'pending',
-                    'expired_at'          => now()->addHours(24),
-                    'created_at'          => now(),
-                    'updated_at'          => now(),
+                    'status' => 'pending',
+                    'expired_at' => now()->addHours(24),
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
                 foreach ($cartItems as $item) {
                     DB::table('order_items')->insert([
-                        'order_id'            => $orderId,
-                        'photo_id'            => $item->photo_id,
-                        'photographer_id'     => $item->photographer_id,
-                        'price'               => $item->price,
+                        'order_id' => $orderId,
+                        'photo_id' => $item->photo_id,
+                        'photographer_id' => $item->photographer_id,
+                        'price' => $item->price,
                         'photographer_amount' => $item->price * 0.85,
-                        'download_token'      => Str::uuid(),
-                        'created_at'          => now(),
+                        'download_token' => Str::uuid(),
+                        'created_at' => now(),
                     ]);
                 }
 
@@ -69,11 +69,13 @@ class OrderController extends Controller
                 return $orderId;
             });
         } catch (\Exception $e) {
+            Log::error('Checkout failed for user_id='.$userId.' msg='.$e->getMessage());
+
             return redirect()->route('cart.index')
                 ->with('error', 'Gagal membuat order. Coba lagi.');
         }
 
-        if (!$orderId) {
+        if (! $orderId) {
             return redirect()->route('cart.index')
                 ->with('error', 'Cart kamu kosong atau foto sudah tidak tersedia.');
         }
@@ -105,7 +107,7 @@ class OrderController extends Controller
             ->where('user_id', Auth::id())
             ->first();
 
-        if (!$order) {
+        if (! $order) {
             abort(404, 'Order tidak ditemukan.');
         }
 
@@ -119,7 +121,8 @@ class OrderController extends Controller
             )
             ->get()
             ->map(function ($item) {
-                $item->watermark_url = env('AWS_URL') . '/' . $item->watermark_path;
+                $item->watermark_url = env('AWS_URL').'/'.$item->watermark_path;
+
                 return $item;
             });
 
@@ -138,7 +141,7 @@ class OrderController extends Controller
             ->where('user_id', $userId)
             ->first();
 
-        if (!$order) {
+        if (! $order) {
             abort(404, 'Order tidak ditemukan.');
         }
 
@@ -155,7 +158,7 @@ class OrderController extends Controller
                     ->lockForUpdate()
                     ->first();
 
-                if (!$order) {
+                if (! $order) {
                     abort(404, 'Order tidak ditemukan.');
                 }
 
@@ -166,8 +169,8 @@ class OrderController extends Controller
                 DB::table('orders')
                     ->where('id', $id)
                     ->update([
-                        'status'     => 'paid',
-                        'paid_at'    => now(),
+                        'status' => 'paid',
+                        'paid_at' => now(),
                         'updated_at' => now(),
                     ]);
 
@@ -177,7 +180,7 @@ class OrderController extends Controller
 
                 foreach ($items as $item) {
                     $photographerId = $item->photographer_id;
-                    $amount         = $item->photographer_amount;
+                    $amount = $item->photographer_amount;
 
                     $balance = DB::table('photographer_balances')
                         ->where('photographer_id', $photographerId)
@@ -189,30 +192,30 @@ class OrderController extends Controller
                         DB::table('photographer_balances')
                             ->where('photographer_id', $photographerId)
                             ->update([
-                                'balance'      => $newBalance,
+                                'balance' => $newBalance,
                                 'total_earned' => $balance->total_earned + $amount,
-                                'updated_at'   => now(),
+                                'updated_at' => now(),
                             ]);
                     } else {
                         $newBalance = $amount;
                         DB::table('photographer_balances')->insert([
                             'photographer_id' => $photographerId,
-                            'balance'         => $newBalance,
-                            'total_earned'    => $amount,
-                            'created_at'      => now(),
-                            'updated_at'      => now(),
+                            'balance' => $newBalance,
+                            'total_earned' => $amount,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ]);
                     }
 
                     DB::table('balance_transactions')->insert([
                         'photographer_id' => $photographerId,
-                        'order_item_id'   => $item->id,
-                        'withdraw_id'     => null,
-                        'type'            => 'credit',
-                        'amount'          => $amount,
-                        'balance_after'   => $newBalance,
-                        'description'     => 'Penjualan foto - Order #' . $order->order_code,
-                        'created_at'      => now(),
+                        'order_item_id' => $item->id,
+                        'withdraw_id' => null,
+                        'type' => 'credit',
+                        'amount' => $amount,
+                        'balance_after' => $newBalance,
+                        'description' => 'Penjualan foto - Order #'.$order->order_code,
+                        'created_at' => now(),
                     ]);
                 }
             });
@@ -220,9 +223,14 @@ class OrderController extends Controller
             return redirect()->route('order.detail', $id)
                 ->with('success', 'Pembayaran berhasil dikonfirmasi!');
 
-        } catch (\Exception $e) {
+        } catch (\RuntimeException $e) {
             return redirect()->route('order.detail', $id)
-                ->with('error', 'Gagal memproses pembayaran. ' . $e->getMessage());
+                ->with('error', $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('Manual payment failed for order_id='.$id.' user_id='.$userId.' msg='.$e->getMessage());
+
+            return redirect()->route('order.detail', $id)
+                ->with('error', 'Gagal memproses pembayaran. Coba lagi.');
         }
     }
 }

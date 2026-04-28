@@ -33,7 +33,7 @@
                         {{ $session->event->name ?? 'Semua Event' }}
                     </p>
                     <p class="text-xs text-gray-400 font-semibold mt-0.5">
-                        {{ \Carbon\Carbon::parse($session->created_at)->translatedFormat('d M Y, H:i') }}
+                        {{ \Carbon\Carbon::parse($session->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('d M Y, H:i') }} WIB
                     </p>
                 </div>
                 <div class="flex flex-col items-end gap-1 flex-shrink-0">

@@ -10,12 +10,19 @@ class Withdrawal extends Model
         'photographer_id',
         'amount',
         'bank_name',
-        'account_number',
-        'account_name',
+        'bank_account_number',
+        'bank_account_name',
         'status',
         'rejection_reason',
         'approved_by',
         'approved_at',
+        'transferred_at',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'approved_at' => 'datetime',
+        'transferred_at' => 'datetime',
     ];
 
     public function photographer()

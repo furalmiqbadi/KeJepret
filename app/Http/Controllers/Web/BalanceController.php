@@ -19,11 +19,17 @@ class BalanceController extends Controller
             ->first();
 
         $balance = $balance ?? (object) [
-            'balance'      => 0,
+            'balance' => 0,
             'total_earned' => 0,
         ];
 
-        return view('photographer.profil', compact('balance'));
+        $withdrawals = DB::table('withdrawals')
+            ->where('photographer_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        return view('photographer.profil', compact('balance', 'withdrawals'));
     }
 
     // ════════════════════════════════
@@ -52,9 +58,9 @@ class BalanceController extends Controller
             ->get();
 
         // Statistik foto
-        $totalFotos     = DB::table('photos')->where('photographer_id', $photographerId)->count();
-        $fotoTersedia   = DB::table('photos')->where('photographer_id', $photographerId)->where('is_active', true)->count();
-        $fotoTerjual    = DB::table('order_items')
+        $totalFotos = DB::table('photos')->where('photographer_id', $photographerId)->count();
+        $fotoTersedia = DB::table('photos')->where('photographer_id', $photographerId)->where('is_active', true)->count();
+        $fotoTerjual = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('photos', 'order_items.photo_id', '=', 'photos.id')
             ->where('photos.photographer_id', $photographerId)
@@ -63,7 +69,7 @@ class BalanceController extends Controller
             ->count('order_items.photo_id');
 
         // Statistik pendapatan
-        $totalRevenue   = $sales->sum('photographer_amount');
+        $totalRevenue = $sales->sum('photographer_amount');
 
         $pendapatanBulanIni = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
@@ -100,30 +106,61 @@ class BalanceController extends Controller
     public function withdraw(Request $request)
     {
         $request->validate([
-            'amount'              => 'required|numeric|min:50000',
-            'bank_name'           => 'required|string|max:50',
+            'amount' => 'required|numeric|min:50000',
+            'bank_name' => 'required|string|max:50',
             'bank_account_number' => 'required|string|max:30',
-            'bank_account_name'   => 'required|string|max:100',
+            'bank_account_name' => 'required|string|max:100',
         ]);
 
-        $balance = DB::table('photographer_balances')
-            ->where('photographer_id', Auth::id())
-            ->first();
+        try {
+            DB::transaction(function () use ($request) {
+                $photographerId = Auth::id();
 
-        if (!$balance || $balance->balance < $request->amount) {
-            return back()->with('error', 'Saldo tidak cukup untuk melakukan withdraw.');
+                $balance = DB::table('photographer_balances')
+                    ->where('photographer_id', $photographerId)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $balance || $balance->balance < $request->amount) {
+                    throw new \RuntimeException('Saldo tidak cukup untuk melakukan withdraw.');
+                }
+
+                $newBalance = $balance->balance - $request->amount;
+
+                $withdrawId = DB::table('withdrawals')->insertGetId([
+                    'photographer_id' => $photographerId,
+                    'amount' => $request->amount,
+                    'bank_name' => $request->bank_name,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_account_name' => $request->bank_account_name,
+                    'status' => 'pending',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                DB::table('photographer_balances')
+                    ->where('photographer_id', $photographerId)
+                    ->update([
+                        'balance' => $newBalance,
+                        'updated_at' => now(),
+                    ]);
+
+                DB::table('balance_transactions')->insert([
+                    'photographer_id' => $photographerId,
+                    'order_item_id' => null,
+                    'withdraw_id' => $withdrawId,
+                    'type' => 'debit',
+                    'amount' => $request->amount,
+                    'balance_after' => $newBalance,
+                    'description' => 'Pengajuan withdrawal #'.$withdrawId,
+                    'created_at' => now(),
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengajukan withdraw. Coba lagi.');
         }
-
-        DB::table('withdrawals')->insert([
-            'photographer_id'     => Auth::id(),
-            'amount'              => $request->amount,
-            'bank_name'           => $request->bank_name,
-            'bank_account_number' => $request->bank_account_number,
-            'bank_account_name'   => $request->bank_account_name,
-            'status'              => 'pending',
-            'created_at'          => now(),
-            'updated_at'          => now(),
-        ]);
 
         return redirect()->route('photographer.profil')
             ->with('success', 'Permintaan withdraw berhasil! Menunggu approval admin.');

@@ -8,7 +8,7 @@
         <div>
             <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">ORDER</p>
             <h1 class="text-3xl font-black text-gray-900">{{ $order->order_code }}</h1>
-            <p class="text-gray-500 text-sm mt-1">Dibuat pada {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</p>
+            <p class="text-gray-500 text-sm mt-1">Dibuat pada {{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</p>
         </div>
 
         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black
@@ -104,7 +104,7 @@
             <div class="bg-green-50 border border-green-100 rounded-2xl p-4">
                 <p class="text-xs font-bold text-green-700">Pembayaran terkonfirmasi. File original sudah bisa diunduh.</p>
                 @if($order->paid_at)
-                <p class="text-[11px] text-green-600 font-semibold mt-1">{{ \Carbon\Carbon::parse($order->paid_at)->format('d M Y, H:i') }}</p>
+                <p class="text-[11px] text-green-600 font-semibold mt-1">{{ \Carbon\Carbon::parse($order->paid_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</p>
                 @endif
             </div>
             @else
