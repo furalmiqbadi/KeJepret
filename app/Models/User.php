@@ -2,31 +2,111 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+        'phone',
+        'avatar',
+        'is_active',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+        'password' => 'hashed',
+    ];
+
+    // ═══════════════════════════════
+    // RELASI
+    // ═══════════════════════════════
+
+    // Fotografer punya 1 profil
+    public function photographerProfile()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasOne(PhotographerProfile::class);
+    }
+
+    // Fotografer punya banyak foto
+    public function photos()
+    {
+        return $this->hasMany(Photo::class, 'photographer_id');
+    }
+
+    // Runner punya banyak sesi search
+    public function searchSessions()
+    {
+        return $this->hasMany(SearchSession::class);
+    }
+
+    // Runner punya banyak item di keranjang
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    // Runner punya banyak order
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // Fotografer punya 1 saldo
+    public function photographerBalance()
+    {
+        return $this->hasOne(PhotographerBalance::class, 'photographer_id');
+    }
+
+    // Fotografer punya banyak riwayat saldo
+    public function balanceTransactions()
+    {
+        return $this->hasMany(BalanceTransaction::class, 'photographer_id');
+    }
+
+    // Fotografer punya banyak withdrawal
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class, 'photographer_id');
+    }
+
+    // ═══════════════════════════════
+    // HELPER ROLE
+    // ═══════════════════════════════
+
+    public function isRunner(): bool
+    {
+        return $this->role === 'runner';
+    }
+
+    public function isPhotographer(): bool
+    {
+        return $this->role === 'photographer';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $panel->getId() === 'admin' && $this->isAdmin();
     }
 }
