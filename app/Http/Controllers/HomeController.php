@@ -2,52 +2,114 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
+    // ═══════════════════════════════
+    // HOME — Halaman Utama
+    // ═══════════════════════════════
     public function index()
     {
-        return view('home');
-    }
-
-    public function kejepret()
-    {
-        return view('kejepret');
-    }
-
-    public function search()
-    {
-        return view('search');
-    }
-
-    public function koleksi()
-    {
-        $user = auth()->user();
-        if ($user && $user->role === 'fotografer') {
-            // Data dummy untuk fotografer: manage penjualan
-            $penjualan = [
-                ['event'=>'Jakarta Marathon 2026','img'=>'photo-1552674605-db6ffd4facb5','harga'=>'50000','terjual'=>'5','pendapatan'=>'250000'],
-                ['event'=>'Surabaya Night Run',   'img'=>'photo-1461896836934-bd45ba8fcf9b','harga'=>'30000','terjual'=>'3','pendapatan'=>'90000'],
-                ['event'=>'Bali Fun Run',         'img'=>'photo-1571008887538-b36bb32f4571','harga'=>'40000','terjual'=>'2','pendapatan'=>'80000'],
-            ];
-            return view('koleksi', compact('penjualan'));
-        } else {
-            // Data dummy untuk user biasa
-            $koleksi = [
-                ['event'=>'Jakarta Marathon 2026','img'=>'photo-1552674605-db6ffd4facb5','km'=>'42K'],
-                ['event'=>'Surabaya Night Run',   'img'=>'photo-1461896836934-bd45ba8fcf9b','km'=>'10K'],
-                ['event'=>'Bali Fun Run',         'img'=>'photo-1571008887538-b36bb32f4571','km'=>'5K'],
-                ['event'=>'Jakarta Marathon 2026','img'=>'photo-1486218119243-13883505764c','km'=>'42K'],
-                ['event'=>'Surabaya Night Run',   'img'=>'photo-1594882645126-14020914d58d','km'=>'10K'],
-                ['event'=>'Bali Fun Run',         'img'=>'photo-1513593771513-7b58b6c4af38','km'=>'5K'],
-            ];
-            return view('koleksi', compact('koleksi'));
+        // FIX 5: Guard photographer — redirect ke halaman mereka
+        if (Auth::check() && Auth::user()->role === 'photographer') {
+            $profile = Auth::user()->photographerProfile;
+            if ($profile && $profile->verification_status === 'verified') {
+                return redirect()->route('photographer.portfolio');
+            }
+            return redirect()->route('photographer.waiting');
         }
+
+        $events = Event::where('is_active', true)
+            ->withCount('photos')
+            ->orderBy('event_date', 'desc')
+            ->limit(6)
+            ->get();
+
+        $totalPhotos = Photo::where('is_active', true)->count();
+        $totalEvents = Event::where('is_active', true)->count();
+
+        return view('home', compact('events', 'totalPhotos', 'totalEvents'));
     }
 
+    // ═══════════════════════════════
+    // EVENT — Daftar Semua Event
+    // ═══════════════════════════════
+    public function event(Request $request)
+    {
+        $query = Event::where('is_active', true)->withCount('photos');
+
+        if ($request->filled('q')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('location', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        if ($request->filled('city')) {
+            $query->where('location', 'like', '%' . $request->city . '%');
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('event_date', $request->date);
+        }
+
+        $events = $query->orderBy('event_date', 'desc')->paginate(12);
+
+        return view('event', compact('events'));
+    }
+
+    // ═══════════════════════════════
+    // EVENT DETAIL
+    // ═══════════════════════════════
+    public function eventDetail($id)
+    {
+        $event = Event::where('is_active', true)
+            ->withCount('photos')
+            ->findOrFail($id);
+
+        return view('event-detail', compact('event'));
+    }
+
+    // ═══════════════════════════════
+    // SEARCH — Halaman Pencarian Foto
+    // ═══════════════════════════════
+    public function search(Request $request)
+    {
+        $query = Event::where('is_active', true)->withCount('photos');
+
+        if ($request->filled('q')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('location', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        $events = $query->orderBy('event_date', 'desc')->get();
+
+        return view('search', compact('events'));
+    }
+
+    // ═══════════════════════════════
+    // PROFIL — Halaman Profil Publik
+    // ═══════════════════════════════
     public function profil()
     {
-        return view('profil');
+        // FIX 5: Guard photographer — redirect ke profil mereka
+        if (Auth::check() && Auth::user()->role === 'photographer') {
+            return redirect()->route('photographer.profil');
+        }
+
+        // FIX 6: Ambil 3 order terakhir untuk riwayat pembelian
+        $recentOrders = DB::table('orders')
+            ->where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('profil', compact('recentOrders'));
     }
 }

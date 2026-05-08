@@ -1,73 +1,47 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Web\AuthController;
-use App\Http\Controllers\Web\CartController;
-use App\Http\Controllers\Web\PhotoController;
-use App\Http\Controllers\Web\OrderController;
-use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\BalanceController;
-use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\DownloadController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\PhotoController;
+use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/home', [HomeController::class, 'index']);
-    Route::get('/kejepret', [HomeController::class, 'kejepret'])->name('kejepret');
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
-    Route::get('/koleksi', [HomeController::class, 'koleksi'])->name('koleksi');
-    Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
-    Route::post('/profile/face/enroll', [App\Http\Controllers\ProfileController::class, 'enroll'])->name('face.enroll');
-    Route::post('/face/delete/{id}', [App\Http\Controllers\ProfileController::class, 'deleteFace'])->name('face.delete');
+Route::get('/', function () {
+    return redirect()->route('home');
 });
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/register/fotografer', [AuthController::class, 'showRegisterFotografer'])->name('register.fotografer');
-Route::post('/register/fotografer', [AuthController::class, 'registerFotografer']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// FIX 3: Guard /home dan /profil — redirect photographer ke halaman mereka
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/event', [HomeController::class, 'event'])->name('event');
+Route::get('/event/{id}', [HomeController::class, 'eventDetail'])->name('event.detail');
+Route::get('/search', [SearchController::class, 'showSearch'])->name('search');
+Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
+Route::get('/banned', function () {
+    return view('banned');
+})->name('banned');
 
-// ══════════════════════════════════════════
-// DEMO ROUTES
-// ══════════════════════════════════════════
-Route::prefix('demo')->group(function () {
-    Route::get('/upload', [DemoController::class, 'uploadView'])->name('demo.upload');
-    Route::post('/upload/process', [DemoController::class, 'uploadProcess'])->name('demo.upload.process');
-    Route::get('/search', [DemoController::class, 'searchView'])->name('demo.search');
-    Route::post('/search/process', [DemoController::class, 'searchProcess'])->name('demo.search.process');
-});
-
-// ══════════════════════════════════════════
-// AUTH ROUTES (Guest only)
-// ══════════════════════════════════════════
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::get('/register/photographer', [AuthController::class, 'showRegisterPhotographer'])->name('register.photographer');
+    Route::post('/register/photographer', [AuthController::class, 'registerPhotographer'])->name('register.photographer.post');
 });
 
-// ══════════════════════════════════════════
-// AUTHENTICATED ROUTES
-// ══════════════════════════════════════════
 Route::middleware('auth')->group(function () {
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
-    // ════════════════════════════════
-    // RUNNER ROUTES
-    // ════════════════════════════════
     Route::middleware('role:runner')->prefix('runner')->group(function () {
-        Route::get('/dashboard', fn() => view('runner.dashboard'))->name('runner.dashboard');
         Route::get('/search', [SearchController::class, 'showSearch'])->name('runner.search');
         Route::post('/search', [SearchController::class, 'search'])->name('runner.search.post');
+        Route::get('/search/results/{id}', [SearchController::class, 'results'])->name('runner.search.results');
         Route::get('/enroll', [SearchController::class, 'showEnroll'])->name('runner.enroll');
-        Route::post('/enroll', [SearchController::class, 'enroll'])->name('runner.enroll.post');
         Route::get('/search/history', [SearchController::class, 'history'])->name('runner.search.history');
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
         Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -79,38 +53,29 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{token}', [DownloadController::class, 'download'])->name('download');
     });
 
-    // ════════════════════════════════
-    // PHOTOGRAPHER ROUTES
-    // ════════════════════════════════
-    Route::middleware('role:photographer')->prefix('photographer')->group(function () {
-        Route::get('/dashboard', fn() => view('photographer.dashboard'))->name('photographer.dashboard');
-        Route::get('/photos', [PhotoController::class, 'index'])->name('photographer.photos');
-        Route::get('/photos/upload', [PhotoController::class, 'showUpload'])->name('photographer.photos.upload');
-        Route::post('/photos/upload', [PhotoController::class, 'upload'])->name('photographer.photos.upload.post');
-        Route::get('/photos/{id}/price', [PhotoController::class, 'showUpdatePrice'])->name('photographer.photos.price');
-        Route::put('/photos/{id}/price', [PhotoController::class, 'updatePrice'])->name('photographer.photos.price.post');
-        Route::get('/balance', [BalanceController::class, 'index'])->name('balance.index');
-        Route::get('/balance/sales', [BalanceController::class, 'sales'])->name('balance.sales');
-        Route::get('/balance/withdraw', [BalanceController::class, 'showWithdraw'])->name('balance.withdraw');
-        Route::post('/balance/withdraw', [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
+    // FIX 1: Tambah route photographer.waiting
+    // FIX 2: Tambah middleware photographer.verified di group photographer
+    Route::middleware(['role:photographer', 'banned'])->prefix('photographer')->group(function () {
+
+        // Route waiting — TANPA middleware photographer.verified
+        // agar photographer pending bisa akses halaman ini
+        Route::get('/waiting', function () {
+            return view('photographer.waiting');
+        })->name('photographer.waiting');
+
+        // Semua route di bawah ini butuh verified
+        Route::middleware('photographer.verified')->group(function () {
+            Route::get('/portfolio', [PhotoController::class, 'index'])->name('photographer.portfolio');
+            Route::get('/upload', [PhotoController::class, 'showUpload'])->name('photographer.upload');
+            Route::post('/upload', [PhotoController::class, 'upload'])->name('photographer.upload.post');
+            Route::put('/photos/{id}/price', [PhotoController::class, 'updatePrice'])->name('photographer.photos.price.post');
+            Route::get('/profil', [BalanceController::class, 'index'])->name('photographer.profil');
+            Route::get('/sales', [BalanceController::class, 'sales'])->name('balance.sales');
+            Route::post('/withdraw', [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
+        });
     });
 
-    // ════════════════════════════════
-    // ADMIN ROUTES
-    // ════════════════════════════════
-    Route::middleware('role:admin')->prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/photographers/pending', [AdminController::class, 'pendingPhotographers'])->name('admin.photographers.pending');
-        Route::post('/photographers/{id}/verify', [AdminController::class, 'verifyPhotographer'])->name('admin.photographers.verify');
-        Route::post('/photographers/{id}/reject', [AdminController::class, 'rejectPhotographer'])->name('admin.photographers.reject');
-        Route::get('/events', [AdminController::class, 'listEvents'])->name('admin.events.index');
-        Route::get('/events/create', [AdminController::class, 'showCreateEvent'])->name('admin.events.create');
-        Route::post('/events', [AdminController::class, 'createEvent'])->name('admin.events.store');
-        Route::get('/events/{id}/edit', [AdminController::class, 'showEditEvent'])->name('admin.events.edit');
-        Route::put('/events/{id}', [AdminController::class, 'updateEvent'])->name('admin.events.update');
-        Route::get('/withdrawals/pending', [AdminController::class, 'pendingWithdrawals'])->name('admin.withdrawals.pending');
-        Route::post('/withdrawals/{id}/approve', [AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
-        Route::post('/withdrawals/{id}/reject', [AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject');
-        Route::put('/photos/{id}/deactivate', [AdminController::class, 'deactivatePhoto'])->name('admin.photos.deactivate');
-    });
+    Route::middleware('role:admin')->get('/admin/dashboard', function () {
+        return redirect()->route('filament.admin.pages.dashboard');
+    })->name('admin.dashboard');
 });

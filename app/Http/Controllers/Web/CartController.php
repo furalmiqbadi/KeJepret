@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\SearchSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
-    // ══════════════════════════════
+    // ════════════════════════════════
     // INDEX — Tampilkan semua item di cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function index()
     {
         $items = DB::table('cart_items')
@@ -26,16 +27,28 @@ class CartController extends Controller
                 'photos.category',
                 'users.name as photographer'
             )
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->watermark_url = env('AWS_URL') . '/' . $item->watermark_path;
+                return $item;
+            });
 
         $total = $items->sum('price');
+        $lastSearchSession = SearchSession::where('user_id', Auth::id())
+            ->where('search_status', 'completed')
+            ->where('result_count', '>', 0)
+            ->latest('created_at')
+            ->first();
+        $searchBackUrl = $lastSearchSession
+            ? route('runner.search.results', $lastSearchSession->id)
+            : route('runner.search');
 
-        return view('cart.index', compact('items', 'total'));
+        return view('runner.cart', compact('items', 'total', 'searchBackUrl'));
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // ADD — Tambah foto ke cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function add(Request $request)
     {
         $request->validate([
@@ -52,6 +65,14 @@ class CartController extends Controller
             ->exists();
 
         if ($exists) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Foto sudah ada di cart.',
+                    'cart_count' => DB::table('cart_items')->where('user_id', $userId)->count(),
+                ], 409);
+            }
+
             return back()->with('error', 'Foto sudah ada di cart.');
         }
 
@@ -64,6 +85,14 @@ class CartController extends Controller
             ->exists();
 
         if ($bought) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Foto sudah pernah dibeli.',
+                    'cart_count' => DB::table('cart_items')->where('user_id', $userId)->count(),
+                ], 409);
+            }
+
             return back()->with('error', 'Foto sudah pernah dibeli.');
         }
 
@@ -74,12 +103,21 @@ class CartController extends Controller
             'created_at' => now(),
         ]);
 
-        return back()->with('success', 'Foto berhasil ditambahkan ke cart.');
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil ditambahkan ke cart.',
+                'cart_count' => DB::table('cart_items')->where('user_id', $userId)->count(),
+            ]);
+        }
+
+        return redirect()->route('cart.index')
+            ->with('success', 'Foto berhasil ditambahkan ke cart.');
     }
 
-    // ══════════════════════════════
+    // ════════════════════════════════
     // REMOVE — Hapus item dari cart
-    // ══════════════════════════════
+    // ════════════════════════════════
     public function remove($id)
     {
         $deleted = DB::table('cart_items')
