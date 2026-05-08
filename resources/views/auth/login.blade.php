@@ -106,17 +106,14 @@
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between px-2">
-                    <label class="flex items-center gap-2 cursor-pointer group">
-                        <input type="checkbox" class="w-4 h-4 rounded border-slate-200 text-blue-600 focus:ring-blue-500">
-                        <span class="text-xs font-bold text-slate-500 group-hover:text-slate-900 transition-colors">Ingat Saya</span>
-                    </label>
-                    <a href="#" class="text-xs font-black text-blue-600 uppercase tracking-widest italic hover:underline">Lupa Sandi?</a>
+                <div class="flex items-center gap-2 px-1">
+                    <input type="checkbox" id="remember" class="w-3.5 h-3.5 rounded border-gray-200 text-blue-600 focus:ring-blue-100 cursor-pointer">
+                    <label for="remember" class="text-[10px] font-semibold text-gray-500 cursor-pointer select-none">Tetap masuk</label>
                 </div>
 
-                <button type="submit" class="w-full py-5 bg-blue-600 text-white rounded-[1.5rem] font-black text-sm uppercase italic tracking-[0.1em] shadow-xl shadow-blue-500/25 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-8">
+                <button type="submit" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-500/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 mt-1">
                     Masuk Sekarang
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    <span class="material-symbols-outlined text-sm">login</span>
                 </button>
             </form>
 

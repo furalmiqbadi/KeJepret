@@ -31,6 +31,7 @@ $testimonials = [
         Temukan Foto Larimu<br>
         <span class="text-blue-600">dari Setiap Event</span>
     </h1>
+    @endif
     <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
         Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Resolusi tinggi, harga terjangkau.
     </p>

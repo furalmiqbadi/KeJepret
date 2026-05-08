@@ -146,10 +146,14 @@
                     </label>
                 </div>
 
-                <button type="submit" class="w-full py-5 bg-blue-600 text-white rounded-[1.5rem] font-black text-sm uppercase italic tracking-[0.1em] shadow-xl shadow-blue-500/25 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4">
-                    Buat Akun KeJepret
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2">
+                    Daftar Sekarang
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </button>
+
+                <div class="text-center">
+                    <a href="{{ route('register.fotografer') }}" class="text-[9px] font-bold text-gray-400 hover:text-blue-600 transition-colors uppercase tracking-wider">Daftar sebagai fotografer &rarr;</a>
+                </div>
             </form>
 
             <div class="text-center pt-2 space-y-2">
@@ -164,8 +168,8 @@
             </div>
         </div>
 
-        <p class="text-center text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
-            &copy; 2026 KEJEPRET STUDIO &bull; REGISTRATION PAGE
+        <p class="text-center text-[7px] font-bold text-gray-300 uppercase tracking-widest mt-3">
+            &copy; 2026 KeJepret &bull; Step Up
         </p>
     </div>
 
