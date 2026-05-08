@@ -9,39 +9,41 @@ use Illuminate\Support\Facades\DB;
 
 class BalanceController extends Controller
 {
-    // ══════════════════════════════════════════
-    // INDEX — Halaman saldo fotografer
-    // ══════════════════════════════════════════
+    // ════════════════════════════════
+    // INDEX — Halaman profil & saldo fotografer
+    // ════════════════════════════════
     public function index()
     {
-        // Tabel: photographer_balances
-        // Kolom: photographer_id, balance, total_earned
         $balance = DB::table('photographer_balances')
             ->where('photographer_id', Auth::id())
             ->first();
 
-        // Jika belum ada record, default 0
         $balance = $balance ?? (object) [
-            'balance'      => 0,
+            'balance' => 0,
             'total_earned' => 0,
         ];
 
-        return view('balance.index', compact('balance'));
+        $withdrawals = DB::table('withdrawals')
+            ->where('photographer_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        return view('photographer.profil', compact('balance', 'withdrawals'));
     }
 
-    // ══════════════════════════════════════════
+    // ════════════════════════════════
     // SALES — Riwayat penjualan foto
-    // ══════════════════════════════════════════
+    // ════════════════════════════════
     public function sales()
     {
-        // Tabel: order_items JOIN orders JOIN photos
-        // Kolom order_items: id, price, photographer_amount, order_id, photo_id
-        // Kolom orders: created_at, order_code, status
-        // Kolom photos: photographer_id, category, filename
+        $photographerId = Auth::id();
+
+        // Riwayat semua penjualan
         $sales = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('photos', 'order_items.photo_id', '=', 'photos.id')
-            ->where('photos.photographer_id', Auth::id())
+            ->where('photos.photographer_id', $photographerId)
             ->where('orders.status', 'paid')
             ->select(
                 'order_items.id',
@@ -55,63 +57,112 @@ class BalanceController extends Controller
             ->orderByDesc('orders.created_at')
             ->get();
 
+        // Statistik foto
+        $totalFotos = DB::table('photos')->where('photographer_id', $photographerId)->count();
+        $fotoTersedia = DB::table('photos')->where('photographer_id', $photographerId)->where('is_active', true)->count();
+        $fotoTerjual = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->distinct('order_items.photo_id')
+            ->count('order_items.photo_id');
+
+        // Statistik pendapatan
         $totalRevenue = $sales->sum('photographer_amount');
 
-        return view('balance.sales', compact('sales', 'totalRevenue'));
+        $pendapatanBulanIni = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->whereMonth('orders.created_at', now()->month)
+            ->whereYear('orders.created_at', now()->year)
+            ->sum('order_items.photographer_amount');
+
+        $penjualanBulanIni = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('photos', 'order_items.photo_id', '=', 'photos.id')
+            ->where('photos.photographer_id', $photographerId)
+            ->where('orders.status', 'paid')
+            ->whereMonth('orders.created_at', now()->month)
+            ->whereYear('orders.created_at', now()->year)
+            ->count();
+
+        return view('photographer.sales', compact(
+            'sales',
+            'totalRevenue',
+            'totalFotos',
+            'fotoTersedia',
+            'fotoTerjual',
+            'pendapatanBulanIni',
+            'penjualanBulanIni'
+        ));
     }
 
-    // ══════════════════════════════════════════
-    // SHOW FORM WITHDRAW
-    // ══════════════════════════════════════════
-    public function showWithdraw()
-    {
-        $balance = DB::table('photographer_balances')
-            ->where('photographer_id', Auth::id())
-            ->first();
-
-        return view('balance.withdraw', compact('balance'));
-    }
-
-    // ══════════════════════════════════════════
+    // ════════════════════════════════
     // WITHDRAW — Ajukan penarikan saldo
-    // ══════════════════════════════════════════
+    // ════════════════════════════════
     public function withdraw(Request $request)
     {
         $request->validate([
-            // Tabel withdrawals: amount (decimal 10,2), min 50000
-            'amount'              => 'required|numeric|min:50000',
-            // Kolom: bank_name varchar(50)
-            'bank_name'           => 'required|string|max:50',
-            // Kolom: bank_account_number varchar(30)
+            'amount' => 'required|numeric|min:50000',
+            'bank_name' => 'required|string|max:50',
             'bank_account_number' => 'required|string|max:30',
-            // Kolom: bank_account_name varchar(100)
-            'bank_account_name'   => 'required|string|max:100',
+            'bank_account_name' => 'required|string|max:100',
         ]);
 
-        // Cek saldo mencukupi dari tabel photographer_balances
-        $balance = DB::table('photographer_balances')
-            ->where('photographer_id', Auth::id())
-            ->first();
+        try {
+            DB::transaction(function () use ($request) {
+                $photographerId = Auth::id();
 
-        if (!$balance || $balance->balance < $request->amount) {
-            return back()->with('error', 'Saldo tidak cukup untuk melakukan withdraw.');
+                $balance = DB::table('photographer_balances')
+                    ->where('photographer_id', $photographerId)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $balance || $balance->balance < $request->amount) {
+                    throw new \RuntimeException('Saldo tidak cukup untuk melakukan withdraw.');
+                }
+
+                $newBalance = $balance->balance - $request->amount;
+
+                $withdrawId = DB::table('withdrawals')->insertGetId([
+                    'photographer_id' => $photographerId,
+                    'amount' => $request->amount,
+                    'bank_name' => $request->bank_name,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_account_name' => $request->bank_account_name,
+                    'status' => 'pending',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                DB::table('photographer_balances')
+                    ->where('photographer_id', $photographerId)
+                    ->update([
+                        'balance' => $newBalance,
+                        'updated_at' => now(),
+                    ]);
+
+                DB::table('balance_transactions')->insert([
+                    'photographer_id' => $photographerId,
+                    'order_item_id' => null,
+                    'withdraw_id' => $withdrawId,
+                    'type' => 'debit',
+                    'amount' => $request->amount,
+                    'balance_after' => $newBalance,
+                    'description' => 'Pengajuan withdrawal #'.$withdrawId,
+                    'created_at' => now(),
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengajukan withdraw. Coba lagi.');
         }
 
-        // Insert ke tabel withdrawals
-        // Kolom: photographer_id, amount, bank_name, bank_account_number,
-        //        bank_account_name, status (default: pending)
-        DB::table('withdrawals')->insert([
-            'photographer_id'     => Auth::id(),
-            'amount'              => $request->amount,
-            'bank_name'           => $request->bank_name,
-            'bank_account_number' => $request->bank_account_number,
-            'bank_account_name'   => $request->bank_account_name,
-            'status'              => 'pending',
-            'created_at'          => now(),
-            'updated_at'          => now(),
-        ]);
-
-        return redirect()->route('balance.index')
+        return redirect()->route('photographer.profil')
             ->with('success', 'Permintaan withdraw berhasil! Menunggu approval admin.');
     }
 }
