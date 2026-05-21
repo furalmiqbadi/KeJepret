@@ -31,58 +31,57 @@ $testimonials = [
         Temukan Foto Larimu<br>
         <span class="text-blue-600">dari Setiap Event</span>
     </h1>
-    @endif
     <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
         Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Resolusi tinggi, harga terjangkau.
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-16">
+    <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-16 relative z-10">
         <input type="text" placeholder="Cari nama event atau kota..."
-            class="flex-1 px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm font-medium placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 shadow-sm transition-all">
-        <a href="{{ route('search') }}" class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-7 py-3.5 rounded-2xl transition-all shadow-md shadow-blue-200 whitespace-nowrap">
+            class="flex-1 px-5 py-3.5 glass-input rounded-2xl text-sm font-bold placeholder-gray-500 focus:outline-none transition-all">
+        <a href="{{ route('search') }}" class="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm px-7 py-3.5 rounded-2xl transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 whitespace-nowrap hover:scale-[1.01] active:scale-[0.99]">
             Cari Sekarang
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
     </div>
 
     {{-- Feature Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16 relative z-10">
 
-        <div class="bg-white rounded-2xl p-5 text-left border border-gray-100 shadow-sm">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">FOTO EVENT</span>
+        <div class="glass-card rounded-2xl p-5 text-left">
+            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 block mb-2">FOTO EVENT</span>
             <h3 class="font-black text-gray-900 text-base mb-1">Ribuan Foto<br>Siap Download</h3>
-            <p class="text-gray-400 text-xs mb-4">Temukan momen terbaikmu berdasarkan nomor BIB atau kilometre.</p>
+            <p class="text-gray-500 text-xs mb-4">Temukan momen terbaikmu berdasarkan nomor BIB atau kilometre.</p>
             <div class="flex gap-1.5 mb-4">
-                <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-lg">Road Run</span>
-                <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-lg">On Course</span>
-                <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-lg">Finish</span>
+                <span class="px-2.5 py-1 bg-white/20 text-slate-800 text-[10px] font-bold rounded-lg backdrop-blur-md border border-white/20">Road Run</span>
+                <span class="px-2.5 py-1 bg-white/20 text-slate-800 text-[10px] font-bold rounded-lg backdrop-blur-md border border-white/20">On Course</span>
+                <span class="px-2.5 py-1 bg-white/20 text-slate-800 text-[10px] font-bold rounded-lg backdrop-blur-md border border-white/20">Finish</span>
             </div>
-            <div class="h-20 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+            <div class="h-20 rounded-xl overflow-hidden bg-slate-950/20 flex items-center justify-center border border-white/20">
                 @if($events->first() && $events->first()->cover_image)
                     <img src="{{ env('AWS_URL') }}/{{ $events->first()->cover_image }}" alt="Cover" class="w-full h-full object-cover">
                 @else
-                    <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 @endif
             </div>
         </div>
 
-        <div class="bg-blue-600 rounded-2xl p-5 text-left text-white shadow-lg shadow-blue-200">
+        <div class="glass-btn-blue rounded-2xl p-5 text-left text-white shadow-lg">
             <div class="flex items-center gap-2 mb-2">
                 <div class="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">KEPUASAN</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-100">KEPUASAN</span>
             </div>
-            <div class="text-4xl font-black mb-0.5">4.9<span class="text-xl text-blue-300">/5</span></div>
-            <p class="text-blue-200 text-xs mb-5">Rating dari pengguna setia KeJepret</p>
+            <div class="text-4xl font-black mb-0.5">4.9<span class="text-xl text-blue-200">/5</span></div>
+            <p class="text-blue-100 text-xs mb-5">Rating dari pengguna setia KeJepret</p>
             <div class="border-t border-white/20 pt-4">
-                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200 mb-1">EVENT TERSEDIA</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-100 mb-1">EVENT TERSEDIA</p>
                 <div class="text-3xl font-black">{{ $totalEvents }}+</div>
-                <p class="text-blue-200 text-xs">Event aktif di seluruh Indonesia</p>
+                <p class="text-blue-100 text-xs">Event aktif di seluruh Indonesia</p>
             </div>
         </div>
 
-        <div class="bg-gray-900 rounded-2xl p-5 text-left text-white shadow-sm relative overflow-hidden">
+        <div class="glass-card bg-slate-900/40 rounded-2xl p-5 text-left text-white shadow-sm relative overflow-hidden">
             @if($events->count() > 1 && $events[1]->cover_image)
             <div class="absolute inset-0 opacity-20">
                 <img src="{{ env('AWS_URL') }}/{{ $events[1]->cover_image }}" alt="" class="w-full h-full object-cover">
@@ -91,11 +90,11 @@ $testimonials = [
             <div class="relative z-10">
                 <div class="flex items-center gap-1.5 mb-3">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Live</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-200">Live</span>
                 </div>
                 <div class="text-3xl font-black mb-1">{{ number_format($totalPhotos) }}+</div>
-                <p class="text-gray-300 text-xs mb-2">Foto Tersedia</p>
-                <p class="text-gray-400 text-xs mb-6">Diperbarui kapan saja, selalu ada.</p>
+                <p class="text-slate-200 text-xs mb-2">Foto Tersedia</p>
+                <p class="text-slate-300 text-xs mb-6">Diperbarui kapan saja, selalu ada.</p>
                 <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-white border border-white/30 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
                     Lihat Event
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -128,7 +127,7 @@ $testimonials = [
 </section>
 
 {{-- ===== CARA KERJA ===== --}}
-<section class="bg-white py-16">
+<section class="py-16 bg-transparent relative z-10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-12">
             <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2">CARA KERJA</p>
@@ -136,9 +135,9 @@ $testimonials = [
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             @foreach($steps as $step)
-            <div class="bg-gray-50 rounded-2xl p-6 relative overflow-hidden">
-                <div class="absolute top-4 right-5 text-6xl font-black text-gray-100 leading-none select-none">{{ $step['num'] }}</div>
-                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4 relative z-10">
+            <div class="glass-card rounded-2xl p-6 relative overflow-hidden hover:translate-y-[-4px] transition-all duration-300">
+                <div class="absolute top-4 right-5 text-6xl font-black text-slate-900/5 leading-none select-none">{{ $step['num'] }}</div>
+                <div class="w-10 h-10 bg-blue-600/10 text-blue-600 border border-blue-500/10 rounded-xl flex items-center justify-center mb-4 relative z-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $step['icon'] }}"/>
                     </svg>
@@ -152,7 +151,7 @@ $testimonials = [
 </section>
 
 {{-- ===== EVENT TERBARU ===== --}}
-<section class="py-16">
+<section class="py-16 relative z-10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="flex items-end justify-between mb-8">
             <div>
@@ -173,8 +172,8 @@ $testimonials = [
         @else
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             @foreach($events as $event)
-            <a href="{{ route('event') }}" class="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:shadow-black/8 hover:-translate-y-1 transition-all duration-300">
-                <div class="aspect-[4/3] overflow-hidden relative bg-gray-100">
+            <a href="{{ route('event') }}" class="group glass-card rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="aspect-[4/3] overflow-hidden relative bg-slate-950/20">
                     @if($event->cover_image)
                         <img src="{{ env('AWS_URL') }}/{{ $event->cover_image }}"
                              alt="{{ $event->name }}"
