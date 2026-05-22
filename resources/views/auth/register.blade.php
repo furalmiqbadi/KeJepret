@@ -15,55 +15,97 @@
     <style type="text/tailwindcss">
         @theme {
             --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-            --color-blue-600: #2563eb;
-            --color-blue-700: #1d4ed8;
+            --color-sky-500: #0ea5e9;
+            --color-sky-600: #0284c7;
         }
-        body {
+        html, body {
             font-family: var(--font-sans);
-            background-color: #fafafa;
+            background-color: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%) fixed;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+        .clean-glass {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(32px) saturate(160%);
+            -webkit-backdrop-filter: blur(32px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        }
+        .clean-glass-input {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: #1e293b;
         }
-        .grid-pattern {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: -1;
+        .clean-glass-input::placeholder {
+            color: #94a3b8;
+        }
+        .clean-glass-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(14, 165, 233, 0.4);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+        .clean-glass-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            color: #334155;
+        }
+        .animate-float-slow {
+            animation: float 12s ease-in-out infinite alternate;
+        }
+        .animate-float-reverse {
+            animation: float-rev 15s ease-in-out infinite alternate;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-20px) scale(1.05); }
+        }
+        @keyframes float-rev {
+            0% { transform: translateY(0) scale(1.05); }
+            100% { transform: translateY(20px) scale(0.95); }
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center p-6">
-    <div class="grid-pattern"></div>
+<body class="antialiased min-h-screen flex items-center justify-center py-12 px-6 relative select-none">
 
-    <div class="w-full max-w-lg space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <!-- Floating Background Orbs for Ultra-Premium Depth (Light Theme optimized - Fixed inset to prevent cutting on scroll) -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-sky-400/8 to-indigo-400/8 blur-[150px] animate-float-slow"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-indigo-400/8 to-purple-400/8 blur-[150px] animate-float-reverse"></div>
+    </div>
 
-        {{-- Logo --}}
-        <div class="flex flex-col items-center gap-4">
-            <a href="/" class="flex items-center gap-3 group">
-                <div class="w-14 h-14 bg-blue-600 rounded-[1.25rem] flex items-center justify-center text-white shadow-2xl shadow-blue-500/40 group-hover:scale-110 transition-transform duration-500">
-                    <span class="material-symbols-outlined text-[32px]">camera_enhance</span>
-                </div>
-                <h1 class="text-3xl font-black tracking-tighter uppercase italic">KeJepret</h1>
-            </a>
-            <div class="text-center">
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight">Buat Akun Baru</h2>
-                <p class="text-slate-500 font-medium text-sm mt-1">Bergabung dengan ribuan pengguna lainnya.</p>
-            </div>
-        </div>
+    <div class="w-full max-w-lg space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative z-10">
 
         {{-- Register Card --}}
-        <div class="bg-white p-10 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100 space-y-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none transform translate-x-4 -translate-y-4">
-                <span class="material-symbols-outlined text-[150px]">person_add</span>
+        <div class="clean-glass p-10 rounded-[2.5rem] space-y-6 relative overflow-hidden">
+            {{-- Modern Ambient Decorative Glow inside Card --}}
+            <div class="absolute top-0 right-0 w-32 h-32 bg-sky-400/4 rounded-full blur-3xl pointer-events-none"></div>
+
+            {{-- Logo & Judul di dalam Card --}}
+            <div class="flex flex-col items-center gap-3.5 text-center mb-2 relative z-10">
+                <a href="/" class="group block">
+                    <h1 class="text-4xl font-extrabold tracking-tighter bg-gradient-to-r from-sky-500 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm transition-transform duration-500 group-hover:scale-105">
+                        KeJepret
+                    </h1>
+                </a>
+                <div>
+                    <h2 class="text-lg font-black text-slate-800 tracking-tight">Buat Akun Baru</h2>
+                    <p class="text-slate-500 font-semibold text-xs mt-1">Bergabunglah dengan ribuan pengguna lainnya.</p>
+                </div>
             </div>
 
             @if ($errors->any())
-                <div class="flex items-start gap-3 bg-red-50 border border-red-100 text-red-600 rounded-2xl px-5 py-4">
-                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
-                    <ul class="text-xs font-bold space-y-1">
+                <div class="flex items-start gap-3 clean-glass-box text-slate-700 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0 text-red-500">error_outline</span>
+                    <ul class="text-xs font-semibold space-y-1">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -71,105 +113,95 @@
                 </div>
             @endif
 
-            <form action="{{ route('register.post') }}" method="POST" class="space-y-6 relative z-10">
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-5 relative z-10">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {{-- Nama --}}
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Nama Lengkap</label>
+                    <div class="space-y-1.5">
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Nama Lengkap</label>
                         <div class="relative group">
-                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">person</span>
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">person</span>
                             <input type="text" name="name" placeholder="John Doe"
                                 value="{{ old('name') }}"
-                                class="w-full bg-slate-50 border {{ $errors->has('name') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-4 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                         </div>
                     </div>
 
-                    {{-- Email --}}
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
+                    {{-- Email / Surel --}}
+                    <div class="space-y-1.5">
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
                         <div class="relative group">
-                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">alternate_email</span>
                             <input type="email" name="email" placeholder="nama@email.com"
                                 value="{{ old('email') }}"
-                                class="w-full bg-slate-50 border {{ $errors->has('email') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-4 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Password --}}
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- Password / Kata Sandi --}}
+                    <div class="space-y-1.5">
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                         <div class="relative group">
-                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">lock</span>
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">lock</span>
                             <input type="password" name="password" id="password_reg" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-11 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                             <button type="button" onclick="togglePassword('password_reg', 'eye_reg')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]" id="eye_reg">visibility</span>
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-sky-700 hover:text-sky-900 transition-colors">
+                                <span class="material-symbols-outlined text-[18px]" id="eye_reg">visibility</span>
                             </button>
                         </div>
                     </div>
 
                     {{-- Konfirmasi Password --}}
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Konfirmasi</label>
+                    <div class="space-y-1.5">
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Konfirmasi Sandi</label>
                         <div class="relative group">
-                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">verified_user</span>
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">verified_user</span>
                             <input type="password" name="password_confirmation" id="password_reg_confirm" placeholder="••••••••"
-                                class="w-full bg-slate-50 border {{ $errors->has('password_confirmation') ? 'border-red-300' : 'border-slate-100' }} rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-11 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                             <button type="button" onclick="togglePassword('password_reg_confirm', 'eye_reg_confirm')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]" id="eye_reg_confirm">visibility</span>
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-sky-700 hover:text-sky-900 transition-colors">
+                                <span class="material-symbols-outlined text-[18px]" id="eye_reg_confirm">visibility</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
                 {{-- No. Telepon --}}
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">No. Telepon <span class="normal-case tracking-normal font-medium">(opsional)</span></label>
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Nomor Telepon <span class="normal-case tracking-normal font-semibold text-slate-400/75">(opsional)</span></label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">phone</span>
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">phone</span>
                         <input type="text" name="phone" placeholder="08xxxxxxxxxx"
                             value="{{ old('phone') }}"
-                            class="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100 transition-all">
+                            class="w-full clean-glass-input rounded-2xl pl-11 pr-4 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                     </div>
                 </div>
 
-                <div class="px-2">
+                <div class="px-1">
                     <label class="flex items-center gap-3 cursor-pointer group">
-                        <input type="checkbox" required class="w-4 h-4 rounded border-slate-200 text-blue-600 focus:ring-blue-500">
-                        <span class="text-xs font-bold text-slate-500 group-hover:text-slate-900 transition-colors">Saya setuju dengan S&K dan Kebijakan Privasi</span>
+                        <input type="checkbox" required class="w-3.5 h-3.5 rounded border-slate-350 bg-white/50 text-sky-500 focus:ring-sky-100 cursor-pointer">
+                        <span class="text-[10px] font-bold text-slate-600 group-hover:text-slate-700 transition-colors">Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi.</span>
                     </label>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2">
-                    Daftar Sekarang
-                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer flex items-center justify-center gap-2 mt-1">
+                    Daftar
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </button>
 
                 <div class="text-center">
-                    <a href="{{ route('register.fotografer') }}" class="text-[9px] font-bold text-gray-400 hover:text-blue-600 transition-colors uppercase tracking-wider">Daftar sebagai fotografer &rarr;</a>
+                    <a href="{{ route('register.photographer') }}" class="text-[9px] font-black text-sky-500 hover:text-sky-600 transition-colors uppercase tracking-widest">Daftar sebagai fotografer &rarr;</a>
                 </div>
             </form>
 
-            <div class="text-center pt-2 space-y-2">
-                <p class="text-sm font-medium text-slate-400">
-                    Sudah punya akun?
-                    <a href="{{ route('login') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Masuk Di Sini</a>
-                </p>
-                <p class="text-sm font-medium text-slate-400">
-                    Kamu fotografer?
-                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-black uppercase italic tracking-tighter hover:underline">Daftar di Sini</a>
-                </p>
-            </div>
         </div>
 
-        <p class="text-center text-[7px] font-bold text-gray-300 uppercase tracking-widest mt-3">
-            &copy; 2026 KeJepret &bull; Step Up
+        <p class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] relative z-10">
+            &copy; 2026 KEJEPRET STUDIO
         </p>
     </div>
 
