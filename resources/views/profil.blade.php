@@ -18,6 +18,17 @@
                 {{ $user->role === 'runner' ? 'Pelari Aktif' : ucfirst($user->role) }}
             </span>
         </div>
+        <div class="text-3xl font-black text-gray-900 mb-0.5">Rp 0</div>
+        <p class="text-gray-400 text-xs mb-5">Saldo tersedia</p>
+        <div class="flex gap-3">
+            <button class="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm py-3 rounded-xl transition-colors shadow-sm shadow-blue-200">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                Top Up
+            </button>
+            <button class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-bold text-sm py-3 rounded-xl border border-gray-200 transition-colors">
+                Tarik Dana
+            </button>
+        </div>
     </div>
 
     {{-- Riwayat Pembelian --}}
