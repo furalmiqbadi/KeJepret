@@ -1,58 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# KeJepret
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+KeJepret adalah sebuah platform marketplace foto event dan perlombaan. Platform ini menjembatani pelari (runner) untuk mencari foto diri mereka menggunakan teknologi pencarian wajah (*face search*) dari hasil jepretan para fotografer.
 
-## About Laravel
+## 🚀 Fitur Utama
+- **Runner**: Pencarian foto otomatis dan cerdas menggunakan wajah (selfie), keranjang belanja (*cart*), halaman checkout pembayaran, serta pengunduhan foto resolusi asli paska-pembayaran.
+- **Photographer**: Unggah hasil foto, penentuan harga jual secara mandiri (minimal Rp 5.000), melihat laporan ringkasan penjualan, serta melakukan permintaan penarikan dana (*withdrawal*).
+- **Admin Panel**: Menggunakan Filament interaktif untuk memverifikasi pendaftaran fotografer, manajemen data event aktif, moderasi foto, serta menyetujui pencairan dana fotografer.
+- **AI Face Search Engine**: Terintegrasi dengan layanan AI REST API eksternal (FastAPI) untuk melakukan proses *face embedding* dan pembandingan/pencarian wajah.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Teknologi yang Digunakan
+- **Backend Framework**: Laravel ^12.0
+- **Admin & Dashboard**: Filament ^5.0
+- **Authentication**: Laravel Sanctum ^4.3
+- **Frontend**: Blade Templates, Tailwind CSS ^4.0, Vite
+- **Database**: Relational Database via Laravel (MySQL / PostgreSQL dll.) serta SQLite untuk *testing*.
+- **Storage Object**: Cloud Storage berbasis kompatibilitas Amazon S3 (disarankan AWS S3 / Cloudflare R2).
+- **Core Environment**: PHP ^8.3, Node.js
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 Prasyarat Instalasi
+Pastikan sistem operasi/lingkungan *development* Anda telah ter-install perangkat lunak berikut:
+- PHP >= 8.3
+- Composer >= 2.x
+- Node.js >= 20.x & npm
+- Database Server (contoh: MySQL, MariaDB, atau PostgreSQL)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ⚙️ Cara Instalasi
+1. Lakukan kloning repositori ke komputer lokal:
+   ```bash
+   git clone https://github.com/username/kejepret.git
+   cd kejepret
+   ```
+2. Pasang semua dependensi sistem:
+   ```bash
+   composer install
+   npm install
+   ```
+3. Gandakan berkas konfigurasi *environment* dan hasilkan *app key* baru:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Sesuaikan `.env` server lokal Anda (Database, Storage AWS, dan API AI):
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   ...
+   # Konfigurasi Storage R2 / S3
+   AWS_ACCESS_KEY_ID=your_key
+   AWS_SECRET_ACCESS_KEY=your_secret
+   AWS_DEFAULT_REGION=us-east-1
+   AWS_BUCKET=your_bucket
+   AWS_URL=your_storage_url
+   AWS_ENDPOINT=your_endpoint
+   
+   # Konfigurasi AI Face Search Eksternal
+   AI_BASE_URL=https://ai.example.com
+   AI_API_KEY=your_ai_api_key
+   ```
+5. Segarkan basis data utama dari skema dan jalankan *seeder*:
+   ```bash
+   php artisan migrate --seed
+   ```
+6. Kompilasi aset di mode pengembangan & jalankan aplikasi:
+   ```bash
+   npm run dev
+   # (Jalankan serve pada terminal baru)
+   php artisan serve
+   ```
 
-## Learning Laravel
+## 📂 Susunan Project
+- `app/Filament/` - Area Admin Panel (Resources, Pages, Widgets) untuk administrasi project.
+- `app/Models/` & `database/migrations/` - Model Eloquent dan Skema/Struktur database secara berdampingan.
+- `app/Http/Controllers/` - *Web Request controller* dan Sanctum REST API controller.
+- `resources/views/` - UI tampilan frontend (Blade) untuk tipe user *runner* dan *photographer*.
+- `routes/` - Pengaturan alur akses (Routing web vs Routing *role-based* vs API).
+- `tests/` - Letak PHPUnit *Feature*, *Unit* testing dan validasi QA.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 💡 Contoh Penggunaan
+- **Akses Runner**: Runner dapat mengunjungi *homepage* via `http://localhost:8000/`. Pelari dapat melakukan *upload* sebuah gambar *selfie* di sebuah laman pencarian event. Sistem akan menampilkan seluruh hasil jepretan yang memuat kemiripan dengan wajah pelari.
+- **Akses Photographer**: Fotografer dapat masuk dan menggunakan akun yang telah diverifikasi untuk menuju portal *upload*, menetapkan *watermark*, dan mengatur harga karya mereka.
+- **Akses Admin Panel**: Panel pengurus dapat diakses pada *endpoint* `http://localhost:8000/admin`. Gunakan kredensial spesifik akun admin saat inisialisasi awal.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+## 🤝 Kontribusi
+Kami sangat menerima berbagai *pull request* untuk memperbaiki kerusakan (*bug*) maupun meningkatkan stabilitas dan penambahan fitur *platform*. Untuk perubahan-perubahan yang berskala sangat luas/besar, mohon buka *issue* terlebih dahulu guna berdiskusi mengenai gagasan yang ingin diubah bersama *maintainer*.
+Harap untuk senantiasa menjalankan proses verifikasi dan tes bawaan menggunakan perintah:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan test
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📜 Lisensi
+Aplikasi (Source Code) KeJepret ini dirilis ke khalayak umum di bawah syarat izin perangkat lunak [MIT License](https://opensource.org/licenses/MIT).
