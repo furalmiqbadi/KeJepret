@@ -12,17 +12,17 @@
     </div>
 
     {{-- Manual Search Form --}}
-    <form method="GET" action="{{ route('search') }}" class="mb-5">
+    <form method="GET" action="{{ route('search') }}" class="mb-5 relative z-10">
         <div class="relative">
-            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input type="text" name="q" value="{{ request('q') }}"
                 placeholder="Ketik nama event atau kota..."
-                class="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm font-medium placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 shadow-sm transition-all">
+                class="w-full pl-11 pr-4 py-3.5 glass-input rounded-2xl text-sm font-bold placeholder-gray-500 focus:outline-none transition-all">
         </div>
     </form>
 
     {{-- Result Count --}}
-    <p class="text-xs text-gray-400 font-semibold mb-4">
+    <p class="text-xs text-slate-500 font-bold mb-4">
         {{ $events->count() }} event ditemukan
     </p>
 
@@ -36,9 +36,9 @@
         @endif
     </div>
     @else
-    <div class="space-y-2">
+    <div class="space-y-2 relative z-10">
         @foreach($events as $event)
-        <a href="{{ route('event.detail', $event->id) }}" class="group flex items-center gap-4 bg-white rounded-2xl p-4 border border-gray-100 hover:border-blue-200 hover:shadow-md hover:shadow-blue-100/40 transition-all">
+        <a href="{{ route('event.detail', $event->id) }}" class="group flex items-center gap-4 glass-card rounded-2xl p-4 hover:shadow-lg hover:scale-[1.01] transition-all">
 
             {{-- Thumbnail --}}
             <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">

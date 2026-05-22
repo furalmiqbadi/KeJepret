@@ -15,97 +15,75 @@
     <style type="text/tailwindcss">
         @theme {
             --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-            --color-sky-500: #0ea5e9;
-            --color-sky-600: #0284c7;
+            --color-blue-600: #2563eb;
+            --color-blue-700: #1d4ed8;
         }
-        html, body {
+        body {
             font-family: var(--font-sans);
-            background-color: #f8fafc;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%) fixed;
-            color: #0f172a;
-            min-height: 100vh;
-        }
-        .clean-glass {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(32px) saturate(160%);
-            -webkit-backdrop-filter: blur(32px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-        }
-        .clean-glass-input {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px) saturate(120%);
-            -webkit-backdrop-filter: blur(12px) saturate(120%);
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             color: #1e293b;
         }
-        .clean-glass-input::placeholder {
-            color: #94a3b8;
+        .liquid-blob-1 {
+            animation: float-1 25s ease-in-out infinite;
         }
-        .clean-glass-input:focus {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(14, 165, 233, 0.4);
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        .liquid-blob-2 {
+            animation: float-2 20s ease-in-out infinite;
         }
-        .clean-glass-box {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(15, 23, 42, 0.06);
-            color: #334155;
+        .liquid-blob-3 {
+            animation: float-3 15s ease-in-out infinite;
         }
-        .animate-float-slow {
-            animation: float 12s ease-in-out infinite alternate;
+        @keyframes float-1 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(40px, -60px) scale(1.15); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-float-reverse {
-            animation: float-rev 15s ease-in-out infinite alternate;
+        @keyframes float-2 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(-40px, 50px) scale(1.1); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
-        }
-        @keyframes float {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-20px) scale(1.05); }
-        }
-        @keyframes float-rev {
-            0% { transform: translateY(0) scale(1.05); }
-            100% { transform: translateY(20px) scale(0.95); }
+        @keyframes float-3 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(50px, -30px) scale(1.2); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center py-12 px-6 relative select-none">
-
-    <!-- Floating Background Orbs for Ultra-Premium Depth (Light Theme optimized - Fixed inset to prevent cutting on scroll) -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-sky-400/8 to-indigo-400/8 blur-[150px] animate-float-slow"></div>
-        <div class="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-indigo-400/8 to-purple-400/8 blur-[150px] animate-float-reverse"></div>
+<body class="antialiased min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
+    {{-- Background Liquid Blobs --}}
+    <div class="absolute inset-0 pointer-events-none z-0">
+        <div class="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-sky-400/30 to-blue-400/20 rounded-full blur-[80px] liquid-blob-1"></div>
+        <div class="absolute bottom-[15%] right-[5%] w-[500px] h-[500px] bg-gradient-to-br from-indigo-400/25 to-purple-400/25 rounded-full blur-[100px] liquid-blob-2"></div>
+        <div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] bg-gradient-to-tr from-pink-400/20 to-rose-400/15 rounded-full blur-[70px] liquid-blob-3"></div>
     </div>
 
     <div class="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative z-10">
 
-        {{-- Login Card --}}
-        <div class="clean-glass p-10 rounded-[2.5rem] space-y-6 relative overflow-hidden">
-            {{-- Modern Ambient Decorative Glow inside Card --}}
-            <div class="absolute top-0 right-0 w-32 h-32 bg-sky-400/4 rounded-full blur-3xl pointer-events-none"></div>
-
-            {{-- Logo & Judul di dalam Card --}}
-            <div class="flex flex-col items-center gap-3.5 text-center relative z-10">
-                <a href="/" class="group block">
-                    <h1 class="text-4xl font-extrabold tracking-tighter bg-gradient-to-r from-sky-500 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm transition-transform duration-500 group-hover:scale-105">
-                        KeJepret
-                    </h1>
-                </a>
-                <div>
-                    <h2 class="text-lg font-black text-slate-800 tracking-tight">Selamat Datang Kembali</h2>
-                    <p class="text-slate-500 font-semibold text-xs mt-1">Masuk untuk melihat momen terbaik Anda.</p>
+        {{-- Logo --}}
+        <div class="flex flex-col items-center gap-4">
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+                    <span class="material-symbols-outlined text-[32px]">camera_enhance</span>
                 </div>
+                <h1 class="text-3xl font-black tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-800">KeJepret</h1>
+            </a>
+            <div class="text-center">
+                <h2 class="text-2xl font-black text-slate-950 tracking-tight">Selamat Datang!</h2>
+                <p class="text-slate-500 font-semibold text-sm mt-1">Masuk untuk melihat momen terbaikmu.</p>
+            </div>
+        </div>
+
+        {{-- Glassmorphism Card --}}
+        <div class="backdrop-blur-3xl bg-white/45 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-white/40 space-y-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-12 opacity-[0.04] pointer-events-none transform translate-x-4 -translate-y-4">
+                <span class="material-symbols-outlined text-[150px] text-slate-800">key</span>
             </div>
 
             @if ($errors->any())
-                <div class="flex items-start gap-3 clean-glass-box text-slate-700 rounded-2xl px-5 py-4">
-                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0 text-red-500">error_outline</span>
-                    <ul class="text-xs font-semibold space-y-1">
+                <div class="flex items-start gap-3 bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-700 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
+                    <ul class="text-xs font-bold space-y-1">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -114,76 +92,65 @@
             @endif
 
             @if (session('status'))
-                <div class="flex items-center gap-3 clean-glass-box text-slate-700 rounded-2xl px-5 py-4">
-                    <span class="material-symbols-outlined text-[20px] shrink-0 text-emerald-500">check_circle_outline</span>
-                    <p class="text-xs font-semibold">{{ session('status') }}</p>
+                <div class="flex items-center gap-3 bg-green-500/10 backdrop-blur-md border border-green-500/20 text-green-700 rounded-2xl px-5 py-4">
+                    <span class="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
+                    <p class="text-xs font-bold">{{ session('status') }}</p>
                 </div>
             @endif
 
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-5 relative z-10">
+            <form action="{{ route('login.post') }}" method="POST" class="space-y-6 relative z-10">
                 @csrf
 
-                {{-- Email / Surel --}}
-                <div class="space-y-1.5">
-                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
+                {{-- Email --}}
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">alternate_email</span>
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
                         <input type="email" name="email" placeholder="nama@email.com"
                             value="{{ old('email') }}"
-                            class="w-full clean-glass-input rounded-2xl pl-11 pr-4 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                            class="w-full bg-white/40 backdrop-blur-md border border-white/40 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:bg-white/70 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder-slate-400 shadow-inner">
                     </div>
                 </div>
 
-                {{-- Password / Kata Sandi --}}
-                <div class="space-y-1.5">
-                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
+                {{-- Password + Toggle --}}
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-sky-700 group-focus-within:text-sky-900 transition-colors text-[20px]">lock</span>
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">lock</span>
                         <input type="password" name="password" id="password_login" placeholder="••••••••"
-                            class="w-full clean-glass-input rounded-2xl pl-11 pr-11 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                            class="w-full bg-white/40 backdrop-blur-md border border-white/40 rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:bg-white/70 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder-slate-400 shadow-inner">
                         <button type="button" onclick="togglePassword('password_login', 'eye_login')"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-sky-700 hover:text-sky-900 transition-colors">
-                            <span class="material-symbols-outlined text-[18px]" id="eye_login">visibility</span>
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]" id="eye_login">visibility</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between px-1">
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="remember" class="w-3.5 h-3.5 rounded border-slate-350 bg-white/50 text-sky-500 focus:ring-sky-100 cursor-pointer">
-                        <label for="remember" class="text-[10px] font-bold text-slate-600 cursor-pointer select-none">Ingat saya</label>
-                    </div>
+                <div class="flex items-center gap-2 px-1">
+                    <input type="checkbox" id="remember" class="w-3.5 h-3.5 rounded border-white/40 bg-white/20 text-blue-600 focus:ring-blue-100 cursor-pointer">
+                    <label for="remember" class="text-[11px] font-bold text-slate-600 cursor-pointer select-none">Tetap masuk</label>
                 </div>
 
-                {{-- Tombol Masuk --}}
-                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer flex items-center justify-center gap-2 mt-1">
-                    Masuk
-                    <span class="material-symbols-outlined text-[16px]">login</span>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2">
+                    Masuk Sekarang
+                    <span class="material-symbols-outlined text-sm font-bold">login</span>
                 </button>
-
-                {{-- Sekat Pembatas / Divider --}}
-                <div class="relative flex py-2 items-center">
-                    <div class="flex-grow border-t border-slate-200"></div>
-                    <span class="flex-shrink mx-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.15em]">Atau Daftar Akun</span>
-                    <div class="flex-grow border-t border-slate-200"></div>
-                </div>
-
-                {{-- Tombol Daftar User / Fotografer setelah Sekat --}}
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 py-3.5 clean-glass-input hover:bg-slate-50/50 text-slate-700 rounded-2xl font-bold text-[10px] uppercase tracking-wider transition-all shadow-sm shadow-slate-200/50">
-                        <span class="material-symbols-outlined text-[16px] text-sky-500">person</span>
-                        Pelari
-                    </a>
-                    <a href="{{ route('register.photographer') }}" class="flex items-center justify-center gap-2 py-3.5 clean-glass-input hover:bg-slate-50/50 text-slate-700 rounded-2xl font-bold text-[10px] uppercase tracking-wider transition-all shadow-sm shadow-slate-200/50">
-                        <span class="material-symbols-outlined text-[16px] text-indigo-500">photo_camera</span>
-                        Fotografer
-                    </a>
-                </div>
             </form>
+
+            <div class="text-center pt-2 space-y-3">
+                <p class="text-sm font-semibold text-slate-500">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline">Daftar Gratis</a>
+                </p>
+                <p class="text-sm font-semibold text-slate-500">
+                    Kamu fotografer?
+                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-bold hover:underline">Daftar di Sini</a>
+                </p>
+            </div>
         </div>
 
-        <p class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] relative z-10">
-            &copy; 2026 KEJEPRET STUDIO
+        <p class="text-center text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
+            &copy; 2026 KEJEPRET STUDIO &bull; PREMIUM ACCESS
         </p>
     </div>
 
