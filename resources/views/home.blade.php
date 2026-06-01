@@ -81,22 +81,23 @@ $testimonials = [
             </div>
         </div>
 
-        <div class="glass-card bg-slate-900/40 rounded-2xl p-5 text-left text-white shadow-sm relative overflow-hidden">
+        <div class="rounded-2xl p-5 text-left text-white shadow-lg relative overflow-hidden bg-slate-900">
             @if($events->count() > 1 && $events[1]->cover_image)
-            <div class="absolute inset-0 opacity-20">
+            <div class="absolute inset-0 opacity-30 mix-blend-luminosity">
                 <img src="{{ env('AWS_URL') }}/{{ $events[1]->cover_image }}" alt="" class="w-full h-full object-cover">
             </div>
             @endif
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/90 pointer-events-none"></div>
             <div class="relative z-10">
                 <div class="flex items-center gap-1.5 mb-3">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-200">Live</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-300">LIVE ACARA</span>
                 </div>
-                <div class="text-3xl font-black mb-1">{{ number_format($totalPhotos) }}+</div>
-                <p class="text-slate-200 text-xs mb-2">Foto Tersedia</p>
-                <p class="text-slate-300 text-xs mb-6">Diperbarui kapan saja, selalu ada.</p>
-                <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-white border border-white/30 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
-                    Lihat Event
+                <div class="text-3xl font-black mb-1 text-white">{{ number_format($totalPhotos) }}+</div>
+                <p class="text-slate-200 text-[10px] font-bold tracking-widest uppercase mb-2">FOTO TERSEDIA</p>
+                <p class="text-slate-400 text-xs mb-6 font-medium leading-relaxed">Diperbarui seketika, temukan fotomu langsung setelah finish.</p>
+                <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 bg-white px-5 py-2.5 rounded-xl hover:bg-slate-100 transition-all hover:scale-105">
+                    Lihat Acara
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
@@ -105,22 +106,24 @@ $testimonials = [
     </div>
 
     {{-- Stats Row --}}
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 py-8 border-t border-b border-gray-200">
-        <div class="text-center">
-            <div class="text-xl sm:text-2xl font-black text-gray-900">{{ number_format($totalPhotos) }}+</div>
-            <div class="text-xs text-gray-400 font-semibold mt-1">Foto tersedia</div>
-        </div>
-        <div class="text-center">
-            <div class="text-xl sm:text-2xl font-black text-gray-900">{{ $totalEvents }}+ Event</div>
-            <div class="text-xs text-gray-400 font-semibold mt-1">Di seluruh Indonesia</div>
-        </div>
-        <div class="text-center">
-            <div class="text-xl sm:text-2xl font-black text-gray-900">15.000+</div>
-            <div class="text-xs text-gray-400 font-semibold mt-1">Pelari terdaftar</div>
-        </div>
-        <div class="text-center">
-            <div class="text-xl sm:text-2xl font-black text-gray-900">4.9/5</div>
-            <div class="text-xs text-gray-400 font-semibold mt-1">Rating pengguna</div>
+    <div class="clean-glass bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 my-8 relative z-10 shadow-sm">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 divide-x divide-slate-200/40">
+            <div class="text-center hover:scale-105 transition-transform duration-300">
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ number_format($totalPhotos) }}+</div>
+                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">FOTO TERSEDIA</div>
+            </div>
+            <div class="text-center hover:scale-105 transition-transform duration-300">
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ $totalEvents }}+</div>
+                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">ACARA AKTIF</div>
+            </div>
+            <div class="text-center hover:scale-105 transition-transform duration-300">
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">15k+</div>
+                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">PELARI TERDAFTAR</div>
+            </div>
+            <div class="text-center hover:scale-105 transition-transform duration-300">
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">4.9<span class="text-xl text-slate-400">/5</span></div>
+                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
+            </div>
         </div>
     </div>
 
