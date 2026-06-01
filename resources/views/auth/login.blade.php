@@ -8,82 +8,120 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
     <style type="text/tailwindcss">
         @theme {
             --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-            --color-blue-600: #2563eb;
-            --color-blue-700: #1d4ed8;
+            --color-sky-500: #0ea5e9;
+            --color-sky-600: #0284c7;
         }
-        body {
+        html, body {
             font-family: var(--font-sans);
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            background: #eef2f6;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+        .clean-glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(32px) saturate(140%);
+            -webkit-backdrop-filter: blur(32px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        }
+        .clean-glass-input {
+            background: rgba(248, 250, 252, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: #1e293b;
         }
-        .liquid-blob-1 {
-            animation: float-1 25s ease-in-out infinite;
+        .clean-glass-input::placeholder {
+            color: #94a3b8;
         }
-        .liquid-blob-2 {
-            animation: float-2 20s ease-in-out infinite;
+        .clean-glass-input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.08);
         }
-        .liquid-blob-3 {
-            animation: float-3 15s ease-in-out infinite;
-        }
-        @keyframes float-1 {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(40px, -60px) scale(1.15); }
-            66% { transform: translate(-30px, 30px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        @keyframes float-2 {
-            0% { transform: translate(0px, 0px) scale(1); }
-            50% { transform: translate(-40px, 50px) scale(1.1); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        @keyframes float-3 {
-            0% { transform: translate(0px, 0px) scale(1); }
-            50% { transform: translate(50px, -30px) scale(1.2); }
-            100% { transform: translate(0px, 0px) scale(1); }
+        .clean-glass-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            color: #334155;
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
-    {{-- Background Liquid Blobs --}}
-    <div class="absolute inset-0 pointer-events-none z-0">
-        <div class="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-sky-400/30 to-blue-400/20 rounded-full blur-[80px] liquid-blob-1"></div>
-        <div class="absolute bottom-[15%] right-[5%] w-[500px] h-[500px] bg-gradient-to-br from-indigo-400/25 to-purple-400/25 rounded-full blur-[100px] liquid-blob-2"></div>
-        <div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] bg-gradient-to-tr from-pink-400/20 to-rose-400/15 rounded-full blur-[70px] liquid-blob-3"></div>
+<body class="antialiased min-h-screen flex flex-col items-center justify-center py-12 px-6 relative select-none">
+
+    <!-- Neumorphic 3D Clean & Elegant Background Ornament -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <!-- Ambient Soft Premium Glows -->
+        <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-blue-400/8 blur-[130px]"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[65%] h-[65%] rounded-full bg-indigo-400/8 blur-[130px]"></div>
+        
+        <!-- Embossed 3D Curves SVG -->
+        <svg class="absolute inset-0 w-full h-full opacity-65" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Neumorphic Drop Shadow Filter -->
+                <filter id="neumorphic-shadow-1" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="3" dy="4" stdDeviation="5" flood-color="#cbd5e1" flood-opacity="0.4"/>
+                    <feDropShadow dx="-3" dy="-4" stdDeviation="5" flood-color="#ffffff" flood-opacity="0.9"/>
+                </filter>
+            </defs>
+
+            <!-- Minimal Concentric Neumorphic Circles (Pojok Kanan Bawah - Sangat Elegan) -->
+            <circle cx="100%" cy="100%" r="200" fill="none" stroke="#eef2f6" stroke-width="8" filter="url(#neumorphic-shadow-1)" />
+            <circle cx="100%" cy="100%" r="350" fill="none" stroke="#eef2f6" stroke-width="12" filter="url(#neumorphic-shadow-1)" />
+            <circle cx="100%" cy="100%" r="500" fill="none" stroke="#eef2f6" stroke-width="16" filter="url(#neumorphic-shadow-1)" />
+
+            <!-- Minimal Concentric Neumorphic Circles (Pojok Kiri Atas - Sangat Tipis) -->
+            <circle cx="0" cy="0" r="150" fill="none" stroke="#eef2f6" stroke-width="8" filter="url(#neumorphic-shadow-1)" />
+            <circle cx="0" cy="0" r="280" fill="none" stroke="#eef2f6" stroke-width="12" filter="url(#neumorphic-shadow-1)" />
+
+            <!-- 3D Parallel Curves (Grup 1 - Indah & Bersih) -->
+            <path d="M-100 300 C 350 200, 450 600, 850 400 C 1250 200, 1450 800, 2100 700" 
+                  fill="none" stroke="#eef2f6" stroke-width="20" stroke-linecap="round" filter="url(#neumorphic-shadow-1)" />
+            <path d="M-100 340 C 350 240, 450 640, 850 440 C 1250 240, 1450 840, 2100 740" 
+                  fill="none" stroke="#eef2f6" stroke-width="12" stroke-linecap="round" filter="url(#neumorphic-shadow-1)" />
+
+            <!-- 3D Parallel Curves (Grup 2 - Bawah) -->
+            <path d="M-50 850 C 450 650, 650 950, 1150 750 C 1650 550, 1850 1150, 2300 950" 
+                  fill="none" stroke="#eef2f6" stroke-width="16" stroke-linecap="round" filter="url(#neumorphic-shadow-1)" />
+            <path d="M-50 890 C 450 690, 650 990, 1150 790 C 1650 590, 1850 1190, 2300 990" 
+                  fill="none" stroke="#eef2f6" stroke-width="10" stroke-linecap="round" filter="url(#neumorphic-shadow-1)" />
+        </svg>
     </div>
 
     <div class="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative z-10">
 
-        {{-- Logo --}}
-        <div class="flex flex-col items-center gap-4">
-            <a href="/" class="flex items-center gap-3 group">
-                <div class="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
-                    <span class="material-symbols-outlined text-[32px]">camera_enhance</span>
-                </div>
-                <h1 class="text-3xl font-black tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-800">KeJepret</h1>
-            </a>
-            <div class="text-center">
-                <h2 class="text-2xl font-black text-slate-950 tracking-tight">Selamat Datang!</h2>
-                <p class="text-slate-500 font-semibold text-sm mt-1">Masuk untuk melihat momen terbaikmu.</p>
-            </div>
-        </div>
+        {{-- Login Card --}}
+        <div class="clean-glass p-10 rounded-[2.5rem] space-y-6 relative overflow-hidden">
 
-        {{-- Glassmorphism Card --}}
-        <div class="backdrop-blur-3xl bg-white/45 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-white/40 space-y-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-12 opacity-[0.04] pointer-events-none transform translate-x-4 -translate-y-4">
-                <span class="material-symbols-outlined text-[150px] text-slate-800">key</span>
+            {{-- Logo & Judul --}}
+            <div class="flex flex-col items-center gap-3.5 text-center relative z-10">
+                <a href="/" class="group block">
+                    <h1 class="text-4xl font-extrabold tracking-tighter bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm transition-transform duration-500 group-hover:scale-105">
+                        KeJepret
+                    </h1>
+                </a>
+                <div>
+                    <h2 class="text-lg font-black text-slate-800 tracking-tight">Selamat Datang Kembali</h2>
+                    <p class="text-slate-500 font-semibold text-xs mt-1">Masuk untuk melihat momen terbaik Anda.</p>
+                </div>
             </div>
 
             @if ($errors->any())
-                <div class="flex items-start gap-3 bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-700 rounded-2xl px-5 py-4">
-                    <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0">error</span>
-                    <ul class="text-xs font-bold space-y-1">
+                <div class="flex items-start gap-3 clean-glass-box text-slate-700 rounded-2xl px-5 py-4">
+                    <svg class="w-5 h-5 mt-0.5 shrink-0 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <ul class="text-xs font-semibold space-y-1">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -92,78 +130,112 @@
             @endif
 
             @if (session('status'))
-                <div class="flex items-center gap-3 bg-green-500/10 backdrop-blur-md border border-green-500/20 text-green-700 rounded-2xl px-5 py-4">
-                    <span class="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
-                    <p class="text-xs font-bold">{{ session('status') }}</p>
+                <div class="flex items-center gap-3 clean-glass-box text-slate-700 rounded-2xl px-5 py-4">
+                    <svg class="w-5 h-5 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <p class="text-xs font-semibold">{{ session('status') }}</p>
                 </div>
             @endif
 
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-6 relative z-10">
+            <form action="{{ route('login.post') }}" method="POST" class="space-y-5 relative z-10">
                 @csrf
 
-                {{-- Email --}}
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Email</label>
+                {{-- Email / Surel --}}
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">alternate_email</span>
                         <input type="email" name="email" placeholder="nama@email.com"
                             value="{{ old('email') }}"
-                            class="w-full bg-white/40 backdrop-blur-md border border-white/40 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold text-slate-900 outline-none focus:bg-white/70 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder-slate-400 shadow-inner">
+                            class="w-full clean-glass-input rounded-2xl px-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
                     </div>
                 </div>
 
-                {{-- Password + Toggle --}}
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
+                {{-- Password / Kata Sandi --}}
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">lock</span>
                         <input type="password" name="password" id="password_login" placeholder="••••••••"
-                            class="w-full bg-white/40 backdrop-blur-md border border-white/40 rounded-2xl pl-12 pr-12 py-4 text-sm font-bold text-slate-900 outline-none focus:bg-white/70 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder-slate-400 shadow-inner">
-                        <button type="button" onclick="togglePassword('password_login', 'eye_login')"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
-                            <span class="material-symbols-outlined text-[20px]" id="eye_login">visibility</span>
+                            class="w-full clean-glass-input rounded-2xl pl-5 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
+                        <button type="button" onclick="togglePassword('password_login', 'eye_login_open', 'eye_login_close')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center">
+                            <svg id="eye_login_open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <svg id="eye_login_close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                            </svg>
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 px-1">
-                    <input type="checkbox" id="remember" class="w-3.5 h-3.5 rounded border-white/40 bg-white/20 text-blue-600 focus:ring-blue-100 cursor-pointer">
-                    <label for="remember" class="text-[11px] font-bold text-slate-600 cursor-pointer select-none">Tetap masuk</label>
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="remember" class="w-3.5 h-3.5 rounded border-slate-300 bg-white/50 text-sky-500 focus:ring-sky-100 cursor-pointer">
+                        <label for="remember" class="text-[10px] font-semibold text-slate-600 cursor-pointer select-none">Ingat saya</label>
+                    </div>
                 </div>
 
-                <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2">
-                    Masuk Sekarang
-                    <span class="material-symbols-outlined text-sm font-bold">login</span>
+                {{-- Tombol Masuk --}}
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-md shadow-slate-300/40 hover:shadow-lg hover:shadow-slate-300/60 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer flex items-center justify-center gap-2 mt-1">
+                    Masuk
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                 </button>
-            </form>
 
-            <div class="text-center pt-2 space-y-3">
-                <p class="text-sm font-semibold text-slate-500">
-                    Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline">Daftar Gratis</a>
-                </p>
-                <p class="text-sm font-semibold text-slate-500">
-                    Kamu fotografer?
-                    <a href="{{ route('register.photographer') }}" class="text-blue-600 font-bold hover:underline">Daftar di Sini</a>
-                </p>
-            </div>
+                {{-- Sekat Pembatas / Divider --}}
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-slate-200/60"></div>
+                    <span class="flex-shrink mx-4 text-[9px] font-black text-slate-400/80 uppercase tracking-[0.2em]">Atau Daftar Akun</span>
+                    <div class="flex-grow border-t border-slate-200/60"></div>
+                </div>
+
+                {{-- Tombol Daftar Pelari / Fotografer rounded-full --}}
+                <div class="grid grid-cols-2 gap-4">
+                    {{-- Tombol Pelari --}}
+                    <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-sky-400/70 hover:border-sky-500 text-sky-600 hover:text-sky-700 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="16" cy="4" r="1" fill="currentColor" />
+                            <path d="m12 8-2.5-1.5L6 10" />
+                            <path d="M11.5 7.5 14 9.5l3.5-1.5" />
+                            <path d="m9.5 13 .5 3.5 2.5 2" />
+                            <path d="M12.5 11.5 11 15.5l-3.5 3.5" />
+                        </svg>
+                        Pelari
+                    </a>
+                    {{-- Tombol Fotografer --}}
+                    <a href="{{ route('register.photographer') }}" class="flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-purple-400/70 hover:border-purple-500 text-purple-600 hover:text-purple-700 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                            <circle cx="12" cy="13" r="3" />
+                        </svg>
+                        Fotografer
+                    </a>
+                </div>
+            </form>
         </div>
 
-        <p class="text-center text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
-            &copy; 2026 KEJEPRET STUDIO &bull; PREMIUM ACCESS
+        <p class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] relative z-10">
+            &copy; 2026 KEJEPRET STUDIO
         </p>
     </div>
 
     <script>
-        function togglePassword(inputId, iconId) {
+        function togglePassword(inputId, eyeOpenId, eyeCloseId) {
             const input = document.getElementById(inputId);
-            const icon  = document.getElementById(iconId);
+            const eyeOpen = document.getElementById(eyeOpenId);
+            const eyeClose = document.getElementById(eyeCloseId);
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.textContent = 'visibility_off';
+                eyeOpen.classList.add('hidden');
+                eyeClose.classList.remove('hidden');
             } else {
                 input.type = 'password';
-                icon.textContent = 'visibility';
+                eyeOpen.classList.remove('hidden');
+                eyeClose.classList.add('hidden');
             }
         }
     </script>
