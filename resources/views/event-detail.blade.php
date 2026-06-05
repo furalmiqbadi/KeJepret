@@ -2,102 +2,111 @@
 @section('title', $event->name)
 @section('content')
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 relative">
+    {{-- Decorative Ambient Orbs --}}
+    <div class="absolute top-20 -left-40 w-96 h-96 bg-sky-300/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-[40%] -right-40 w-[28rem] h-[28rem] bg-indigo-300/10 rounded-full blur-3xl pointer-events-none"></div>
 
     {{-- Breadcrumb --}}
-    <div class="flex items-center gap-2 text-xs font-semibold text-gray-400 mb-6">
-        <a href="{{ route('search') }}" class="hover:text-blue-600 transition-colors">Cari Event</a>
-        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        <span class="text-gray-700">{{ Str::limit($event->name, 40) }}</span>
+    <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-6 relative z-10">
+        <a href="{{ route('search') }}" class="hover:text-blue-600 transition-colors">Cari Acara</a>
+        <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <span class="text-slate-700 font-bold">{{ Str::limit($event->name, 40) }}</span>
     </div>
 
     {{-- Cover Image --}}
     @if($event->cover_image)
-    <div class="w-full h-56 sm:h-72 rounded-3xl overflow-hidden mb-6 bg-gray-100">
+    <div class="w-full h-56 sm:h-72 rounded-[2rem] overflow-hidden mb-6 bg-slate-950/5 border border-white/60 shadow-lg shadow-slate-200/50 relative z-10">
         <img src="{{ env('AWS_URL') }}/{{ $event->cover_image }}"
              alt="{{ $event->name }}"
              class="w-full h-full object-cover">
     </div>
     @else
-    <div class="w-full h-40 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mb-6">
+    <div class="w-full h-40 rounded-[2rem] bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mb-6 border border-white/60 shadow-md relative z-10">
         <svg class="w-16 h-16 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
     </div>
     @endif
 
-    {{-- Event Info --}}
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h1 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4">{{ $event->name }}</h1>
+    {{-- Event Info (Clean Glass) --}}
+    <div class="clean-glass rounded-[2.5rem] p-6 mb-6 relative overflow-hidden z-10 border border-white/50 bg-white/60 backdrop-blur-xl">
+        {{-- Ambient Orbs tipis dekoratif --}}
+        <div class="absolute -top-10 -right-10 w-20 h-20 bg-blue-300/5 rounded-full blur-xl pointer-events-none"></div>
+
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-tight mb-5">{{ $event->name }}</h1>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
-            <div class="flex items-start gap-2">
-                <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div class="flex items-start gap-2.5">
+                <div class="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0 text-sky-600 shadow-sm border border-sky-100/50">
+                    <svg class="w-4.5 h-4.5 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Tanggal</p>
-                    <p class="text-sm font-black text-gray-900">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Tanggal</p>
+                    <p class="text-xs font-black text-slate-700 mt-0.5">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}</p>
                 </div>
             </div>
 
-            <div class="flex items-start gap-2">
-                <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <div class="flex items-start gap-2.5">
+                <div class="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0 text-sky-600 shadow-sm border border-sky-100/50">
+                    <svg class="w-4.5 h-4.5 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Lokasi</p>
-                    <p class="text-sm font-black text-gray-900">{{ $event->location }}</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Lokasi</p>
+                    <p class="text-xs font-black text-slate-700 mt-0.5">{{ $event->location }}</p>
                 </div>
             </div>
 
-            <div class="flex items-start gap-2">
-                <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div class="flex items-start gap-2.5">
+                <div class="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0 text-sky-600 shadow-sm border border-sky-100/50">
+                    <svg class="w-4.5 h-4.5 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total Foto</p>
-                    <p class="text-sm font-black text-gray-900">{{ number_format($event->photos_count) }} foto</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Total Foto</p>
+                    <p class="text-xs font-black text-slate-700 mt-0.5">{{ number_format($event->photos_count) }} foto</p>
                 </div>
             </div>
         </div>
 
         @if($event->description)
-        <div class="border-t border-gray-50 pt-4">
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Deskripsi</p>
-            <p class="text-sm text-gray-600 leading-relaxed">{{ $event->description }}</p>
+        <div class="border-t border-slate-200/40 pt-4">
+            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1.5">Deskripsi</p>
+            <p class="text-xs text-slate-500 leading-relaxed font-semibold">{{ $event->description }}</p>
         </div>
         @endif
     </div>
 
     {{-- ===== CARI FOTO ===== --}}
     @auth
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-6"
+    <div class="clean-glass rounded-[2.5rem] overflow-hidden mb-6 relative z-10 border border-white/50 bg-white/60 backdrop-blur-xl"
          x-data="eventSearch()" x-init="init()">
+        
+        {{-- Ambient Orbs tipis dekoratif --}}
+        <div class="absolute -top-10 -left-10 w-24 h-24 bg-blue-300/5 rounded-full blur-xl pointer-events-none"></div>
 
         {{-- Header --}}
-        <div class="px-6 py-5 border-b border-gray-50">
-            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">TEMUKAN FOTOMU</p>
-            <h2 class="text-xl font-black text-gray-900">Cari Foto di Event Ini</h2>
-            <p class="text-sm text-gray-400 mt-1">Ambil selfie langsung atau upload file — AI akan mencarikan fotomu di event ini.</p>
+        <div class="px-6 py-5 border-b border-slate-200/40 relative z-10">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-1">TEMUKAN FOTOMU</p>
+            <h2 class="text-lg font-black text-slate-800">Cari Foto di Acara Ini</h2>
+            <p class="text-xs text-slate-400 font-semibold mt-1">Ambil selfie langsung atau unggah file — AI akan mencarikan fotomu di acara ini.</p>
         </div>
 
         {{-- Tab Toggle --}}
-        <div class="grid grid-cols-2 gap-2 bg-slate-100 rounded-2xl p-1 mx-6 mt-5">
+        <div class="grid grid-cols-2 gap-2 bg-slate-200/40 backdrop-blur-md rounded-2xl p-1 mx-6 mt-5 relative z-10 border border-slate-100/50">
             <button type="button" @click="mode = 'camera'"
-                :class="mode === 'camera' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'"
-                class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                :class="mode === 'camera' ? 'bg-white shadow-sm text-blue-600 border border-white/60' : 'text-slate-400 hover:text-slate-600'"
+                class="flex items-center justify-center gap-2 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Kamera
             </button>
             <button type="button" @click="mode = 'file'"
-                :class="mode === 'file' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'"
-                class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                Upload File
+                :class="mode === 'file' ? 'bg-white shadow-sm text-blue-600 border border-white/60' : 'text-slate-400 hover:text-slate-600'"
+                class="flex items-center justify-center gap-2 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Unggah File
             </button>
         </div>
 
         <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data"
-              class="p-6 space-y-5" @submit="prepareSubmit">
+              class="p-6 space-y-5 relative z-10" @submit="prepareSubmit">
             @csrf
             {{-- event_id otomatis dari event yang sedang dibuka --}}
             <input type="hidden" name="event_id" value="{{ $event->id }}">
@@ -107,7 +116,7 @@
 
             {{-- MODE KAMERA --}}
             <div x-show="mode === 'camera'" x-transition>
-                <div class="relative rounded-2xl overflow-hidden bg-black aspect-square">
+                <div class="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square max-w-sm mx-auto shadow-inner border border-slate-950/20">
                     <video x-ref="video" autoplay playsinline muted
                         class="w-full h-full object-cover" x-show="!capturedImage"></video>
                     <img :src="capturedImage" x-show="capturedImage"
@@ -115,45 +124,47 @@
 
                     {{-- Ring panduan --}}
                     <div x-show="!capturedImage" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div class="w-48 h-48 rounded-full border-4 border-white/50 border-dashed"></div>
+                        <div class="w-48 h-48 rounded-full border-4 border-white/40 border-dashed"></div>
                     </div>
 
                     {{-- Tombol capture / retake --}}
                     <div class="absolute bottom-4 inset-x-0 flex justify-center gap-4">
                         <template x-if="!capturedImage">
                             <button type="button" @click="capture"
-                                class="w-16 h-16 bg-white rounded-full border-4 border-blue-600 shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full"></div>
+                                class="w-16 h-16 bg-white rounded-full border-4 border-blue-500 shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition cursor-pointer">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full"></div>
                             </button>
                         </template>
                         <template x-if="capturedImage">
                             <button type="button" @click="retake"
-                                class="px-5 py-2.5 bg-white/90 backdrop-blur rounded-2xl font-bold text-sm text-gray-800 shadow hover:bg-white transition flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                class="px-5 py-2.5 bg-white/95 backdrop-blur rounded-2xl font-black text-xs uppercase tracking-wider text-slate-700 shadow-md hover:bg-white transition flex items-center gap-2 cursor-pointer border border-slate-100/50">
+                                <svg class="w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 Ulangi
                             </button>
                         </template>
                     </div>
                     <canvas x-ref="canvas" class="hidden"></canvas>
                 </div>
-                <p class="text-xs text-gray-400 font-medium text-center mt-2">Posisikan wajah di dalam lingkaran lalu tekan tombol bulat.</p>
+                <p class="text-[10px] text-slate-400 font-bold text-center mt-2.5">Posisikan wajah di dalam lingkaran lalu tekan tombol bulat.</p>
             </div>
 
             {{-- MODE FILE --}}
             <div x-show="mode === 'file'" x-transition>
-                <div class="bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition"
+                <div class="bg-white/40 border border-dashed border-slate-300/80 backdrop-blur-md rounded-2xl p-8 text-center cursor-pointer hover:border-sky-400 hover:bg-white/60 transition-all duration-300 shadow-inner group max-w-sm mx-auto"
                     @click="$refs.selfieFile.click()">
                     <template x-if="!filePreview">
-                        <div>
-                            <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                            <p class="text-sm font-bold text-slate-500">Klik untuk pilih foto</p>
-                            <p class="text-xs text-slate-400 mt-1">JPG / PNG, maks 5MB</p>
+                        <div class="space-y-2">
+                            <span class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center mx-auto shadow-sm text-sky-500 border border-sky-100/50 group-hover:scale-105 transition-transform duration-300">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            </span>
+                            <p class="text-xs font-black text-slate-600 uppercase tracking-wider pt-2">Pilih file fotomu</p>
+                            <p class="text-[10px] text-slate-400 font-bold">JPG, PNG, atau JPEG (Maks. 5MB)</p>
                         </div>
                     </template>
                     <template x-if="filePreview">
-                        <div>
-                            <img :src="filePreview" class="w-40 h-40 object-cover rounded-xl mx-auto">
-                            <p class="text-xs font-bold text-blue-600 mt-3">Foto dipilih. Klik untuk ganti.</p>
+                        <div class="space-y-2">
+                            <img :src="filePreview" class="w-40 h-40 object-cover rounded-2xl mx-auto shadow-md border border-white/60">
+                            <p class="text-[10px] font-black text-blue-600 uppercase tracking-wider pt-2">Foto dipilih. Klik untuk ganti.</p>
                         </div>
                     </template>
                 </div>
@@ -162,34 +173,38 @@
             {{-- Tombol Submit --}}
             <button type="submit"
                 :disabled="mode === 'camera' ? !capturedImage : !fileSelected"
-                :class="(mode === 'camera' ? !capturedImage : !fileSelected) ? 'opacity-40 cursor-not-allowed' : 'hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/25'"
-                class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm uppercase italic tracking-[0.1em] transition-all flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                Cari Fotoku di Event Ini
+                :class="(mode === 'camera' ? !capturedImage : !fileSelected) ? 'opacity-40 cursor-not-allowed shadow-none' : 'hover:scale-[1.01] active:scale-95 shadow-md shadow-blue-500/25 hover:shadow-lg'"
+                class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black text-xs uppercase italic tracking-[0.15em] transition-all flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden">
+                <span class="absolute top-0 -left-[100%] w-[50%] h-full bg-white/20 skew-x-[-25deg] group-hover:left-[150%] transition-all duration-1000"></span>
+                <svg class="w-4.5 h-4.5 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                Cari Fotoku di Acara Ini
             </button>
         </form>
     </div>
 
     @else
     {{-- Guest: minta login dulu --}}
-    <div class="bg-blue-50 border border-blue-100 rounded-3xl p-8 text-center mb-6">
-        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+    <div class="clean-glass rounded-[2.5rem] p-8 text-center mb-6 relative overflow-hidden z-10 border border-white/50 bg-white/60 backdrop-blur-xl">
+        {{-- Ambient Orbs tipis dekoratif --}}
+        <div class="absolute -top-10 -right-10 w-24 h-24 bg-blue-300/5 rounded-full blur-xl pointer-events-none"></div>
+
+        <div class="w-14 h-14 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-sky-100/50 text-sky-500">
+            <svg class="w-7 h-7 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         </div>
-        <h3 class="font-black text-gray-900 text-lg mb-2">Login untuk Mencari Foto</h3>
-        <p class="text-sm text-gray-500 mb-5">Kamu perlu login terlebih dahulu untuk mencari foto di event ini.</p>
+        <h3 class="font-black text-slate-800 text-lg mb-1 leading-tight">Login untuk Mencari Foto</h3>
+        <p class="text-xs text-slate-400 font-semibold mb-6">Kamu perlu login terlebih dahulu untuk mencari foto di acara ini.</p>
         <div class="flex gap-3 justify-center">
-            <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl transition-colors shadow-md shadow-blue-200">Masuk Sekarang</a>
-            <a href="{{ route('register') }}" class="px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold text-sm rounded-xl border border-gray-200 transition-colors">Daftar Gratis</a>
+            <a href="{{ route('login') }}" class="px-6 py-3.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-black text-xs uppercase italic tracking-wider rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md shadow-blue-200/50">Masuk Sekarang</a>
+            <a href="{{ route('register') }}" class="px-6 py-3.5 bg-white/40 hover:bg-white/70 border border-slate-200 text-slate-600 hover:text-slate-800 rounded-xl font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-sm">Daftar Gratis</a>
         </div>
     </div>
     @endauth
 
     {{-- Back --}}
-    <div class="text-center">
-        <a href="{{ route('search') }}" class="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-            Kembali ke Daftar Event
+    <div class="text-center relative z-10">
+        <a href="{{ route('search') }}" class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-blue-600 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke Daftar Acara
         </a>
     </div>
 

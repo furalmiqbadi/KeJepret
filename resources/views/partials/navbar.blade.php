@@ -1,6 +1,6 @@
 <div id="desktop-navbar" class="hidden md:flex fixed top-8 left-0 right-0 z-[100] items-center justify-between px-16 pointer-events-none transition-all duration-500 ease-out">
     <!-- Pill 1: Logo (Left) -->
-    <div class="backdrop-blur-2xl bg-white/20 h-14 rounded-2xl px-6 flex items-center shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/40 pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
+    <div class="clean-glass h-14 rounded-2xl px-6 flex items-center pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
         @auth
             <a href="{{ Auth::user()->role === 'photographer' ? route('photographer.portfolio') : route('home') }}" class="flex items-center gap-3">
         @else
@@ -14,26 +14,24 @@
     </div>
 
     <!-- Pill 2: Navigation Links (Center) -->
-    <div class="backdrop-blur-2xl bg-white/20 h-14 rounded-2xl px-10 flex items-center shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/40 pointer-events-auto transition-all duration-300">
+    <div class="clean-glass h-14 rounded-2xl px-10 flex items-center pointer-events-auto transition-all duration-300">
         <div class="flex items-center gap-10">
 
             @auth
                 @if(Auth::user()->role === 'photographer')
                     @php
                         $navLinks = [
-                            ['route' => 'photographer.portfolio', 'label' => 'Portfolio'],
-                            ['route' => 'photographer.upload',    'label' => 'Upload Foto'],
+                            ['route' => 'photographer.portfolio', 'label' => 'Portofolio'],
+                            ['route' => 'photographer.upload',    'label' => 'Unggah Foto'],
                             ['route' => 'balance.sales',          'label' => 'Penjualan'],
-                            ['route' => 'photographer.profil',    'label' => 'Profil'],
                         ];
                     @endphp
                 @else
                     @php
                         $navLinks = [
                             ['route' => 'home',   'label' => 'Beranda'],
-                            ['route' => 'event',  'label' => 'Event'],
-                            ['route' => 'search', 'label' => 'Search Photo'],
-                            ['route' => 'profil', 'label' => 'Profil'],
+                            ['route' => 'event',  'label' => 'Acara'],
+                            ['route' => 'search', 'label' => 'Cari Foto'],
                         ];
                     @endphp
                 @endif
@@ -41,8 +39,8 @@
                 @php
                     $navLinks = [
                         ['route' => 'home',   'label' => 'Beranda'],
-                        ['route' => 'event',  'label' => 'Event'],
-                        ['route' => 'search', 'label' => 'Search Photo'],
+                        ['route' => 'event',  'label' => 'Acara'],
+                        ['route' => 'search', 'label' => 'Cari Foto'],
                     ];
                 @endphp
             @endauth
@@ -50,7 +48,7 @@
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}"
                    class="text-[11px] font-black uppercase tracking-[0.2em] italic transition-all duration-300 relative group {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-500 hover:text-slate-950' }}">
-                    {{ $link['label'] }}
+                     {{ $link['label'] }}
                     @if(Route::is($link['route']))
                         <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
                     @else
@@ -70,8 +68,8 @@
                     ? route('photographer.profil')
                     : route('profil');
             @endphp
-            <a href="{{ $profilRoute }}" class="backdrop-blur-2xl bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/40 hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
-                <div class="w-full h-full rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg font-black italic shadow-inner overflow-hidden border border-white/20">
+            <a href="{{ $profilRoute }}" class="clean-glass w-14 h-14 rounded-2xl flex items-center justify-center hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
+                <div class="w-full h-full rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg font-black italic shadow-inner overflow-hidden border border-white/10">
                     @if(Auth::user()->profile_face_url)
                         <img src="{{ Auth::user()->profile_face_url }}" class="w-full h-full object-cover">
                     @else
@@ -80,7 +78,7 @@
                 </div>
             </a>
         @else
-            <a href="{{ route('login') }}" class="backdrop-blur-2xl bg-white/20 h-14 px-8 rounded-2xl flex items-center text-[11px] font-black uppercase italic shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/40 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:translate-y-[-2px] transition-all duration-300">
+            <a href="{{ route('login') }}" class="clean-glass h-14 px-8 rounded-2xl flex items-center text-[11px] font-black uppercase italic text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:translate-y-[-2px] transition-all duration-300">
                 Login
             </a>
         @endauth
