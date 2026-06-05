@@ -6,17 +6,37 @@
 
 <div class="max-w-2xl mx-auto px-4 sm:px-6 py-8 relative z-10">
 
+    @if(session('success'))
+    <div class="bg-green-100 border border-green-200 text-green-700 px-4 py-3 rounded-2xl mb-6 font-bold text-sm text-center">
+        {{ session('success') }}
+    </div>
+    @endif
+
     {{-- Profile Header Card --}}
-    <div class="glass-card rounded-[2rem] p-8 mb-6 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 hover:translate-y-[-2px] transition-all duration-300">
-        <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center border border-white/30 shadow-[0_10px_25px_rgba(37,99,235,0.2)]">
-            <span class="text-4xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
-        </div>
-        <div class="flex-1">
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-1">{{ $user->name }}</h1>
-            <p class="text-slate-600 text-sm font-semibold mb-4">{{ $user->email }}</p>
-            <span class="inline-block bg-blue-600/10 text-blue-600 text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-2xl border border-blue-500/15">
-                {{ $user->role === 'runner' ? 'Pelari Aktif' : ucfirst($user->role) }}
-            </span>
+    <div class="glass-card rounded-[2.5rem] p-8 md:p-12 mb-8 relative overflow-hidden shadow-2xl hover:shadow-blue-500/10 transition-all duration-500">
+        {{-- Ambient decorative glow --}}
+        <div class="absolute -top-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-8">
+            {{-- Avatar Section --}}
+            <div class="w-36 h-36 rounded-[2.5rem] bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center border-[6px] border-white shadow-[0_15px_35px_rgba(37,99,235,0.25)] flex-shrink-0 relative group cursor-pointer overflow-hidden transition-transform duration-500 hover:scale-105">
+                <span class="text-6xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+            </div>
+
+            <div class="flex-1 flex flex-col sm:flex-row items-center sm:items-start justify-between w-full pt-2">
+                <div class="mb-6 sm:mb-0 flex flex-col items-center sm:items-start">
+                    <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-2">{{ $user->name }}</h1>
+                    <p class="text-slate-600 text-sm font-semibold mb-5">{{ $user->email }}</p>
+                    <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-blue-100 shadow-sm">
+                        {{ $user->role === 'runner' ? 'Pelari Aktif' : ucfirst($user->role) }}
+                    </span>
+                </div>
+                <a href="{{ route('profil.edit') }}" class="inline-flex items-center justify-center gap-2 bg-white/60 hover:bg-white text-slate-700 hover:text-blue-600 font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl border border-slate-200/60 hover:border-blue-200 transition-all shadow-sm">
+                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    Edit Profil
+                </a>
+            </div>
         </div>
     </div>
 

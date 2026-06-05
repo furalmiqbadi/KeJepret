@@ -18,7 +18,7 @@ $testimonials = [
 {{-- ===== HERO ===== --}}
 <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-16 text-center">
 
-    <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-gray-100 mb-8">
+    <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-gray-100 mb-8 hover:-translate-y-0.5 transition-transform">
         <span class="flex gap-1">
             <span class="w-2 h-2 rounded-full bg-orange-400"></span>
             <span class="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -27,22 +27,22 @@ $testimonials = [
         <span class="text-xs font-semibold text-gray-600">{{ number_format($totalPhotos) }}+ foto tersedia di KeJepret</span>
     </div>
 
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-gray-900 mb-6">
+    <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-6 drop-shadow-sm">
         Temukan Foto Larimu<br>
-        <span class="text-blue-600">dari Setiap Event</span>
+        <span class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent">dari Setiap Event</span>
     </h1>
     <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
         Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Resolusi tinggi, harga terjangkau.
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-16 relative z-10">
-        <input type="text" placeholder="Cari nama event atau kota..."
-            class="flex-1 px-5 py-3.5 glass-input rounded-2xl text-sm font-bold placeholder-gray-500 focus:outline-none transition-all">
-        <a href="{{ route('search') }}" class="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm px-7 py-3.5 rounded-2xl transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 whitespace-nowrap hover:scale-[1.01] active:scale-[0.99]">
+    <form action="{{ route('search') }}" method="GET" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-16 relative z-10">
+        <input type="text" name="q" placeholder="Cari nama event atau kota..."
+            class="flex-1 px-5 py-3.5 clean-glass-input rounded-2xl text-sm font-bold placeholder-slate-500 focus:outline-none transition-all shadow-sm shadow-slate-200/50">
+        <button type="submit" class="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm px-7 py-3.5 rounded-2xl transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
             Cari Sekarang
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
-    </div>
+        </button>
+    </form>
 
     {{-- Feature Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16 relative z-10">
@@ -138,8 +138,8 @@ $testimonials = [
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             @foreach($steps as $step)
-            <div class="glass-card rounded-2xl p-6 relative overflow-hidden hover:translate-y-[-4px] transition-all duration-300">
-                <div class="absolute top-4 right-5 text-6xl font-black text-slate-900/5 leading-none select-none">{{ $step['num'] }}</div>
+            <div class="clean-glass rounded-[2rem] p-8 relative overflow-hidden group hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                <div class="absolute -top-6 -right-6 text-8xl font-black bg-gradient-to-br from-sky-500/10 to-indigo-600/5 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-500 select-none">{{ $step['num'] }}</div>
                 <div class="w-10 h-10 bg-blue-600/10 text-blue-600 border border-blue-500/10 rounded-xl flex items-center justify-center mb-4 relative z-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $step['icon'] }}"/>
@@ -180,14 +180,15 @@ $testimonials = [
                     @if($event->cover_image)
                         <img src="{{ env('AWS_URL') }}/{{ $event->cover_image }}"
                              alt="{{ $event->name }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
                     @else
                         <div class="w-full h-full flex items-center justify-center">
-                            <svg class="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <svg class="w-10 h-10 text-slate-300 group-hover:scale-110 transition-transform duration-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                     @endif
-                    <span class="absolute top-2.5 right-2.5 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-bold px-2.5 py-1 rounded-full">
-                        <svg class="w-3 h-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                    <span class="absolute top-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-md shadow-sm text-slate-700 text-[10px] font-black px-3 py-1.5 rounded-full z-10 group-hover:-translate-y-0.5 transition-transform duration-300">
+                        <svg class="w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
@@ -240,20 +241,20 @@ $testimonials = [
                 </a>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                @forelse($events->take(4) as $ev)
-                <div class="rounded-2xl overflow-hidden aspect-square bg-gray-100">
-                    @if($ev->cover_image)
-                        <img src="{{ env('AWS_URL') }}/{{ $ev->cover_image }}" alt="{{ $ev->name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                @forelse($randomPhotos as $photo)
+                <div class="rounded-2xl overflow-hidden aspect-square bg-slate-100 group">
+                    @if($photo->watermark_path || $photo->r2_path)
+                        <img src="{{ env('AWS_URL') }}/{{ $photo->watermark_path ?? $photo->r2_path }}" alt="Random Photo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
                     @else
                         <div class="w-full h-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <svg class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                     @endif
                 </div>
                 @empty
                 @for($i = 0; $i < 4; $i++)
-                <div class="rounded-2xl overflow-hidden aspect-square bg-gray-100 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <div class="rounded-2xl overflow-hidden aspect-square bg-slate-100 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 @endfor
                 @endforelse
@@ -351,7 +352,7 @@ $testimonials = [
 </section>
 
 {{-- ===== FOOTER CTA ===== --}}
-<section class="bg-gray-900 py-20 text-center">
+<section class="bg-gray-900 pt-16 pb-8 text-center rounded-b-[2.5rem] sm:rounded-none">
     <div class="max-w-2xl mx-auto px-4 sm:px-6">
         <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">MULAI SEKARANG</p>
         <h2 class="text-4xl sm:text-5xl font-black text-white leading-tight mb-4">
@@ -371,7 +372,7 @@ $testimonials = [
             </a>
         </div>
     </div>
-    <div class="max-w-5xl mx-auto px-4 mt-16 pt-8 border-t border-gray-800">
+    <div class="max-w-5xl mx-auto px-4 mt-12 pt-6 border-t border-gray-800">
         <p class="text-gray-500 text-sm">© 2026 KeJepret. Platform foto lari terpercaya di Indonesia.</p>
     </div>
 </section>

@@ -123,7 +123,7 @@
             <div class="space-y-2 relative">
                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Pilih Acara <span class="normal-case tracking-normal font-medium text-slate-400">(opsional)</span></label>
                 <div class="relative">
-                    <input type="hidden" name="event_id" :value="selectedEventId">
+                    <input type="hidden" name="event_id" :value="selectedEventId" :disabled="selectedEventId === ''">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-20">
                         <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </span>
@@ -138,6 +138,9 @@
                         <svg class="w-4 h-4 transition-transform duration-200" :class="dropdownOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </span>
                 </div>
+                @error('event_id')
+                    <p class="text-xs text-red-500 font-bold mt-1">{{ $message }}</p>
+                @enderror
 
                 {{-- Popover Dropdown Options List --}}
                 <div x-show="dropdownOpen" 
@@ -190,12 +193,9 @@
 </div>
 
 {{-- LOADING OVERLAY AI SEARCH --}}
-<div id="search-overlay" class="hidden fixed inset-0 bg-slate-900/20 backdrop-blur-md z-50 flex items-center justify-center transition-all duration-300">
-    <div class="clean-glass rounded-[2.5rem] p-10 flex flex-col items-center gap-6 max-w-sm w-full mx-4 relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(15,23,42,0.06)]"
-         style="background: rgba(255, 255, 255, 0.2); border: 1.5px solid rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px);">
-        {{-- Ambient Orbs di modal loading --}}
-        <div class="absolute -top-10 -right-10 w-24 h-24 bg-blue-400/10 rounded-full blur-xl pointer-events-none"></div>
-        <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-indigo-400/10 rounded-full blur-xl pointer-events-none"></div>
+<div id="search-overlay" class="hidden fixed inset-0 bg-white/5 backdrop-blur-sm z-[200] flex items-center justify-center transition-all duration-300">
+    <div class="clean-glass rounded-[2.5rem] p-10 flex flex-col items-center gap-6 max-w-sm w-full mx-4 relative overflow-hidden shadow-2xl shadow-blue-900/5"
+         style="background: rgba(255, 255, 255, 0.6); border: 2px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(20px);">
 
         {{-- Spinner wajah --}}
         <div class="relative w-24 h-24">
@@ -215,8 +215,8 @@
         </div>
 
         <div class="text-center relative z-10">
-            <p class="text-xl font-black text-slate-800 leading-tight">AI Memindai Wajah...</p>
-            <p class="text-xs text-slate-400/90 font-semibold mt-2 leading-relaxed">Mencocokkan wajahmu dengan ribuan foto berkualitas tinggi di sistem KeJepret</p>
+            <p class="text-xl font-black text-blue-700 leading-tight">AI Memindai Wajah...</p>
+            <p class="text-xs text-blue-500 font-semibold mt-2 leading-relaxed">Mencocokkan wajahmu dengan ribuan foto berkualitas tinggi di sistem KeJepret</p>
         </div>
 
         {{-- Step progress --}}

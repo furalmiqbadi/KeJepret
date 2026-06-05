@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
@@ -110,7 +110,7 @@
         </svg>
     </div>
 
-    <div class="w-full max-w-lg space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative z-10">
+    <div class="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative z-10">
 
         {{-- Register Card --}}
         <div class="clean-glass p-10 rounded-[2.5rem] space-y-6 relative overflow-hidden">
@@ -148,14 +148,19 @@
             <form action="{{ route('register.post') }}" method="POST" class="space-y-5 relative z-10">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
                     {{-- Nama --}}
                     <div class="space-y-1.5">
                         <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Nama Lengkap</label>
                         <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
                             <input type="text" name="name" placeholder="John Doe"
                                 value="{{ old('name') }}"
-                                class="w-full clean-glass-input rounded-2xl px-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                         </div>
                     </div>
 
@@ -163,22 +168,32 @@
                     <div class="space-y-1.5">
                         <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
                         <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
                             <input type="email" name="email" placeholder="nama@email.com"
                                 value="{{ old('email') }}"
-                                class="w-full clean-glass-input rounded-2xl px-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                         </div>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {{-- Password / Kata Sandi --}}
                     <div class="space-y-1.5">
                         <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                         <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
                             <input type="password" name="password" id="password_reg" placeholder="••••••••"
-                                class="w-full clean-glass-input rounded-2xl pl-5 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                             <button type="button" onclick="togglePassword('password_reg', 'eye_reg_open', 'eye_reg_close')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center">
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center z-10">
                                 <svg id="eye_reg_open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -194,10 +209,15 @@
                     <div class="space-y-1.5">
                         <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Konfirmasi Sandi</label>
                         <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
                             <input type="password" name="password_confirmation" id="password_reg_confirm" placeholder="••••••••"
-                                class="w-full clean-glass-input rounded-2xl pl-5 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                                class="w-full clean-glass-input rounded-2xl pl-11 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                             <button type="button" onclick="togglePassword('password_reg_confirm', 'eye_reg_confirm_open', 'eye_reg_confirm_close')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center">
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center z-10">
                                 <svg id="eye_reg_confirm_open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -214,9 +234,14 @@
                 <div class="space-y-1.5">
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Nomor Telepon <span class="normal-case tracking-normal font-semibold text-slate-400/75">(opsional)</span></label>
                     <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
                         <input type="text" name="phone" placeholder="08xxxxxxxxxx"
                             value="{{ old('phone') }}"
-                            class="w-full clean-glass-input rounded-2xl px-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
+                            class="w-full clean-glass-input rounded-2xl pl-11 pr-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                     </div>
                 </div>
 

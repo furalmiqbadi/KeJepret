@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
@@ -146,9 +146,14 @@
                 <div class="space-y-1.5">
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
                     <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
                         <input type="email" name="email" placeholder="nama@email.com"
                             value="{{ old('email') }}"
-                            class="w-full clean-glass-input rounded-2xl px-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
+                            class="w-full clean-glass-input rounded-2xl pl-11 pr-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
                     </div>
                 </div>
 
@@ -156,10 +161,15 @@
                 <div class="space-y-1.5">
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Kata Sandi</label>
                     <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
                         <input type="password" name="password" id="password_login" placeholder="••••••••"
-                            class="w-full clean-glass-input rounded-2xl pl-5 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
+                            class="w-full clean-glass-input rounded-2xl pl-11 pr-12 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400/70 shadow-sm shadow-slate-200/50">
                         <button type="button" onclick="togglePassword('password_login', 'eye_login_open', 'eye_login_close')"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center">
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors flex items-center justify-center z-10">
                             <svg id="eye_login_open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

@@ -9,11 +9,11 @@
     <div class="absolute bottom-20 -left-20 w-80 h-80 bg-blue-300/5 rounded-full blur-3xl pointer-events-none"></div>
 
     {{-- Header dengan Ambient Glow --}}
-    <div class="mb-10 text-center relative z-10">
-        <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-12 bg-blue-400/10 rounded-full blur-xl pointer-events-none"></div>
-        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">Acara Lari</p>
-        <h1 class="text-3xl sm:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900">Semua Acara</h1>
-        <p class="text-slate-500 text-xs mt-2 max-w-md mx-auto leading-relaxed">Temukan acara lari terfavoritmu dan temukan foto terbaikmu dengan mudah di dalamnya.</p>
+    <div class="mb-14 text-center relative z-10">
+        <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-12 bg-blue-400/20 rounded-full blur-2xl pointer-events-none"></div>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2 drop-shadow-sm">Jelajahi Acara</p>
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 drop-shadow-sm mb-4">Semua Acara</h1>
+        <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed font-medium">Temukan acara lari terfavoritmu dan simpan momen terbaikmu bersama fotografer profesional kami.</p>
     </div>
 
     {{-- Filter Form Glassmorphism --}}
@@ -120,10 +120,10 @@
                 @if($event->cover_image)
                     <img src="{{ env('AWS_URL') }}/{{ $event->cover_image }}"
                          alt="{{ $event->name }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
                 @else
-                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                        <svg class="w-10 h-10 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sky-400 to-indigo-500 shadow-inner group-hover:scale-110 transition-transform duration-700 ease-out">
+                        <svg class="w-12 h-12 text-white drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                 @endif
 
@@ -141,18 +141,18 @@
             </div>
 
             {{-- Info --}}
-            <div class="p-5 flex-1 flex flex-col justify-between">
+            <div class="p-5 flex-1 flex flex-col justify-between bg-white relative z-10">
                 <div>
                     <div class="flex items-center gap-1.5 text-slate-400 mb-2">
                         <svg class="w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         <span class="text-[10px] font-black uppercase tracking-wider">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}</span>
                     </div>
-                    <h3 class="font-black text-slate-800 text-sm leading-snug mb-4 group-hover:text-sky-600 transition-colors line-clamp-2">{{ $event->name }}</h3>
+                    <h3 class="font-black text-slate-800 text-sm leading-snug mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-sky-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2">{{ $event->name }}</h3>
                 </div>
-                <div class="flex items-center justify-between pt-3 border-t border-slate-200/40">
+                <div class="flex items-center justify-between pt-3 border-t border-slate-100">
                     <span class="text-[10px] font-black uppercase tracking-widest text-sky-600 italic group-hover:text-indigo-600 transition-colors">Lihat Detail</span>
-                    <div class="w-6 h-6 rounded-lg bg-sky-50 flex items-center justify-center text-sky-600 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-600 group-hover:text-white transition-all duration-500 shadow-sm">
-                        <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    <div class="w-7 h-7 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:shadow-blue-500/20 group-hover:scale-110">
+                        <svg class="w-3.5 h-3.5 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                     </div>
                 </div>
             </div>
