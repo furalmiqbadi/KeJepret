@@ -138,6 +138,45 @@ class PhotoController extends Controller
     }
 
     // ════════════════════════════════
+    // ARCHIVE FOTO (TOGGLE IS_ACTIVE)
+    // ════════════════════════════════
+    public function archive($id)
+    {
+        $photo = Photo::where('id', $id)
+            ->where('photographer_id', Auth::id())
+            ->firstOrFail();
+
+        $photo->update(['is_active' => !$photo->is_active]);
+
+        $status = $photo->is_active ? 'diaktifkan' : 'diarsipkan';
+        return redirect()->route('photographer.portfolio')
+            ->with('success', "Foto berhasil $status.");
+    }
+
+    // ════════════════════════════════
+    // HAPUS FOTO
+    // ════════════════════════════════
+    public function destroy($id)
+    {
+        $photo = Photo::where('id', $id)
+            ->where('photographer_id', Auth::id())
+            ->firstOrFail();
+
+        try {
+            Storage::disk('s3')->delete($photo->r2_path);
+            Storage::disk('s3')->delete($photo->watermark_path);
+        } catch (\Exception $e) {
+            Log::error('Gagal hapus file dari R2: ' . $e->getMessage());
+        }
+
+        // Hapus juga Face Enrollment atau AI data jika ada endpintnya (saat ini cukup hapus dari DB)
+        $photo->delete();
+
+        return redirect()->route('photographer.portfolio')
+            ->with('success', 'Foto berhasil dihapus secara permanen.');
+    }
+
+    // ════════════════════════════════
     // PRIVATE: Generate Watermark
     // ════════════════════════════════
     private function generateWatermark($file, string $filename): string

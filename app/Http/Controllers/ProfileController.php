@@ -82,4 +82,40 @@ class ProfileController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Menampilkan halaman edit profil.
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('profil-edit', compact('user'));
+    }
+
+    /**
+     * Memperbarui data profil pengguna.
+     */
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $user->name = $request->name;
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        if ($user->role === 'photographer') {
+            return redirect()->route('photographer.profil')->with('success', 'Profil berhasil diperbarui.');
+        }
+
+        return redirect()->route('profil')->with('success', 'Profil berhasil diperbarui.');
+    }
 }

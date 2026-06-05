@@ -33,7 +33,12 @@ class HomeController extends Controller
         $totalPhotos = Photo::where('is_active', true)->count();
         $totalEvents = Event::where('is_active', true)->count();
 
-        return view('home', compact('events', 'totalPhotos', 'totalEvents'));
+        $randomPhotos = Photo::where('is_active', true)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return view('home', compact('events', 'totalPhotos', 'totalEvents', 'randomPhotos'));
     }
 
     // ═══════════════════════════════

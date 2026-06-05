@@ -39,42 +39,48 @@
     @else
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 relative z-10">
         @foreach($photos as $photo)
-        <div class="glass-card rounded-2xl overflow-hidden hover:shadow-md transition-all group">
+        <div class="clean-glass rounded-[2rem] overflow-hidden hover:shadow-xl hover:shadow-blue-900/10 transition-all duration-300 group border border-white/50 flex flex-col">
 
             {{-- Foto Watermark --}}
-            <div class="relative aspect-square overflow-hidden bg-slate-950">
+            <div class="relative aspect-[4/5] sm:aspect-square overflow-hidden bg-slate-100 flex items-center justify-center">
+                {{-- Blurred Background --}}
+                <img src="{{ $photo['watermark_url'] }}" class="absolute inset-0 w-full h-full object-cover opacity-60 blur-md scale-110 pointer-events-none" alt="Blurred background">
+                
                 <button
                     type="button"
-                    class="preview-trigger block w-full h-full"
+                    class="preview-trigger block w-full h-full relative z-10"
                     data-preview-url="{{ $photo['watermark_url'] }}"
                     data-preview-alt="Preview foto event {{ $photo['event_name'] }}"
                     aria-label="Lihat preview foto"
                 >
                     <img src="{{ $photo['watermark_url'] }}" alt="Foto"
-                        class="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-300">
+                        class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-2xl">
                 </button>
-                <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] font-black px-2 py-1 rounded-full">
-                    {{ round($photo['similarity_score']) }}%
+                <div class="absolute top-3 right-3 bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 z-20">
+                    {{ round($photo['similarity_score']) }}% Cocok
                 </div>
             </div>
 
             {{-- Info --}}
-            <div class="p-3 space-y-1">
-                <p class="text-xs font-bold text-gray-900 truncate">{{ $photo['event_name'] }}</p>
-                <p class="text-[11px] text-gray-400 font-semibold">{{ $photo['photographer'] }}</p>
-                <p class="text-sm font-black text-blue-600">Rp {{ number_format($photo['price'], 0, ',', '.') }}</p>
+            <div class="p-4 space-y-1.5 bg-white/40 flex-1">
+                <p class="text-xs font-black text-slate-800 truncate leading-none">{{ $photo['event_name'] }}</p>
+                <div class="flex items-center gap-1">
+                    <svg class="w-3 h-3 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{{ $photo['photographer'] }}</p>
+                </div>
+                <p class="text-sm font-black text-blue-600 pt-1">Rp {{ number_format($photo['price'], 0, ',', '.') }}</p>
             </div>
 
             {{-- Tombol Keranjang --}}
-            <div class="px-3 pb-3">
+            <div class="px-4 pb-4 bg-white/40">
                 <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
                     @csrf
                     <input type="hidden" name="photo_id" value="{{ $photo['photo_id'] }}">
                     <button type="submit"
-                        class="cart-button w-full py-2 rounded-xl font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 {{ $photo['in_cart'] ? 'bg-green-50 text-green-600' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
+                        class="cart-button w-full py-3 rounded-2xl font-black text-[11px] uppercase tracking-wider active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm {{ $photo['in_cart'] ? 'bg-green-100/50 text-green-700 border border-green-200 cursor-not-allowed' : 'bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5' }}"
                         {{ $photo['in_cart'] ? 'disabled' : '' }}>
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $photo['in_cart'] ? 'M5 13l4 4L19 7' : 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' }}"/></svg>
-                        <span>{{ $photo['in_cart'] ? 'Sudah di Keranjang' : 'Tambah ke Keranjang' }}</span>
+                        <svg class="w-4 h-4 {{ $photo['in_cart'] ? '' : 'animate-bounce' }}" style="animation-duration: 2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $photo['in_cart'] ? 'M5 13l4 4L19 7' : 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' }}"/></svg>
+                        <span>{{ $photo['in_cart'] ? 'Sudah di Keranjang' : 'Tambah Keranjang' }}</span>
                     </button>
                 </form>
             </div>

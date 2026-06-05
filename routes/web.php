@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\BalanceController;
 use App\Http\Controllers\Web\CartController;
@@ -36,6 +37,8 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profil/edit', [ProfileController::class, 'edit'])->name('profil.edit');
+    Route::put('/profil/edit', [ProfileController::class, 'update'])->name('profil.update');
 
     Route::middleware('role:runner')->prefix('runner')->group(function () {
         Route::get('/search', [SearchController::class, 'showSearch'])->name('runner.search');
@@ -69,6 +72,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/upload', [PhotoController::class, 'showUpload'])->name('photographer.upload');
             Route::post('/upload', [PhotoController::class, 'upload'])->name('photographer.upload.post');
             Route::put('/photos/{id}/price', [PhotoController::class, 'updatePrice'])->name('photographer.photos.price.post');
+            Route::put('/photos/{id}/archive', [PhotoController::class, 'archive'])->name('photographer.photos.archive.post');
+            Route::delete('/photos/{id}', [PhotoController::class, 'destroy'])->name('photographer.photos.destroy.post');
             Route::get('/profil', [BalanceController::class, 'index'])->name('photographer.profil');
             Route::get('/sales', [BalanceController::class, 'sales'])->name('balance.sales');
             Route::post('/withdraw', [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
