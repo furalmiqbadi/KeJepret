@@ -72,11 +72,11 @@ $testimonials = [
                 </div>
                 <span class="text-[10px] font-bold uppercase tracking-widest text-blue-100">KEPUASAN</span>
             </div>
-            <div class="text-4xl font-black mb-0.5">4.9<span class="text-xl text-blue-200">/5</span></div>
+            <div class="text-4xl font-black mb-0.5"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-xl text-blue-200">/5</span></div>
             <p class="text-blue-100 text-xs mb-5">Rating dari pengguna setia KeJepret</p>
             <div class="border-t border-white/20 pt-4">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-blue-100 mb-1">EVENT TERSEDIA</p>
-                <div class="text-3xl font-black">{{ $totalEvents }}+</div>
+                <div class="text-3xl font-black"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
                 <p class="text-blue-100 text-xs">Event aktif di seluruh Indonesia</p>
             </div>
         </div>
@@ -93,7 +93,7 @@ $testimonials = [
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                     <span class="text-[10px] font-bold uppercase tracking-widest text-slate-300">LIVE ACARA</span>
                 </div>
-                <div class="text-3xl font-black mb-1 text-white">{{ number_format($totalPhotos) }}+</div>
+                <div class="text-3xl font-black mb-1 text-white"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
                 <p class="text-slate-200 text-[10px] font-bold tracking-widest uppercase mb-2">FOTO TERSEDIA</p>
                 <p class="text-slate-400 text-xs mb-6 font-medium leading-relaxed">Diperbarui seketika, temukan fotomu langsung setelah finish.</p>
                 <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 bg-white px-5 py-2.5 rounded-xl hover:bg-slate-100 transition-all hover:scale-105">
@@ -109,19 +109,19 @@ $testimonials = [
     <div class="clean-glass bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 my-8 relative z-10 shadow-sm">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 divide-x divide-slate-200/40">
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ number_format($totalPhotos) }}+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">FOTO TERSEDIA</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ $totalEvents }}+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">ACARA AKTIF</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">15k+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="15000">15.000</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">PELARI TERDAFTAR</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">4.9<span class="text-xl text-slate-400">/5</span></div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-xl text-slate-400">/5</span></div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
             </div>
         </div>
@@ -376,5 +376,56 @@ $testimonials = [
         <p class="text-gray-500 text-sm">© 2026 KeJepret. Platform foto lari terpercaya di Indonesia.</p>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter-up');
+    const speed = 1500; // durasi animasi dalam milidetik
+
+    const animate = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+        const start = 0;
+        let startTime = null;
+
+        const format = (value) => {
+            if (decimals > 0) {
+                return value.toFixed(decimals);
+            }
+            return Math.floor(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        };
+
+        const updateCount = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / speed, 1);
+
+            const currentValue = start + (target - start) * percentage;
+            counter.innerText = format(currentValue);
+
+            if (percentage < 1) {
+                requestAnimationFrame(updateCount);
+            } else {
+                counter.innerText = format(target);
+            }
+        };
+
+        requestAnimationFrame(updateCount);
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animate(entry.target);
+                observer.unobserve(entry.target); // Hanya jalankan animasi sekali
+            }
+        });
+    }, { threshold: 0.1 });
+
+    counters.forEach(counter => {
+        observer.observe(counter);
+    });
+});
+</script>
 
 @endsection
