@@ -141,23 +141,23 @@ $testimonials = [
 </section>
 
 {{-- Stats Row --}}
-    <div class="clean-glass bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 my-8 relative z-10 shadow-sm">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 divide-x divide-slate-200/40">
+    <div class="max-w-4xl mx-auto clean-glass bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl p-5 my-4 relative z-10 shadow-sm">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 divide-x divide-slate-200/40">
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
-                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">FOTO TERSEDIA</div>
+                <div class="text-2xl sm:text-3xl font-black text-slate-800 mb-0.5"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">FOTO TERSEDIA</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
-                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">ACARA AKTIF</div>
+                <div class="text-2xl sm:text-3xl font-black text-slate-800 mb-0.5"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">ACARA AKTIF</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="15000">15.000</span>+</div>
-                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">PELARI TERDAFTAR</div>
+                <div class="text-2xl sm:text-3xl font-black text-slate-800 mb-0.5"><span class="counter-up" data-target="15000">15.000</span>+</div>
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">PELARI TERDAFTAR</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-xl text-slate-400">/5</span></div>
-                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
+                <div class="text-2xl sm:text-3xl font-black text-slate-800 mb-0.5"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-lg text-slate-400 font-bold">/5</span></div>
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
             </div>
         </div>
     </div>
