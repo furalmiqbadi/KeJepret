@@ -38,8 +38,12 @@
             
             {{-- Avatar Section --}}
             <div class="flex flex-col items-center gap-5 w-full md:w-auto">
-                <div class="w-36 h-36 rounded-[2.5rem] bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center border-[6px] border-white shadow-[0_15px_35px_rgba(37,99,235,0.25)] relative group cursor-pointer overflow-hidden transition-transform duration-500 hover:scale-105">
-                    <span class="text-6xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                <div class="w-36 h-36 rounded-[2.5rem] bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center border-[6px] border-white shadow-[0_15px_35px_rgba(37,99,235,0.25)] relative group cursor-pointer overflow-hidden transition-transform duration-500 hover:scale-105" onclick="document.getElementById('profile_photo').click()">
+                    @if($user->profile_face_url)
+                        <img src="{{ $user->profile_face_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-6xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                    @endif
                     <div class="absolute inset-0 bg-slate-900/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
                         <svg class="w-8 h-8 text-white mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span class="text-[9px] font-black text-white uppercase tracking-widest">Ubah Foto</span>
@@ -52,7 +56,7 @@
 
             {{-- Form Section --}}
             <div class="flex-1 w-full">
-                <form action="{{ route('profil.update') }}" method="POST" class="space-y-7">
+                <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data" class="space-y-7">
                     @csrf
                     @method('PUT')
 
@@ -78,6 +82,15 @@
                                        class="w-full bg-slate-100/50 border border-slate-200/50 text-slate-500 text-sm font-bold rounded-2xl block pl-12 pr-4 py-4 shadow-inner cursor-not-allowed">
                             </div>
                         </div>
+                    </div>
+
+                    <div class="relative group">
+                        <label for="profile_photo" class="block text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest group-focus-within:text-blue-600 transition-colors">Foto Profil (Opsional)</label>
+                        <div class="relative">
+                            <input type="file" name="profile_photo" id="profile_photo" accept="image/*"
+                                   class="w-full bg-white/70 border border-slate-200 text-slate-900 text-sm font-bold rounded-2xl focus:ring-4 focus:ring-blue-500/15 focus:border-blue-500 block px-4 py-4 transition-all shadow-sm outline-none file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 placeholder:text-slate-300">
+                        </div>
+                        <p class="mt-2 text-[10px] text-slate-400 font-medium">Format: JPG, PNG, WEBP. Maks 10MB.</p>
                     </div>
 
                     <div class="my-10 relative">

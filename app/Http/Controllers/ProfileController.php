@@ -102,12 +102,31 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
         ]);
 
         $user->name = $request->name;
 
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
+        }
+
+        if ($request->hasFile('profile_photo')) {
+            try {
+                $file = $request->file('profile_photo');
+                $fileName = 'user_' . $user->id . '_profile_' . time() . '.' . $file->getClientOriginalExtension();
+                $r2Path = 'user-profiles/' . $fileName;
+
+                // Upload ke S3
+                Storage::disk('s3')->put($r2Path, file_get_contents($file));
+                $r2Url = env('AWS_URL') . '/' . $r2Path;
+
+                // Update profile_face_url dengan foto profil baru
+                $user->profile_face_url = $r2Url;
+            } catch (\Exception $e) {
+                Log::error('Profile Photo Upload Error: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Gagal mengupload foto profil: ' . $e->getMessage());
+            }
         }
 
         $user->save();
