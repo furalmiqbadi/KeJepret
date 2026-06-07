@@ -279,53 +279,111 @@ $testimonials = [
 </section>
 
 {{-- ===== KENAPA KEJEPRET ===== --}}
-<section class="bg-white py-16">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3">KENAPA KEJEPRET?</p>
-                <h2 class="text-3xl sm:text-4xl font-black text-gray-900 leading-tight mb-4">
-                    Platform Foto Lari<br><span class="text-blue-600">Terpercaya #1</span>
-                </h2>
-                <p class="text-gray-500 text-sm leading-relaxed mb-6">
-                    Kami bekerja sama dengan fotografer terbaik di setiap event untuk memastikan momen berhargamu terabadikan dengan sempurna.
+<section class="py-24 relative overflow-hidden">
+    {{-- Decorative backgrounds --}}
+    <div class="absolute inset-0 pointer-events-none -z-10">
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-200/20 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/4"></div>
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-200/20 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/4"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            
+            {{-- Left Content --}}
+            <div class="space-y-8">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">Kenapa KeJepret?</span>
+                    </div>
+                    <h2 class="text-4xl sm:text-5xl font-black text-slate-800 leading-[1.1] tracking-tight">
+                        Platform Foto Lari<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-400">Terpercaya #1</span>
+                    </h2>
+                </div>
+                
+                <p class="text-slate-500 text-base sm:text-lg leading-relaxed font-medium">
+                    Kami bekerja sama dengan fotografer terbaik di setiap event untuk memastikan momen berhargamu terabadikan dengan kualitas paling sempurna.
                 </p>
-                <ul class="space-y-3 mb-8">
-                    @foreach(['Foto resolusi tinggi ready to print','Harga terjangkau mulai Rp 20.000','Unduh langsung tanpa batas waktu','Fotografer profesional di setiap event'] as $item)
-                    <li class="flex items-center gap-3">
-                        <div class="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-3 h-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                
+                <ul class="space-y-4">
+                    @foreach([
+                        ['icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', 'text' => 'Foto resolusi tinggi ready to print'],
+                        ['icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'text' => 'Harga terjangkau mulai Rp 20.000'],
+                        ['icon' => 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', 'text' => 'Unduh langsung tanpa batas waktu'],
+                        ['icon' => 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', 'text' => 'Fotografer profesional di setiap event']
+                    ] as $item)
+                    <li class="flex items-center gap-4 group">
+                        <div class="w-10 h-10 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-blue-50 transition-all duration-300">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
                             </svg>
                         </div>
-                        <span class="text-sm text-gray-700 font-medium">{{ $item }}</span>
+                        <span class="text-sm sm:text-base text-slate-700 font-bold group-hover:text-blue-600 transition-colors">{{ $item['text'] }}</span>
                     </li>
                     @endforeach
                 </ul>
-                <a href="{{ route('search') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-7 py-3.5 rounded-xl transition-colors shadow-md shadow-blue-200">
-                    Jelajahi Foto
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </a>
+                
+                <div class="pt-4">
+                    <a href="{{ route('search') }}" class="group inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-sm uppercase tracking-widest px-8 py-4 rounded-[1.25rem] transition-all duration-300 shadow-[0_10px_30px_rgba(37,99,235,0.3)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.4)] hover:-translate-y-1">
+                        Jelajahi Foto
+                        <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-blue-600 transition-all duration-300">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                    </a>
+                </div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                @forelse($randomPhotos as $photo)
-                <div class="rounded-2xl overflow-hidden aspect-square bg-slate-100 group">
-                    @if($photo->watermark_path || $photo->r2_path)
-                        <img src="{{ env('AWS_URL') }}/{{ $photo->watermark_path ?? $photo->r2_path }}" alt="Random Photo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
-                    @else
-                        <div class="w-full h-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+
+            {{-- Right Content (Single Photo Auto-Slideshow) --}}
+            <div class="relative w-full max-w-[320px] mx-auto aspect-[4/5] perspective-[1000px] mt-8 lg:mt-0">
+                @if(isset($randomPhotos) && $randomPhotos->count() > 0)
+                    <div id="photo-slideshow" class="w-full h-full rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.2)] border-[8px] border-white relative transform rotate-2 hover:rotate-0 hover:scale-[1.02] transition-all duration-500 z-20">
+                        @foreach($randomPhotos as $index => $photo)
+                            <img src="{{ env('AWS_URL') }}/{{ $photo->watermark_path ?? $photo->r2_path }}" 
+                                 class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                 alt="Galeri KeJepret">
+                        @endforeach
+                        
+                        {{-- Overlay Gradient for depth --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none"></div>
+                    </div>
+                    
+                    {{-- Floating Camera Decoration --}}
+                    <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/90 backdrop-blur-md rounded-full shadow-2xl flex items-center justify-center z-40 transform border border-slate-100/50">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
-                    @endif
-                </div>
-                @empty
-                @for($i = 0; $i < 4; $i++)
-                <div class="rounded-2xl overflow-hidden aspect-square bg-slate-100 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                @endfor
-                @endforelse
+                    </div>
+
+                    {{-- Simple Vanilla JS for Slideshow --}}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const images = document.querySelectorAll('#photo-slideshow .slideshow-img');
+                            if (images.length > 1) {
+                                let currentIndex = 0;
+                                setInterval(() => {
+                                    // Sembunyikan gambar saat ini
+                                    images[currentIndex].classList.remove('opacity-100');
+                                    images[currentIndex].classList.add('opacity-0');
+                                    
+                                    // Lanjut ke gambar berikutnya
+                                    currentIndex = (currentIndex + 1) % images.length;
+                                    
+                                    // Tampilkan gambar berikutnya
+                                    images[currentIndex].classList.remove('opacity-0');
+                                    images[currentIndex].classList.add('opacity-100');
+                                }, 3000); // Ganti tiap 3 detik
+                            }
+                        });
+                    </script>
+                @else
+                    {{-- Fallback --}}
+                    <div class="w-full h-full bg-slate-100 rounded-[2.5rem] border-[8px] border-white shadow-xl flex items-center justify-center transform rotate-2">
+                        <span class="text-slate-400 font-bold uppercase tracking-widest text-xs">Belum ada foto</span>
+                    </div>
+                @endif
             </div>
+
         </div>
     </div>
 </section>
