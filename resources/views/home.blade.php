@@ -272,7 +272,7 @@ $testimonials = [
         </div>
         <div class="grid sm:grid-cols-3 gap-5">
             @foreach($testimonials as $t)
-            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-blue-500/10">
                 <div class="flex gap-0.5 mb-4">
                     @for($i = 0; $i < 5; $i++)
                     <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
