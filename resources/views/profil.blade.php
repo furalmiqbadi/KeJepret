@@ -117,7 +117,11 @@
             <span class="inline-block bg-white/20 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full mb-4 border border-white/15">Fitur Khusus</span>
             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Ingin Jadi Fotografer?</h3>
             <p class="text-white/80 text-sm leading-relaxed mb-6">Bergabunglah sebagai fotografer profesional dan dapatkan penghasilan dari setiap foto yang terjual.</p>
-            <a href="{{ route('register.photographer') }}" class="inline-flex items-center gap-2 bg-white text-blue-600 font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl hover:bg-blue-50 transition-all hover:shadow-lg active:scale-[0.98]">
+            
+            <form id="logout-register-form" action="{{ route('logout.register.photographer') }}" method="POST" class="hidden">
+                @csrf
+            </form>
+            <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari akun saat ini untuk membuat akun fotografer baru?')) { document.getElementById('logout-register-form').submit(); }" class="inline-flex items-center gap-2 bg-white text-blue-600 font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl hover:bg-blue-50 transition-all hover:shadow-lg active:scale-[0.98] cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Daftar Sekarang
             </a>
