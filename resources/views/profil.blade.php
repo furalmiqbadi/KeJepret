@@ -21,7 +21,11 @@
         <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-8">
             {{-- Avatar Section --}}
             <div class="w-36 h-36 rounded-[2.5rem] bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center border-[6px] border-white shadow-[0_15px_35px_rgba(37,99,235,0.25)] flex-shrink-0 relative group cursor-pointer overflow-hidden transition-transform duration-500 hover:scale-105">
-                <span class="text-6xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                @if($user->profile_face_url)
+                    <img src="{{ $user->profile_face_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                @else
+                    <span class="text-6xl font-black text-white italic tracking-tighter">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                @endif
             </div>
 
             <div class="flex-1 flex flex-col sm:flex-row items-center sm:items-start justify-between w-full pt-2">
