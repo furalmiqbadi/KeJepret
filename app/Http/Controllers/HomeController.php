@@ -95,6 +95,7 @@ class HomeController extends Controller
             'event_date' => 'required|date',
             'location' => 'required|string|max:200',
             'description' => 'required|string',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
         ]);
 
         $baseSlug = \Illuminate\Support\Str::slug($request->name);
@@ -105,6 +106,11 @@ class HomeController extends Controller
             $counter++;
         }
 
+        $coverImagePath = null;
+        if ($request->hasFile('cover_image')) {
+            $coverImagePath = $request->file('cover_image')->store('events/covers', 's3');
+        }
+
         Event::create([
             'created_by' => Auth::id(),
             'name' => $request->name,
@@ -112,6 +118,7 @@ class HomeController extends Controller
             'event_date' => $request->event_date,
             'location' => $request->location,
             'description' => $request->description,
+            'cover_image' => $coverImagePath,
             'is_active' => false,
         ]);
 

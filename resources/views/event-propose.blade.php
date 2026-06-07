@@ -4,9 +4,9 @@
 
 <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-12 relative z-10">
     <div class="mb-10 text-center">
-        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">PUNYA EVENT LARI?</p>
-        <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">Ajukan Event Baru</h1>
-        <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed font-medium">Beri tahu kami event lari terdekatmu dan simpan momen terbaik bersama fotografer profesional.</p>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">PUNYA ACARA LARI?</p>
+        <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">Ajukan Acara Baru</h1>
+        <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed font-medium">Beri tahu kami acara lari terdekatmu dan simpan momen terbaik bersama fotografer profesional.</p>
     </div>
 
     @if(session('success'))
@@ -24,7 +24,7 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('event.propose.post') }}" class="clean-glass rounded-[2rem] p-6 sm:p-8">
+    <form method="POST" action="{{ route('event.propose.post') }}" enctype="multipart/form-data" class="clean-glass rounded-[2rem] p-6 sm:p-8">
         @csrf
         <div class="space-y-6">
             {{-- Nama Event --}}
@@ -58,8 +58,17 @@
                 <label for="description" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Deskripsi Singkat Acara <span class="text-red-500">*</span></label>
                 <textarea name="description" id="description" rows="4" required
                     class="w-full px-4 py-3.5 clean-glass-input rounded-2xl text-sm font-medium text-slate-800 outline-none @error('description') border-red-300 focus:border-red-400 focus:ring-red-500/10 @enderror"
-                    placeholder="Ceritakan sedikit tentang acara ini..."></textarea>
+                    placeholder="Ceritakan sedikit tentang acara ini...">{{ old('description') }}</textarea>
                 @error('description') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Cover Image --}}
+            <div>
+                <label for="cover_image" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Foto Cover Event (Opsional)</label>
+                <input type="file" name="cover_image" id="cover_image" accept="image/*"
+                    class="w-full px-4 py-3 clean-glass-input rounded-2xl text-sm font-medium text-slate-800 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 outline-none @error('cover_image') border-red-300 focus:border-red-400 focus:ring-red-500/10 @enderror">
+                <p class="mt-1.5 text-[10px] text-slate-400 font-medium">Format: JPG, PNG, WEBP. Maks 10MB.</p>
+                @error('cover_image') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
             </div>
 
             {{-- Tombol Submit --}}
