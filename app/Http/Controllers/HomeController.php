@@ -50,13 +50,13 @@ class HomeController extends Controller
 
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->q . '%')
-                  ->orWhere('location', 'like', '%' . $request->q . '%');
+                $q->where('name', 'ilike', '%' . $request->q . '%')
+                  ->orWhere('location', 'ilike', '%' . $request->q . '%');
             });
         }
 
         if ($request->filled('city')) {
-            $query->where('location', 'like', '%' . $request->city . '%');
+            $query->where('location', 'ilike', '%' . $request->city . '%');
         }
 
         if ($request->filled('date')) {
@@ -127,8 +127,8 @@ class HomeController extends Controller
 
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->q . '%')
-                  ->orWhere('location', 'like', '%' . $request->q . '%');
+                $q->where('name', 'ilike', '%' . $request->q . '%')
+                  ->orWhere('location', 'ilike', '%' . $request->q . '%');
             });
         }
 
