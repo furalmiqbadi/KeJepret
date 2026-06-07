@@ -81,6 +81,7 @@ $testimonials = [
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-blue-600 rounded-b-xl z-10 flex justify-center items-end pb-1.5">
                 <div class="w-12 h-1.5 bg-black/20 rounded-full"></div>
             </div>
+<<<<<<< HEAD
             
             {{-- Phone Screen --}}
             <div class="flex-1 bg-white rounded-[1.8rem] overflow-hidden flex flex-col relative border border-slate-100">
@@ -121,6 +122,14 @@ $testimonials = [
                     </div>
                     @endif
                 </div>
+=======
+            <div class="text-4xl font-black mb-0.5"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-xl text-blue-200">/5</span></div>
+            <p class="text-blue-100 text-xs mb-5">Rating dari pengguna setia KeJepret</p>
+            <div class="border-t border-white/20 pt-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-100 mb-1">EVENT TERSEDIA</p>
+                <div class="text-3xl font-black"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
+                <p class="text-blue-100 text-xs">Event aktif di seluruh Indonesia</p>
+>>>>>>> c972e7cb15b9492e6573087925f794a4e35e3e83
             </div>
         </div>
 
@@ -129,10 +138,27 @@ $testimonials = [
             <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white border-2 border-white">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </div>
+<<<<<<< HEAD
             <div class="text-left pr-2">
                 <h4 class="text-xs font-bold text-slate-800 mb-1">Andi Wijaya</h4>
                 <p class="text-[11px] text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-lg rounded-tr-none border border-slate-100">"Kualitas tajam, resolusi tinggi. Sempurna buat diposting di sosmed!"</p>
                 <div class="mt-2 text-[9px] text-slate-400 text-left">Jakarta Marathon • 10:15 am</div>
+=======
+            @endif
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/90 pointer-events-none"></div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-1.5 mb-3">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-300">LIVE ACARA</span>
+                </div>
+                <div class="text-3xl font-black mb-1 text-white"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
+                <p class="text-slate-200 text-[10px] font-bold tracking-widest uppercase mb-2">FOTO TERSEDIA</p>
+                <p class="text-slate-400 text-xs mb-6 font-medium leading-relaxed">Diperbarui seketika, temukan fotomu langsung setelah finish.</p>
+                <a href="{{ route('event') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 bg-white px-5 py-2.5 rounded-xl hover:bg-slate-100 transition-all hover:scale-105">
+                    Lihat Acara
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+>>>>>>> c972e7cb15b9492e6573087925f794a4e35e3e83
             </div>
         </div>
 
@@ -144,19 +170,19 @@ $testimonials = [
     <div class="clean-glass bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 my-8 relative z-10 shadow-sm">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 divide-x divide-slate-200/40">
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ number_format($totalPhotos) }}+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalPhotos }}">{{ number_format($totalPhotos) }}</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">FOTO TERSEDIA</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">{{ $totalEvents }}+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="{{ $totalEvents }}">{{ $totalEvents }}</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">ACARA AKTIF</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">15k+</div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="15000">15.000</span>+</div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">PELARI TERDAFTAR</div>
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1">4.9<span class="text-xl text-slate-400">/5</span></div>
+                <div class="text-3xl sm:text-4xl font-black text-slate-800 mb-1"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-xl text-slate-400">/5</span></div>
                 <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
             </div>
         </div>
@@ -454,5 +480,56 @@ $testimonials = [
         <p class="text-gray-500 text-sm">© 2026 KeJepret. Platform foto lari terpercaya di Indonesia.</p>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter-up');
+    const speed = 1500; // durasi animasi dalam milidetik
+
+    const animate = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+        const start = 0;
+        let startTime = null;
+
+        const format = (value) => {
+            if (decimals > 0) {
+                return value.toFixed(decimals);
+            }
+            return Math.floor(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        };
+
+        const updateCount = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / speed, 1);
+
+            const currentValue = start + (target - start) * percentage;
+            counter.innerText = format(currentValue);
+
+            if (percentage < 1) {
+                requestAnimationFrame(updateCount);
+            } else {
+                counter.innerText = format(target);
+            }
+        };
+
+        requestAnimationFrame(updateCount);
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animate(entry.target);
+                observer.unobserve(entry.target); // Hanya jalankan animasi sekali
+            }
+        });
+    }, { threshold: 0.1 });
+
+    counters.forEach(counter => {
+        observer.observe(counter);
+    });
+});
+</script>
 
 @endsection
