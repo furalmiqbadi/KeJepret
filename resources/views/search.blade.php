@@ -14,17 +14,130 @@
         <p class="text-gray-500 text-sm mt-1">Pilih acara larimu, lalu cari fotomu di dalamnya.</p>
     </div>
 
-    {{-- Manual Search Form --}}
-    <form method="GET" action="{{ route('search') }}" class="mb-6 relative z-10">
-        <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10">
-                <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            </span>
-            <input type="text" name="q" value="{{ request('q') }}"
-                placeholder="Ketik nama acara atau kota..."
-                class="w-full pl-11 pr-4 py-3.5 clean-glass-input rounded-2xl text-sm font-bold placeholder-slate-400 focus:outline-none transition-all shadow-sm shadow-slate-200/50">
+    {{-- Search Form dengan Autocomplete Event --}}
+    <form method="GET" action="{{ route('search') }}" class="mb-6 relative z-10" id="searchForm">
+
+        {{-- Event Autocomplete Input --}}
+        <div class="mb-4">
+            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-2">
+                PILIH ACARA <span class="text-slate-400 normal-case tracking-normal font-semibold">(opsional)</span>
+            </label>
+            <div class="relative" id="eventAutocompleteWrapper">
+                {{-- Hidden input untuk value sesungguhnya --}}
+                <input type="hidden" name="event_id" id="eventIdInput" value="{{ request('event_id') }}">
+
+                {{-- Text input yang user ketik --}}
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10">
+                    <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </span>
+                <input type="text" id="eventTextInput"
+                    placeholder="Ketik nama acara... atau biarkan kosong untuk semua"
+                    autocomplete="off"
+                    value="{{ request('event_id') ? $allEvents->firstWhere('id', request('event_id'))?->name ?? '' : '' }}"
+                    class="w-full pl-11 pr-10 py-3.5 clean-glass-input rounded-2xl text-sm font-bold placeholder-slate-400 focus:outline-none transition-all shadow-sm shadow-slate-200/50">
+
+                {{-- Clear button --}}
+                <button type="button" id="clearEventBtn"
+                    class="{{ request('event_id') ? '' : 'hidden' }} absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-all z-10">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                {{-- Suggestions Dropdown --}}
+                <div id="eventSuggestions"
+                    class="hidden absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100/80 overflow-hidden z-50 max-h-64 overflow-y-auto">
+
+                    {{-- Option: Semua Acara --}}
+                    <button type="button"
+                        class="event-suggestion-item w-full flex items-center gap-3 px-4 py-3 hover:bg-sky-50 transition-colors text-left border-b border-slate-100"
+                        data-id="" data-name="Semua Acara">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-100 to-indigo-100 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-slate-800">Semua Acara</p>
+                            <p class="text-[10px] text-slate-400 font-semibold">Tampilkan semua event</p>
+                        </div>
+                    </button>
+
+                    {{-- Daftar Event --}}
+                    @foreach($allEvents as $ev)
+                    <button type="button"
+                        class="event-suggestion-item w-full flex items-center gap-3 px-4 py-3 hover:bg-sky-50 transition-colors text-left border-b border-slate-100/50 last:border-0"
+                        data-id="{{ $ev->id }}" data-name="{{ $ev->name }}">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-black text-slate-800 truncate">{{ $ev->name }}</p>
+                            <p class="text-[10px] text-slate-400 font-semibold">{{ \Carbon\Carbon::parse($ev->event_date)->translatedFormat('d M Y') }} · {{ Str::limit($ev->location, 25) }}</p>
+                        </div>
+                    </button>
+                    @endforeach
+                </div>
+            </div>
         </div>
+
+        {{-- Submit --}}
+        <button type="submit"
+            class="w-full py-3.5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-black text-xs uppercase italic tracking-[0.15em] rounded-2xl transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md shadow-slate-300/40 hover:shadow-lg">
+            Cari Foto
+        </button>
     </form>
+
+    {{-- Script Autocomplete --}}
+    <script>
+    (function () {
+        const textInput   = document.getElementById('eventTextInput');
+        const idInput     = document.getElementById('eventIdInput');
+        const suggestions = document.getElementById('eventSuggestions');
+        const clearBtn    = document.getElementById('clearEventBtn');
+        const items       = document.querySelectorAll('.event-suggestion-item');
+
+        function showSuggestions() { suggestions.classList.remove('hidden'); }
+        function hideSuggestions() { setTimeout(() => suggestions.classList.add('hidden'), 150); }
+
+        function filterItems(q) {
+            const lq = q.toLowerCase().trim();
+            items.forEach(item => {
+                const name = item.dataset.name.toLowerCase();
+                // Selalu tampilkan "Semua Acara"
+                item.style.display = (item.dataset.id === '' || name.includes(lq)) ? '' : 'none';
+            });
+        }
+
+        textInput.addEventListener('focus', () => { filterItems(textInput.value); showSuggestions(); });
+        textInput.addEventListener('blur', hideSuggestions);
+        textInput.addEventListener('input', () => { filterItems(textInput.value); showSuggestions(); });
+
+        items.forEach(item => {
+            item.addEventListener('mousedown', () => {
+                const id   = item.dataset.id;
+                const name = item.dataset.name;
+                idInput.value   = id;
+                textInput.value = id === '' ? '' : name;
+                clearBtn.classList.toggle('hidden', id === '');
+                suggestions.classList.add('hidden');
+                // Langsung submit jika pilih event
+                if (id !== '') document.getElementById('searchForm').submit();
+            });
+        });
+
+        clearBtn.addEventListener('click', () => {
+            idInput.value   = '';
+            textInput.value = '';
+            clearBtn.classList.add('hidden');
+            textInput.focus();
+        });
+
+        // Klik di luar tutup dropdown
+        document.addEventListener('click', e => {
+            if (!document.getElementById('eventAutocompleteWrapper').contains(e.target)) {
+                suggestions.classList.add('hidden');
+            }
+        });
+    })();
+    </script>
+
 
     {{-- Result Count --}}
     <p class="text-xs text-slate-400 font-black uppercase tracking-wider mb-4 relative z-10">

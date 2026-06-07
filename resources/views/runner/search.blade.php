@@ -120,65 +120,87 @@
             </div>
 
             {{-- Pilih Acara --}}
-            <div class="space-y-2 relative">
+            <div class="space-y-2 relative" x-data="{ open: false }" @click.away="open = false">
                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Pilih Acara <span class="normal-case tracking-normal font-medium text-slate-400">(opsional)</span></label>
+
+                <input type="hidden" name="event_id" :value="selectedEventId" :disabled="selectedEventId === ''">
+
                 <div class="relative">
-                    <input type="hidden" name="event_id" :value="selectedEventId" :disabled="selectedEventId === ''">
+                    {{-- Icon kalender --}}
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-20">
                         <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </span>
-                    
-                    {{-- Tombol Dropdown --}}
-                    <button type="button" @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"
-                        class="w-full bg-white/70 border border-slate-200/80 rounded-2xl pl-11 pr-10 py-4 text-xs font-black uppercase tracking-wider text-slate-700 outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-left shadow-sm cursor-pointer flex items-center justify-between relative z-10">
-                        <span x-text="selectedEventLabel">Semua Acara</span>
-                    </button>
-                    
-                    <span class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 z-20">
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="dropdownOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
-                </div>
-                @error('event_id')
-                    <p class="text-xs text-red-500 font-bold mt-1">{{ $message }}</p>
-                @enderror
 
-                {{-- Popover Dropdown Options List --}}
-                <div x-show="dropdownOpen" 
-                     x-transition:enter="transition ease-out duration-200" 
-                     x-transition:enter-start="opacity-0 translate-y-[-10px] scale-95" 
-                     x-transition:enter-end="opacity-100 translate-y-0 scale-100" 
-                     x-transition:leave="transition ease-in duration-100" 
-                     x-transition:leave-start="opacity-100 translate-y-0 scale-100" 
-                     x-transition:leave-end="opacity-0 translate-y-[-10px] scale-95"
+                    {{-- Input teks ketik nama acara --}}
+                    <input type="text"
+                        x-model="eventSearch"
+                        @focus="open = true"
+                        @input="open = true; selectedEventId = ''"
+                        :placeholder="selectedEventId ? selectedEventLabel : 'Ketik nama acara...'"
+                        autocomplete="off"
+                        class="w-full bg-white/70 border border-slate-200/80 rounded-2xl pl-11 pr-10 py-4 text-xs font-black text-slate-700 placeholder-slate-400 outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm">
+
+                    {{-- Clear button --}}
+                    <button type="button"
+                        x-show="selectedEventId !== '' || eventSearch !== ''"
+                        @click="selectedEventId = ''; selectedEventLabel = 'Semua Acara'; eventSearch = ''; open = false;"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-all z-20">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                {{-- Dropdown Suggestions --}}
+                <div x-show="open"
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
                      style="display: none;"
-                     class="absolute z-[90] mt-2 left-0 right-0 bg-white/95 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-[0_20px_40px_-10px_rgba(15,23,42,0.15)] max-h-60 overflow-y-auto p-1.5 space-y-1 scrollbar-thin">
-                    
+                     class="absolute z-[90] top-full mt-2 left-0 right-0 bg-white/95 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-[0_20px_40px_-10px_rgba(15,23,42,0.15)] max-h-56 overflow-y-auto p-1.5 space-y-1">
+
                     {{-- Opsi Semua Acara --}}
-                    <button type="button" @click="selectedEventId = ''; selectedEventLabel = 'Semua Acara'; dropdownOpen = false;"
-                        :class="selectedEventId === '' ? 'bg-blue-50/80 text-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                        class="w-full text-left px-4 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-between">
-                        <span>Semua Acara</span>
+                    <button type="button"
+                        @click="selectedEventId = ''; selectedEventLabel = 'Semua Acara'; eventSearch = ''; open = false;"
+                        :class="selectedEventId === '' ? 'bg-blue-50/80 text-blue-600' : 'text-slate-600 hover:bg-slate-50'"
+                        class="w-full text-left px-4 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            <span>Semua Acara</span>
+                        </div>
                         <template x-if="selectedEventId === ''">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         </template>
                     </button>
-                    
-                    {{-- Loop Opsi Event --}}
-                    <template x-for="item in eventsList" :key="item.id">
-                        <button type="button" @click="selectedEventId = item.id; selectedEventLabel = item.name + ' — ' + item.date; dropdownOpen = false;"
-                            :class="selectedEventId == item.id ? 'bg-blue-50/80 text-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+
+                    {{-- Loop Opsi Event (difilter realtime) --}}
+                    <template x-for="item in filteredEvents" :key="item.id">
+                        <button type="button"
+                            @click="selectedEventId = item.id; selectedEventLabel = item.name; eventSearch = item.name; open = false;"
+                            :class="selectedEventId == item.id ? 'bg-blue-50/80 text-blue-600' : 'text-slate-600 hover:bg-slate-50'"
                             class="w-full text-left px-4 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-between">
                             <div>
                                 <span x-text="item.name" class="block"></span>
                                 <span class="block text-[9px] text-slate-400 font-semibold normal-case tracking-normal mt-0.5" x-text="item.date"></span>
                             </div>
                             <template x-if="selectedEventId == item.id">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </template>
                         </button>
                     </template>
+
+                    {{-- Kosong --}}
+                    <template x-if="filteredEvents.length === 0">
+                        <div class="px-4 py-3 text-center text-[10px] text-slate-400 font-semibold">Tidak ada acara ditemukan</div>
+                    </template>
                 </div>
+
+                @error('event_id')
+                    <p class="text-xs text-red-500 font-bold mt-1">{{ $message }}</p>
+                @enderror
             </div>
+
 
             {{-- Tombol Submit --}}
             <button type="submit"
@@ -255,6 +277,7 @@ function searchPage() {
         selectedEventId: '{{ old('event_id') }}',
         selectedEventLabel: 'Semua Acara',
         dropdownOpen: false,
+        eventSearch: '',
         eventsList: [
             @foreach($events as $event)
             {
@@ -264,6 +287,12 @@ function searchPage() {
             },
             @endforeach
         ],
+
+        get filteredEvents() {
+            if (!this.eventSearch.trim()) return this.eventsList;
+            const q = this.eventSearch.toLowerCase();
+            return this.eventsList.filter(e => e.name.toLowerCase().includes(q));
+        },
 
         async init() {
             // Set label event default jika ada request old input (contoh setelah submit error)

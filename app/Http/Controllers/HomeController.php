@@ -139,9 +139,17 @@ class HomeController extends Controller
             });
         }
 
+        if ($request->filled('event_id')) {
+            $query->where('id', $request->event_id);
+        }
+
         $events = $query->orderBy('event_date', 'desc')->get();
 
-        return view('search', compact('events'));
+        $allEvents = Event::where('is_active', true)
+            ->orderBy('event_date', 'desc')
+            ->get(['id', 'name', 'location', 'event_date']);
+
+        return view('search', compact('events', 'allEvents'));
     }
 
     // ═══════════════════════════════
