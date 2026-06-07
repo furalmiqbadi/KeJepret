@@ -1,21 +1,22 @@
-<div id="desktop-navbar" class="hidden md:flex fixed top-8 left-0 right-0 z-[100] items-center justify-between px-16 pointer-events-none transition-all duration-500 ease-out">
-    <!-- Pill 1: Logo (Left) -->
-    <div class="clean-glass h-14 rounded-2xl px-6 flex items-center pointer-events-auto hover:translate-y-[-2px] transition-all duration-300">
-        @auth
-            <a href="{{ Auth::user()->role === 'photographer' ? route('photographer.portfolio') : route('home') }}" class="flex items-center gap-3">
-        @else
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
-        @endauth
-            <div class="w-10 h-10 overflow-hidden flex items-center justify-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xl font-black text-slate-900 tracking-tighter uppercase italic leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-950 to-slate-800">KeJepret</span>
-        </a>
-    </div>
+<div id="desktop-navbar" class="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-5xl transition-all duration-500 ease-out">
+    <div class="w-full bg-white/70 backdrop-blur-3xl border border-white/60 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] rounded-[2rem] px-5 py-3 flex items-center justify-between pointer-events-auto hover:bg-white/85 hover:shadow-[0_15px_50px_-10px_rgba(37,99,235,0.15)] transition-all duration-500">
+        
+        <!-- Left: Logo -->
+        <div class="flex items-center">
+            @auth
+                <a href="{{ Auth::user()->role === 'photographer' ? route('photographer.portfolio') : route('home') }}" class="flex items-center gap-3 group">
+            @else
+                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+            @endauth
+                <div class="w-11 h-11 bg-white rounded-[1rem] shadow-sm border border-slate-100 overflow-hidden flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-300">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-br from-slate-900 to-slate-700">KeJepret</span>
+            </a>
+        </div>
 
-    <!-- Pill 2: Navigation Links (Center) -->
-    <div class="clean-glass h-14 rounded-2xl px-10 flex items-center pointer-events-auto transition-all duration-300">
-        <div class="flex items-center gap-10">
+        <!-- Center: Navigation Links -->
+        <div class="flex items-center gap-8">
 
             @auth
                 @if(Auth::user()->role === 'photographer')
@@ -47,41 +48,41 @@
 
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}"
-                   class="text-[11px] font-black uppercase tracking-[0.2em] italic transition-all duration-300 relative group {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-500 hover:text-slate-950' }}">
+                   class="text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative py-2 {{ Route::is($link['route']) ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900' }}">
                      {{ $link['label'] }}
                     @if(Route::is($link['route']))
-                        <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-1 bg-blue-600 rounded-t-full"></span>
                     @else
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 rounded-full group-hover:w-full transition-all duration-300"></span>
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-blue-600/50 rounded-t-full transition-all duration-300 opacity-0"></span>
                     @endif
                 </a>
             @endforeach
 
         </div>
-    </div>
 
-    <!-- Pill 3: Profile Avatar (Right) -->
-    <div class="pointer-events-auto">
-        @auth
-            @php
-                $profilRoute = Auth::user()->role === 'photographer'
-                    ? route('photographer.profil')
-                    : route('profil');
-            @endphp
-            <a href="{{ $profilRoute }}" class="clean-glass w-14 h-14 rounded-2xl flex items-center justify-center hover:translate-y-[-2px] transition-all duration-300 overflow-hidden p-1.5">
-                <div class="w-full h-full rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg font-black italic shadow-inner overflow-hidden border border-white/10">
+        <!-- Right: Profile / Login -->
+        <div class="flex items-center">
+            @auth
+                @php
+                    $profilRoute = Auth::user()->role === 'photographer'
+                        ? route('photographer.profil')
+                        : route('profil');
+                @endphp
+                <a href="{{ $profilRoute }}" class="w-12 h-12 rounded-[1.1rem] flex items-center justify-center hover:scale-105 hover:rotate-3 transition-all duration-300 overflow-hidden shadow-sm border-2 border-white bg-gradient-to-tr from-blue-600 to-indigo-600 text-white text-sm font-black italic">
                     @if(Auth::user()->profile_face_url)
                         <img src="{{ Auth::user()->profile_face_url }}" class="w-full h-full object-cover">
                     @else
                         {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                     @endif
-                </div>
-            </a>
-        @else
-            <a href="{{ route('login') }}" class="clean-glass h-14 px-8 rounded-2xl flex items-center text-[11px] font-black uppercase italic text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:translate-y-[-2px] transition-all duration-300">
-                Login
-            </a>
-        @endauth
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-7 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
+                    Masuk
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            @endauth
+        </div>
+
     </div>
 </div>
 
