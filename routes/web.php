@@ -18,7 +18,7 @@ Route::get('/', function () {
 // FIX 3: Guard /home dan /profil — redirect photographer ke halaman mereka
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/event', [HomeController::class, 'event'])->name('event');
-Route::get('/event/{id}', [HomeController::class, 'eventDetail'])->name('event.detail');
+Route::get('/event/{id}', [HomeController::class, 'eventDetail'])->where('id', '[0-9]+')->name('event.detail');
 Route::get('/search', [SearchController::class, 'showSearch'])->name('search');
 Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
 Route::get('/banned', function () {
@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('/profil/edit', [ProfileController::class, 'edit'])->name('profil.edit');
     Route::put('/profil/edit', [ProfileController::class, 'update'])->name('profil.update');
+
+    Route::get('/event/propose', [HomeController::class, 'proposeEventForm'])->name('event.propose');
+    Route::post('/event/propose', [HomeController::class, 'storeProposedEvent'])->name('event.propose.post');
 
     Route::middleware('role:runner')->prefix('runner')->group(function () {
         Route::get('/search', [SearchController::class, 'showSearch'])->name('runner.search');
