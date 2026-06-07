@@ -30,7 +30,7 @@
                 </span>
                 <input type="text" name="q" value="{{ request('q') }}"
                     placeholder="Cari nama acara..."
-                    class="w-full pl-11 pr-4 py-3.5 clean-glass-input rounded-2xl text-xs font-black uppercase tracking-wider text-slate-700 placeholder-slate-400/70 outline-none shadow-sm shadow-slate-200/50 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 focus:bg-white/90 transition-all duration-300">
+                    class="w-full pl-11 pr-4 py-3.5 clean-glass-input rounded-2xl text-xs font-black tracking-wider text-slate-700 placeholder-slate-400/70 outline-none shadow-sm shadow-slate-200/50 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 focus:bg-white/90 transition-all duration-300">
             </div>
 
             {{-- Kota Input --}}
