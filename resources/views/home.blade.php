@@ -64,7 +64,7 @@ $testimonials = [
     <div class="relative max-w-4xl mx-auto h-[400px] sm:h-[450px] flex justify-center items-end z-10 perspective-[1000px] mb-10">
         
         {{-- Left Mockup (Chat/Review Card) --}}
-        <div class="absolute left-0 sm:left-[10%] bottom-16 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform -rotate-[10deg] hover:-rotate-6 hover:-translate-y-2 transition-all duration-500 z-20">
+        <div class="hidden md:block absolute left-0 sm:left-[10%] bottom-16 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform -rotate-[10deg] hover:-rotate-6 hover:-translate-y-2 transition-all duration-500 z-20">
             <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-blue-500 rounded-full shadow-lg flex items-center justify-center text-white border-2 border-white">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             </div>
@@ -125,7 +125,7 @@ $testimonials = [
         </div>
 
         {{-- Right Mockup (Event Card/Review) --}}
-        <div class="absolute right-0 sm:right-[10%] bottom-24 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform rotate-[10deg] hover:rotate-6 hover:-translate-y-2 transition-all duration-500 z-10">
+        <div class="hidden md:flex absolute right-0 sm:right-[10%] bottom-24 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform rotate-[10deg] hover:rotate-6 hover:-translate-y-2 transition-all duration-500 z-10">
             <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white border-2 border-white">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </div>
