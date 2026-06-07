@@ -4,9 +4,9 @@
 
 <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-12 relative z-10">
     <div class="mb-10 text-center">
-        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">PUNYA EVENT LARI?</p>
-        <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">Ajukan Event Baru</h1>
-        <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed font-medium">Beri tahu kami event lari terdekatmu dan simpan momen terbaik bersama fotografer profesional.</p>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">PUNYA ACARA LARI?</p>
+        <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">Ajukan Acara Baru</h1>
+        <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed font-medium">Beri tahu kami acara lari terdekatmu dan simpan momen terbaik bersama fotografer profesional.</p>
     </div>
 
     @if(session('success'))
