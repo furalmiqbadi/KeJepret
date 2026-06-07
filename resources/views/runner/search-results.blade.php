@@ -77,7 +77,7 @@
                     @csrf
                     <input type="hidden" name="photo_id" value="{{ $photo['photo_id'] }}">
                     <button type="submit"
-                        class="cart-button w-full py-3 rounded-2xl font-black text-[11px] uppercase tracking-wider active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm {{ $photo['in_cart'] ? 'bg-green-100/50 text-green-700 border border-green-200 cursor-not-allowed' : 'bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5' }}"
+                        class="cart-button w-full py-3 rounded-2xl font-black text-[11px] uppercase tracking-wider active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm {{ $photo['in_cart'] ? 'bg-green-600 text-white border border-green-700 cursor-not-allowed' : 'bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5' }}"
                         {{ $photo['in_cart'] ? 'disabled' : '' }}>
                         <svg class="w-4 h-4 {{ $photo['in_cart'] ? '' : 'animate-bounce' }}" style="animation-duration: 2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $photo['in_cart'] ? 'M5 13l4 4L19 7' : 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' }}"/></svg>
                         <span>{{ $photo['in_cart'] ? 'Sudah di Keranjang' : 'Tambah Keranjang' }}</span>
@@ -150,8 +150,8 @@ document.querySelectorAll('.add-to-cart-form').forEach((form) => {
 
             badge.textContent = data.cart_count;
             badge.classList.remove('hidden');
-            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
-            button.classList.add('bg-green-50', 'text-green-600');
+            button.classList.remove('bg-gradient-to-r', 'from-sky-500', 'via-blue-500', 'to-indigo-600', 'hover:shadow-lg', 'hover:shadow-blue-500/20', 'hover:-translate-y-0.5');
+            button.classList.add('bg-green-600', 'text-white', 'border', 'border-green-700', 'cursor-not-allowed');
             label.textContent = 'Sudah di Keranjang';
             showCartFlash(flash, data.message, true);
         } catch (error) {
