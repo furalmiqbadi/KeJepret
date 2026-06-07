@@ -81,6 +81,44 @@ class HomeController extends Controller
     }
 
     // ═══════════════════════════════
+    // AJUKAN EVENT
+    // ═══════════════════════════════
+    public function proposeEventForm()
+    {
+        return view('event-propose');
+    }
+
+    public function storeProposedEvent(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:150',
+            'event_date' => 'required|date',
+            'location' => 'required|string|max:200',
+            'description' => 'required|string',
+        ]);
+
+        $baseSlug = \Illuminate\Support\Str::slug($request->name);
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Event::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        Event::create([
+            'created_by' => Auth::id(),
+            'name' => $request->name,
+            'slug' => $slug,
+            'event_date' => $request->event_date,
+            'location' => $request->location,
+            'description' => $request->description,
+            'is_active' => false,
+        ]);
+
+        return redirect()->route('event.propose')->with('success', 'Pengajuan event berhasil dikirim dan sedang menunggu persetujuan admin.');
+    }
+
+    // ═══════════════════════════════
     // SEARCH — Halaman Pencarian Foto
     // ═══════════════════════════════
     public function search(Request $request)

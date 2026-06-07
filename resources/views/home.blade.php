@@ -311,7 +311,7 @@ $testimonials = [
                 </div>
                 <h3 class="font-black text-gray-900 mb-2">Event Organizer</h3>
                 <p class="text-gray-500 text-sm leading-relaxed mb-5">Dokumentasikan event lari Anda dengan fotografer profesional kami. Bagikan kenangan kepada peserta.</p>
-                <a href="mailto:admin@kejepret.id" class="text-sm font-bold text-blue-600 flex items-center gap-1 hover:underline">
+                <a href="{{ route('event.propose') }}" class="text-sm font-bold text-blue-600 flex items-center gap-1 hover:underline">
                     Ajukan Event
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
