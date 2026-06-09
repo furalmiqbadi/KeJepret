@@ -33,6 +33,7 @@
                             ['route' => 'home',   'label' => 'Beranda'],
                             ['route' => 'event',  'label' => 'Acara'],
                             ['route' => 'search', 'label' => 'Cari Foto'],
+                            ['route' => 'runner.search.history', 'label' => 'Riwayat Cari'],
                         ];
                     @endphp
                 @endif

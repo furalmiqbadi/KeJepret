@@ -2,6 +2,21 @@
 @section('title', 'Beranda')
 @section('content')
 
+<style>
+    .comment-slide-left-active {
+        transform: translateX(-60px) rotate(-16deg) translateY(-8px) !important;
+        box-shadow: 0 25px 60px rgba(37, 99, 235, 0.25) !important;
+    }
+    .comment-slide-right-active {
+        transform: translateX(60px) rotate(16deg) translateY(-8px) !important;
+        box-shadow: 0 25px 60px rgba(37, 99, 235, 0.25) !important;
+    }
+    .ml16 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
 @php
 $steps = [
     ['num'=>'01','title'=>'Cari Event-mu','desc'=>'Ketik nama event marathon atau kota yang kamu ikuti. Filter berdasarkan kota atau tanggal.','icon'=>'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
@@ -30,17 +45,18 @@ $testimonials = [
 
     {{-- 1. Badge --}}
     <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 mb-8 hover:-translate-y-0.5 transition-transform relative z-10">
-        <svg class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M9 12l2 2 4-4"/>
+        <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
         </svg>
         <span class="text-xs font-semibold text-slate-700">{{ number_format($totalPhotos) }}+ foto tersedia di KeJepret.</span>
     </div>
 
     {{-- 2. Title --}}
-    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-6 relative z-10">
-        Temukan Foto Larimu<br>
-        <span class="text-blue-600">dari Setiap Event</span>
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-6 relative z-10 ml16">
+        <span class="line-1 inline-block overflow-hidden pb-1">Temukan Foto Larimu</span>
+        <br>
+        <span class="line-2 inline-block text-blue-600 overflow-hidden pb-1">dari Setiap Event</span>
     </h1>
 
     {{-- 3. Subtitle --}}
@@ -64,7 +80,7 @@ $testimonials = [
     <div class="relative max-w-4xl mx-auto h-[400px] sm:h-[450px] flex justify-center items-end z-10 perspective-[1000px] mb-10">
         
         {{-- Left Mockup (Chat/Review Card) --}}
-        <div class="hidden md:block absolute left-0 sm:left-[10%] bottom-16 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform -rotate-[10deg] hover:-rotate-6 hover:-translate-y-2 transition-all duration-500 z-20">
+        <div id="comment-box-left" class="hidden md:block absolute left-0 sm:left-[10%] bottom-16 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform -rotate-[10deg] hover:-rotate-6 hover:-translate-y-2 transition-all duration-500 z-20 cursor-pointer select-none">
             <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-blue-500 rounded-full shadow-lg flex items-center justify-center text-white border-2 border-white">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             </div>
@@ -105,27 +121,54 @@ $testimonials = [
                 </div>
                 
                 <div class="flex-1 px-3 space-y-2.5 overflow-hidden">
-                    <div class="text-[10px] font-bold text-slate-400 px-1 mt-2 mb-1">Event Terbaru</div>
-                    @if($events->count() > 0 && $events[0]->cover_image)
-                    <div class="relative h-28 rounded-xl overflow-hidden bg-slate-200">
-                        <img src="{{ env('AWS_URL') }}/{{ $events[0]->cover_image }}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-2 left-2 text-left">
-                            <p class="text-[11px] font-bold text-white">{{ Str::limit($events[0]->name, 15) }}</p>
-                        </div>
+                    <div class="text-[10px] font-bold text-slate-400 px-1 mt-2 mb-1">Galeri Pelari</div>
+                    
+                    {{-- Box 1 --}}
+                    <div class="relative h-28 rounded-xl overflow-hidden bg-slate-200" id="runner-slideshow-1">
+                        @if(isset($randomPhotos) && $randomPhotos->count() > 0)
+                            @foreach($randomPhotos as $index => $photo)
+                                <img src="{{ env('AWS_URL') }}/{{ $photo->watermark_path ?? $photo->r2_path }}" 
+                                     class="runner-slide-1 absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                     alt="Foto Pelari">
+                            @endforeach
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                            <div class="absolute bottom-2 left-2 text-left">
+                                <p class="text-[9px] font-bold text-white uppercase tracking-wider">Terbaru</p>
+                            </div>
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-slate-100">
+                                <span class="text-[9px] text-slate-400 uppercase font-bold">Belum ada foto</span>
+                            </div>
+                        @endif
                     </div>
-                    @endif
-                    @if($events->count() > 1 && $events[1]->cover_image)
-                    <div class="relative h-28 rounded-xl overflow-hidden bg-slate-200">
-                        <img src="{{ env('AWS_URL') }}/{{ $events[1]->cover_image }}" class="w-full h-full object-cover">
+
+                    {{-- Box 2 --}}
+                    <div class="relative h-28 rounded-xl overflow-hidden bg-slate-200" id="runner-slideshow-2">
+                        @if(isset($randomPhotos) && $randomPhotos->count() > 0)
+                            @foreach($randomPhotos as $index => $photo)
+                                @php 
+                                    $activeIdx = $randomPhotos->count() > 1 ? 1 : 0; 
+                                @endphp
+                                <img src="{{ env('AWS_URL') }}/{{ $photo->watermark_path ?? $photo->r2_path }}" 
+                                     class="runner-slide-2 absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out {{ $index === $activeIdx ? 'opacity-100' : 'opacity-0' }}"
+                                     alt="Foto Pelari">
+                            @endforeach
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                            <div class="absolute bottom-2 left-2 text-left">
+                                <p class="text-[9px] font-bold text-white uppercase tracking-wider">Rekomendasi</p>
+                            </div>
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-slate-100">
+                                <span class="text-[9px] text-slate-400 uppercase font-bold">Belum ada foto</span>
+                            </div>
+                        @endif
                     </div>
-                    @endif
                 </div>
             </div>
         </div>
 
         {{-- Right Mockup (Event Card/Review) --}}
-        <div class="hidden md:flex absolute right-0 sm:right-[10%] bottom-24 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform rotate-[10deg] hover:rotate-6 hover:-translate-y-2 transition-all duration-500 z-10">
+        <div id="comment-box-right" class="hidden md:flex absolute right-0 sm:right-[10%] bottom-24 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform rotate-[10deg] hover:rotate-6 hover:-translate-y-2 transition-all duration-500 z-10 cursor-pointer select-none">
             <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white border-2 border-white">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </div>
@@ -570,6 +613,7 @@ $testimonials = [
     </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const counters = document.querySelectorAll('.counter-up');
@@ -618,6 +662,81 @@ document.addEventListener('DOMContentLoaded', () => {
     counters.forEach(counter => {
         observer.observe(counter);
     });
+
+    // Auto-slide for Runner Slideshow 1 inside Phone Mockup
+    const runnerSlides1 = document.querySelectorAll('#runner-slideshow-1 .runner-slide-1');
+    if (runnerSlides1.length > 1) {
+        let currentIdx1 = 0;
+        setInterval(() => {
+            runnerSlides1[currentIdx1].classList.remove('opacity-100');
+            runnerSlides1[currentIdx1].classList.add('opacity-0');
+            currentIdx1 = (currentIdx1 + 1) % runnerSlides1.length;
+            runnerSlides1[currentIdx1].classList.remove('opacity-0');
+            runnerSlides1[currentIdx1].classList.add('opacity-100');
+        }, 3000);
+    }
+
+    // Auto-slide for Runner Slideshow 2 inside Phone Mockup (Staggered start)
+    const runnerSlides2 = document.querySelectorAll('#runner-slideshow-2 .runner-slide-2');
+    if (runnerSlides2.length > 1) {
+        let currentIdx2 = runnerSlides2.length > 1 ? 1 : 0;
+        setInterval(() => {
+            runnerSlides2[currentIdx2].classList.remove('opacity-100');
+            runnerSlides2[currentIdx2].classList.add('opacity-0');
+            currentIdx2 = (currentIdx2 + 1) % runnerSlides2.length;
+            runnerSlides2[currentIdx2].classList.remove('opacity-0');
+            runnerSlides2[currentIdx2].classList.add('opacity-100');
+        }, 3000);
+    }
+
+    // Slide left/right comment box on click
+    const commentBoxLeft = document.getElementById('comment-box-left');
+    const commentBoxRight = document.getElementById('comment-box-right');
+
+    if (commentBoxLeft) {
+        commentBoxLeft.addEventListener('click', () => {
+            commentBoxLeft.classList.add('comment-slide-left-active');
+            setTimeout(() => {
+                commentBoxLeft.classList.remove('comment-slide-left-active');
+            }, 800);
+        });
+    }
+
+    if (commentBoxRight) {
+        commentBoxRight.addEventListener('click', () => {
+            commentBoxRight.classList.add('comment-slide-right-active');
+            setTimeout(() => {
+                commentBoxRight.classList.remove('comment-slide-right-active');
+            }, 800);
+        });
+    }
+
+    // Wrap every letter in .line-1 and .line-2 in a span with class 'letter'
+    const line1 = document.querySelector('.ml16 .line-1');
+    const line2 = document.querySelector('.ml16 .line-2');
+    if (line1) {
+        line1.innerHTML = line1.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    }
+    if (line2) {
+        line2.innerHTML = line2.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    }
+
+    if (line1 || line2) {
+        anime.timeline({loop: true})
+          .add({
+            targets: '.ml16 .letter',
+            translateY: [-100,0],
+            easing: "easeOutExpo",
+            duration: 1400,
+            delay: (el, i) => 30 * i
+          }).add({
+            targets: '.ml16',
+            opacity: [1, 0],
+            duration: 1000,
+            easing: "easeOutExpo",
+            delay: 1000
+          });
+    }
 });
 </script>
 

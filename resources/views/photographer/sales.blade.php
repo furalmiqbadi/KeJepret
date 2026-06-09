@@ -81,7 +81,7 @@
             <div class="relative z-10">
                 <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-200 mb-2">Penjualan Bulan Ini</p>
                 <p class="text-5xl font-black tracking-tight mb-2">{{ $penjualanBulanIni }}</p>
-                <p class="text-blue-100 text-sm font-bold opacity-80">Transaksi pada {{ now()->translatedFormat('F Y') }}</p>
+                <p class="text-blue-100 text-sm font-bold opacity-80">Transaksi pada {{ now()->locale('id')->translatedFormat('F Y') }}</p>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
             <div class="relative z-10">
                 <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Pendapatan Bulan Ini</p>
                 <p class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-400 tracking-tight mb-2">Rp {{ number_format($pendapatanBulanIni, 0, ',', '.') }}</p>
-                <p class="text-slate-400 text-sm font-bold">Pada {{ now()->translatedFormat('F Y') }}</p>
+                <p class="text-slate-400 text-sm font-bold">Pada {{ now()->locale('id')->translatedFormat('F Y') }}</p>
             </div>
         </div>
 
