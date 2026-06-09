@@ -55,7 +55,7 @@ class AuthController extends Controller
         }
 
         return match ($user->role) {
-            'admin'  => redirect()->route('filament.admin.pages.dashboard'),
+            'admin'  => redirect()->route('profil'),
             'runner' => redirect()->route('home'),
             default  => redirect()->route('home'),
         };
@@ -169,7 +169,7 @@ class AuthController extends Controller
         }
 
         return match ($user->role) {
-            'admin'  => redirect()->route('filament.admin.pages.dashboard'),
+            'admin'  => redirect()->route('profil'),
             'runner' => redirect()->route('home'),
             default  => redirect()->route('home'),
         };

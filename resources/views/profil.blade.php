@@ -76,13 +76,13 @@
             <div class="glass-card bg-white/70 backdrop-blur-2xl rounded-[2.5rem] p-3 shadow-xl shadow-slate-200/40 border border-white">
                 <nav class="space-y-1">
                     @if($user->role !== 'admin')
-                    <a href="{{ route('order.history') }}" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white hover:shadow-sm text-slate-600 hover:text-blue-600 transition-all group font-bold">
+                    <a href="{{ route('cart.index') }}" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white hover:shadow-sm text-slate-600 hover:text-blue-600 transition-all group font-bold">
                         <div class="w-10 h-10 rounded-[1rem] bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <span class="text-sm tracking-wide flex-1">Riwayat Order</span>
+                        <span class="text-sm tracking-wide flex-1">Lihat Keranjang</span>
                         <svg class="w-4 h-4 opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                     </a>
                     <div class="h-px bg-slate-200/50 my-2 mx-4"></div>

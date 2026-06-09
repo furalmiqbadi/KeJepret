@@ -46,6 +46,22 @@
         </button>
     </div>
     @endif
+    @if($errors->any())
+    <div id="toast-validation" class="glass-card bg-red-50/80 border border-red-200 text-red-700 px-6 py-5 rounded-[1.5rem] mb-8 shadow-sm flex items-start gap-4 animate-in fade-in slide-in-from-top-4 relative max-w-2xl mx-auto">
+        <svg class="w-6 h-6 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="flex-1">
+            <p class="text-sm font-black mb-1 tracking-wide">Input Tidak Valid!</p>
+            <ul class="text-xs font-bold list-disc pl-4 space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <button onclick="dismissToast('toast-validation')" class="text-red-400 hover:text-red-700 transition">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+    @endif
 
     {{-- TWO COLUMN LAYOUT --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -149,31 +165,33 @@
                 {{-- Glossy reflections --}}
                 <div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
 
-                <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8" x-data="{ openWithdraw: false }">
-                    <div>
-                        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-white/10">
-                            <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Dompet Penghasilan</p>
+                <div class="relative z-10" x-data="{ openWithdraw: {{ $errors->any() || session('error') ? 'true' : 'false' }} }">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-white/10">
+                                <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Dompet Penghasilan</p>
+                            </div>
+                            
+                            <p class="text-sm font-semibold text-slate-300 mb-1">Saldo Tersedia</p>
+                            <p class="text-5xl md:text-6xl font-black tracking-tighter mb-3 drop-shadow-md">Rp {{ number_format($balance->balance, 0, ',', '.') }}</p>
+                            
+                            <div class="flex items-center gap-2 text-sm font-bold text-slate-400 bg-black/20 inline-flex px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/5">
+                                <span>Total Akumulasi:</span>
+                                <span class="text-white">Rp {{ number_format($balance->total_earned, 0, ',', '.') }}</span>
+                            </div>
                         </div>
-                        
-                        <p class="text-sm font-semibold text-slate-300 mb-1">Saldo Tersedia</p>
-                        <p class="text-5xl md:text-6xl font-black tracking-tighter mb-3 drop-shadow-md">Rp {{ number_format($balance->balance, 0, ',', '.') }}</p>
-                        
-                        <div class="flex items-center gap-2 text-sm font-bold text-slate-400 bg-black/20 inline-flex px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/5">
-                            <span>Total Akumulasi:</span>
-                            <span class="text-white">Rp {{ number_format($balance->total_earned, 0, ',', '.') }}</span>
-                        </div>
-                    </div>
 
-                    <div class="shrink-0 w-full md:w-auto relative z-20">
-                        <button @click="openWithdraw = !openWithdraw" type="button" class="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-400 hover:to-indigo-400 text-white font-black text-sm uppercase tracking-widest px-8 py-5 rounded-2xl shadow-[0_10px_25px_rgba(59,130,246,0.5)] hover:shadow-[0_15px_35px_rgba(59,130,246,0.6)] hover:-translate-y-1 transition-all duration-300 border border-blue-400/50">
-                            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                            Tarik Dana
-                        </button>
+                        <div class="shrink-0 w-full md:w-auto relative z-20">
+                            <button @click="openWithdraw = !openWithdraw" type="button" class="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-400 hover:to-indigo-400 text-white font-black text-sm uppercase tracking-widest px-8 py-5 rounded-2xl shadow-[0_10px_25px_rgba(59,130,246,0.5)] hover:shadow-[0_15px_35px_rgba(59,130,246,0.6)] hover:-translate-y-1 transition-all duration-300 border border-blue-400/50">
+                                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                Tarik Dana
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Withdraw Form Dropdown --}}
-                    <div x-show="openWithdraw" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" class="absolute top-full left-0 w-full mt-6 bg-white/10 backdrop-blur-2xl rounded-[2rem] p-8 border border-white/20 shadow-2xl z-30">
+                    <div x-show="openWithdraw" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4" class="w-full mt-8 bg-white/10 backdrop-blur-2xl rounded-[2rem] p-8 border border-white/20 shadow-2xl relative z-30">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="font-black text-lg">Formulir Penarikan</h3>
                             <button @click="openWithdraw = false" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
@@ -306,8 +324,10 @@
         el.style.transform = 'translateY(-12px)';
         setTimeout(() => el.remove(), 400);
     }
-    @if(session('success') || session('error'))
-    setTimeout(() => dismissToast(document.getElementById('toast-success') ? 'toast-success' : 'toast-error'), 5000);
+    @if(session('success') || session('error') || $errors->any())
+    setTimeout(() => {
+        dismissToast(document.getElementById('toast-success') ? 'toast-success' : (document.getElementById('toast-error') ? 'toast-error' : 'toast-validation'))
+    }, 5000);
     @endif
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

@@ -420,66 +420,81 @@ $testimonials = [
 </section>
 
 {{-- ===== BERGABUNG ===== --}}
-<section class="bg-white py-16">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-10">
-            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2">BERGABUNG</p>
-            <h2 class="text-3xl font-black text-gray-900">Untuk Semua Orang</h2>
+<section class="py-24 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">BERGABUNG</span>
+            </div>
+            <h2 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">Untuk Semua Orang</h2>
         </div>
-        <div class="grid sm:grid-cols-3 gap-5">
+        
+        <div class="grid lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
 
-            <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-blue-500/10">
-                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            {{-- Card 1: Event Organizer --}}
+            <div class="group glass-card bg-white/80 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 sm:p-10 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] hover:bg-white flex flex-col h-full relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-sky-100/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10 w-16 h-16 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors duration-300 shadow-sm group-hover:scale-110">
+                    <svg class="w-7 h-7 text-slate-400 group-hover:text-blue-600 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3 class="font-black text-gray-900 mb-2">Event Organizer</h3>
-                <p class="text-gray-500 text-sm leading-relaxed mb-5">Dokumentasikan event lari Anda dengan fotografer profesional kami. Bagikan kenangan kepada peserta.</p>
-                <a href="{{ route('event.propose') }}" class="text-sm font-bold text-blue-600 flex items-center gap-1 hover:underline">
-                    Ajukan Event
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Event Organizer</h3>
+                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Dokumentasikan event lari Anda dengan fotografer profesional kami. Bagikan kenangan tak terlupakan kepada seluruh peserta.</p>
+                <a href="{{ route('event.propose') }}" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors group/link mt-auto">
+                    <span class="border-b-2 border-transparent group-hover/link:border-blue-600 transition-colors pb-0.5">Ajukan Event</span>
+                    <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
 
-            <div class="bg-blue-600 rounded-2xl p-6 shadow-lg shadow-blue-200 relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-600/30">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full"></div>
-                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            {{-- Card 2: Jadi Fotografer (Featured) --}}
+            <div class="group relative bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 sm:p-10 overflow-hidden transition-all duration-500 hover:-translate-y-2 shadow-[0_20px_40px_rgba(37,99,235,0.2)] hover:shadow-[0_30px_60px_rgba(37,99,235,0.4)] flex flex-col h-full lg:-mt-4 lg:mb-[-1rem] z-10 border border-blue-400/30">
+                {{-- Decorative Shapes --}}
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-125 transition-transform duration-700"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-indigo-400/40 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
+                <div class="absolute -right-8 -bottom-8 w-32 h-32 border-[16px] border-white/5 rounded-full group-hover:scale-110 transition-transform duration-700"></div>
+                
+                <div class="relative z-10 w-16 h-16 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center mb-8 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                    <svg class="w-7 h-7 text-white drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="font-black text-white mb-2">Jadi Fotografer</h3>
-                <p class="text-white/75 text-sm leading-relaxed mb-5">Bergabunglah sebagai mitra fotografer dan dapatkan penghasilan dari setiap foto yang terjual.</p>
+                <h3 class="relative z-10 font-black text-white text-2xl mb-4 drop-shadow-sm">Jadi Fotografer</h3>
+                <p class="relative z-10 text-blue-50 text-sm leading-relaxed mb-10 flex-grow font-medium">Bergabunglah sebagai mitra fotografer. Abadikan momen pelari dan dapatkan penghasilan tak terbatas dari setiap foto yang terjual di platform kami.</p>
                 
-                @auth
-                <form id="logout-register-form-home" action="{{ route('logout.register.photographer') }}" method="POST" class="hidden">
-                    @csrf
-                </form>
-                <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari akun saat ini untuk membuat akun fotografer baru?')) { document.getElementById('logout-register-form-home').submit(); }" class="inline-flex items-center gap-1.5 bg-white text-blue-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shadow cursor-pointer">
-                    Daftar Sekarang
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </a>
-                @else
-                <a href="{{ route('register.photographer') }}" class="inline-flex items-center gap-1.5 bg-white text-blue-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shadow">
-                    Daftar Sekarang
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </a>
-                @endauth
+                <div class="relative z-10 mt-auto">
+                    @auth
+                    <form id="logout-register-form-home" action="{{ route('logout.register.photographer') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+                    <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari akun saat ini untuk membuat akun fotografer baru?')) { document.getElementById('logout-register-form-home').submit(); }" class="inline-flex w-full justify-center items-center gap-2 bg-white text-blue-600 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-[1.25rem] hover:bg-slate-50 transition-colors shadow-lg hover:shadow-xl hover:scale-[1.02] duration-300">
+                        Daftar Sekarang
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                    @else
+                    <a href="{{ route('register.photographer') }}" class="inline-flex w-full justify-center items-center gap-2 bg-white text-blue-600 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-[1.25rem] hover:bg-slate-50 transition-colors shadow-lg hover:shadow-xl hover:scale-[1.02] duration-300">
+                        Daftar Sekarang
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                    @endauth
+                </div>
             </div>
 
-            <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-blue-500/10">
-                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            {{-- Card 3: Butuh Bantuan --}}
+            <div class="group glass-card bg-white/80 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 sm:p-10 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] hover:bg-white flex flex-col h-full relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-100/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10 w-16 h-16 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors duration-300 shadow-sm group-hover:scale-110">
+                    <svg class="w-7 h-7 text-slate-400 group-hover:text-indigo-600 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <h3 class="font-black text-gray-900 mb-2">Butuh Bantuan?</h3>
-                <p class="text-gray-500 text-sm leading-relaxed mb-5">Punya pertanyaan tentang foto atau event? Tim support kami siap membantu kapan saja.</p>
-                <a href="mailto:support@kejepret.id" class="text-sm font-bold text-blue-600 flex items-center gap-1 hover:underline">
-                    Hubungi Kami
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Butuh Bantuan?</h3>
+                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Punya pertanyaan seputar cara pembelian foto atau mendaftarkan event? Tim support kami selalu siap membantu Anda kapan saja.</p>
+                <a href="mailto:support@kejepret.id" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link mt-auto">
+                    <span class="border-b-2 border-transparent group-hover/link:border-indigo-600 transition-colors pb-0.5">Hubungi Kami</span>
+                    <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
 
@@ -488,28 +503,70 @@ $testimonials = [
 </section>
 
 {{-- ===== FOOTER CTA ===== --}}
-<section class="bg-gray-900 pt-16 pb-8 text-center rounded-b-[2.5rem] sm:rounded-none">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6">
-        <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">MULAI SEKARANG</p>
-        <h2 class="text-4xl sm:text-5xl font-black text-white leading-tight mb-4">
-            Temukan Fotomu<br>Sekarang Juga
+{{-- ===== FOOTER CTA ===== --}}
+<section class="relative bg-slate-950 pt-24 pb-10 text-center overflow-hidden">
+    {{-- Decorative Ambient Glows --}}
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] sm:w-[800px] h-[400px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-sky-500/10 rounded-full blur-[100px]"></div>
+        <div class="absolute top-1/2 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px]"></div>
+        {{-- Subtle Grid Pattern --}}
+        <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse shadow-[0_0_8px_rgba(56,189,248,0.8)]"></span>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-400">MULAI SEKARANG</span>
+        </div>
+        
+        <h2 class="text-4xl sm:text-6xl font-black text-white leading-[1.1] tracking-tight mb-6 drop-shadow-lg">
+            Temukan Fotomu<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Sekarang Juga</span>
         </h2>
-        <p class="text-gray-400 text-base mb-10">Ribuan foto dari ratusan event lari menunggu kamu. Gratis untuk dicari.</p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="{{ route('search') }}" class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-xl shadow-blue-900/40">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        
+        <p class="text-slate-400 text-base sm:text-lg mb-12 max-w-xl mx-auto font-medium leading-relaxed">
+            Ribuan foto dari ratusan event lari menunggu kamu. Proses pencarian instan dengan teknologi pengenalan wajah. Gratis untuk dicari.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="{{ route('search') }}" class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm uppercase tracking-widest px-8 py-5 rounded-2xl transition-all duration-300 shadow-[0_0_40px_rgba(37,99,235,0.4)] hover:shadow-[0_0_60px_rgba(37,99,235,0.6)] hover:-translate-y-1">
+                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 Cari Fotomu
             </a>
-            <a href="{{ route('event') }}" class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-2xl transition-all border border-white/20">
+            
+            <a href="{{ route('event') }}" class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white font-black text-sm uppercase tracking-widest px-8 py-5 rounded-2xl transition-all duration-300 border border-white/10 hover:border-white/20 backdrop-blur-md">
                 Lihat Event
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
     </div>
-    <div class="max-w-5xl mx-auto px-4 mt-12 pt-6 border-t border-gray-800">
-        <p class="text-gray-500 text-sm">© 2026 KeJepret. Platform foto lari terpercaya di Indonesia.</p>
+
+    {{-- Footer Info --}}
+    <div class="max-w-6xl mx-auto px-4 mt-24 relative z-10">
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8"></div>
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg border border-blue-400/30">
+                    K
+                </div>
+                <span class="font-black text-white text-xl tracking-tight">KeJepret</span>
+            </div>
+            <p class="text-slate-500 text-sm font-medium text-center md:text-left">
+                © {{ date('Y') }} KeJepret. Platform foto lari terpercaya di Indonesia.
+            </p>
+            <div class="flex gap-4">
+                {{-- Placeholder Social Icons --}}
+                <a href="#" aria-label="Twitter" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                </a>
+                <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-pink-600 hover:shadow-[0_0_20px_rgba(219,39,119,0.5)] transition-all duration-300">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
