@@ -26,7 +26,30 @@
     @else
     <div class="space-y-3">
         @foreach($sessions as $session)
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        @if($session->search_status === 'completed')
+        <a href="{{ route('runner.search.results', $session->id) }}" class="block bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-400 hover:shadow-md transition-all duration-300 group">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-black text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                        {{ $session->event->name ?? 'Semua Event' }}
+                    </p>
+                    <p class="text-xs text-gray-400 font-semibold mt-0.5">
+                        {{ \Carbon\Carbon::parse($session->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('d M Y, H:i') }} WIB
+                    </p>
+                </div>
+                <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                    <span class="inline-block text-[10px] font-black px-3 py-1 rounded-full bg-green-50 text-green-600">
+                        Selesai
+                    </span>
+                    <span class="text-xs text-gray-400 font-semibold group-hover:text-blue-600 transition-colors flex items-center gap-1">
+                        {{ $session->result_count }} foto
+                        <svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                </div>
+            </div>
+        </a>
+        @else
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 opacity-75">
             <div class="flex items-start justify-between gap-4">
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-black text-gray-900 truncate">
@@ -36,15 +59,16 @@
                         {{ \Carbon\Carbon::parse($session->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('d M Y, H:i') }} WIB
                     </p>
                 </div>
-                <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                    <span class="inline-block text-[11px] font-black px-3 py-1 rounded-full
-                        {{ $session->search_status === 'completed' ? 'bg-green-50 text-green-600' : ($session->search_status === 'failed' ? 'bg-red-50 text-red-500' : 'bg-yellow-50 text-yellow-600') }}">
-                        {{ ucfirst($session->search_status) }}
+                <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                    <span class="inline-block text-[10px] font-black px-3 py-1 rounded-full
+                        {{ $session->search_status === 'failed' ? 'bg-red-50 text-red-500' : 'bg-yellow-50 text-yellow-600' }}">
+                        {{ $session->search_status === 'failed' ? 'Gagal' : 'Memproses' }}
                     </span>
-                    <span class="text-xs text-gray-400 font-semibold">{{ $session->result_count }} foto ditemukan</span>
+                    <span class="text-xs text-gray-400 font-semibold">{{ $session->result_count }} foto</span>
                 </div>
             </div>
         </div>
+        @endif
         @endforeach
     </div>
 
