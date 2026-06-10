@@ -9,7 +9,7 @@
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
             @endauth
                 <div class="w-11 h-11 bg-white rounded-[1rem] shadow-sm border border-slate-100 overflow-hidden flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-300">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
+                    <img src="/images/logo.png" alt="Logo" class="w-full h-full object-contain">
                 </div>
                 <span class="text-xl font-black text-slate-800 tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-br from-slate-900 to-slate-700">KeJepret</span>
             </a>

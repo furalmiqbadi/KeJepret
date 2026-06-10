@@ -73,7 +73,7 @@
 
             {{-- Tombol Keranjang --}}
             <div class="px-4 pb-4 bg-white/40">
-                <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                <form action="{{ route('cart.add', [], false) }}" method="POST" class="add-to-cart-form">
                     @csrf
                     <input type="hidden" name="photo_id" value="{{ $photo['photo_id'] }}">
                     <button type="submit"
@@ -131,7 +131,7 @@ document.querySelectorAll('.add-to-cart-form').forEach((form) => {
         label.textContent = 'Menambahkan...';
 
         try {
-            const response = await fetch(form.action, {
+            const response = await fetch(form.getAttribute('action'), {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
