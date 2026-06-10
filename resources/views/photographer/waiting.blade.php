@@ -141,7 +141,20 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mt-2">
+        <div class="clean-glass-box rounded-2xl p-5 text-left space-y-3 mt-2">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Butuh Bantuan?</p>
+            <div class="space-y-2">
+                <textarea id="complaint-text" rows="3" class="w-full clean-glass-input rounded-xl p-3 text-xs focus:outline-none resize-none" placeholder="Tulis pertanyaan atau keluhan Anda di sini..."></textarea>
+                <button onclick="sendToWhatsapp()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    Kirim ke WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4">
             <form action="{{ route('logout') }}" method="POST" class="w-full">
                 @csrf
                 <button type="submit" class="w-full flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-slate-350 hover:border-slate-400 text-slate-650 hover:text-slate-800 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
@@ -151,13 +164,36 @@
                     Logout
                 </button>
             </form>
-            <a href="mailto:support@kejepret.id" class="flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-[0.98] cursor-pointer">
-                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Dukungan
-            </a>
         </div>
+
+        <script>
+            function sendToWhatsapp() {
+                const keluhan = document.getElementById('complaint-text').value.trim();
+                if (!keluhan) {
+                    alert('Silakan tulis pertanyaan atau keluhan Anda terlebih dahulu.');
+                    return;
+                }
+                
+                const name = "{{ $user->name }}";
+                const email = "{{ $user->email }}";
+                const status = "Ditolak";
+                
+                const message = `Halo Admin KeJepret, saya membutuhkan bantuan mengenai akun fotografer saya.
+
+Detail Akun:
+- Nama: ${name}
+- Email: ${email}
+- Status: ${status}
+
+Pertanyaan/Keluhan:
+${keluhan}`;
+
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/6285319252270?text=${encodedMessage}`;
+                
+                window.open(whatsappUrl, '_blank');
+            }
+        </script>
 
         @else
         {{-- PENDING --}}

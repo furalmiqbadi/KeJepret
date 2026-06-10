@@ -535,10 +535,10 @@ $testimonials = [
                 </div>
                 <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Butuh Bantuan?</h3>
                 <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Punya pertanyaan seputar cara pembelian foto atau mendaftarkan event? Tim support kami selalu siap membantu Anda kapan saja.</p>
-                <a href="mailto:support@kejepret.id" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link mt-auto">
+                <button onclick="openHelpModal()" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link mt-auto bg-transparent border-none cursor-pointer">
                     <span class="border-b-2 border-transparent group-hover/link:border-indigo-600 transition-colors pb-0.5">Hubungi Kami</span>
                     <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </a>
+                </button>
             </div>
 
         </div>
@@ -613,8 +613,109 @@ $testimonials = [
     </div>
 </section>
 
+{{-- Modal Bantuan WhatsApp --}}
+<div id="help-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="relative w-full max-w-lg clean-glass p-8 rounded-[2.5rem] shadow-2xl transform scale-95 opacity-0 transition-all duration-300 ease-out" id="help-modal-card">
+        {{-- Close button --}}
+        <button onclick="closeHelpModal()" class="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100/80 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shadow-sm cursor-pointer z-20 border-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        {{-- Background ambient glow inside modal --}}
+        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="space-y-6 relative z-10 text-center">
+            <div class="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg border border-indigo-400/30">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+            </div>
+            
+            <div class="space-y-2">
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight">Kirim Pertanyaan</h3>
+                <p class="text-slate-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">Tulis pertanyaan atau keluhan Anda di bawah. Pesan Anda akan langsung dikirimkan ke WhatsApp tim support KeJepret.</p>
+            </div>
+
+            <div class="space-y-4 text-left">
+                <div>
+                    <label for="home-modal-complaint-text" class="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2 ml-1">Pertanyaan / Keluhan</label>
+                    <textarea id="home-modal-complaint-text" rows="4" class="w-full clean-glass-input rounded-2xl p-4 text-sm focus:outline-none resize-none" placeholder="Tulis pertanyaan Anda seputar pembelian foto, pendaftaran event, atau kendala lainnya di sini..."></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button onclick="closeHelpModal()" class="w-full order-2 sm:order-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-655 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-[0.98] cursor-pointer text-center border-none">
+                        Batal
+                    </button>
+                    <button onclick="sendHomeModalToWhatsapp()" class="w-full order-1 sm:order-2 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border-none">
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        Kirim WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 <script>
+function openHelpModal() {
+    const modal = document.getElementById('help-modal');
+    const card = document.getElementById('help-modal-card');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+        card.classList.remove('scale-95', 'opacity-0');
+    }, 50);
+}
+
+function closeHelpModal() {
+    const modal = document.getElementById('help-modal');
+    const card = document.getElementById('help-modal-card');
+    card.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        document.getElementById('home-modal-complaint-text').value = '';
+    }, 200);
+}
+
+function sendHomeModalToWhatsapp() {
+    const keluhan = document.getElementById('home-modal-complaint-text').value.trim();
+    if (!keluhan) {
+        alert('Silakan tulis pertanyaan atau keluhan Anda terlebih dahulu.');
+        return;
+    }
+    
+    @auth
+        const name = "{{ auth()->user()->name }}";
+        const email = "{{ auth()->user()->email }}";
+        const role = "{{ auth()->user()->role }}";
+    @else
+        const name = "Pengunjung Umum";
+        const email = "-";
+        const role = "Guest";
+    @endauth
+    
+    const message = `Halo Admin KeJepret, saya membutuhkan bantuan/memiliki pertanyaan mengenai platform KeJepret.
+
+Detail Pengirim:
+- Nama: ${name}
+- Email: ${email}
+- Status: ${role}
+
+Pertanyaan/Keluhan:
+${keluhan}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/6285319252270?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank');
+    closeHelpModal();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const counters = document.querySelectorAll('.counter-up');
     const speed = 1500; // durasi animasi dalam milidetik
