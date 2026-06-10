@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Services\PakasirService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -10,9 +11,10 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    // ═══════════════════════════════════════════
-    // CHECKOUT — Buat order dari cart
-    // ═══════════════════════════════════════════
+    public function __construct(private readonly PakasirService $pakasir)
+    {
+    }
+
     public function checkout()
     {
         $userId = Auth::id();
@@ -46,6 +48,7 @@ class OrderController extends Controller
                     'total_amount' => $total,
                     'platform_fee' => $platformFee,
                     'photographer_amount' => $photographerAmount,
+                    'payment_channel' => 'pakasir',
                     'status' => 'pending',
                     'expired_at' => now()->addHours(24),
                     'created_at' => now(),
@@ -84,9 +87,6 @@ class OrderController extends Controller
             ->with('success', 'Order berhasil dibuat. Silakan lakukan pembayaran.');
     }
 
-    // ═══════════════════════════════════════════
-    // HISTORY — Daftar semua order milik user
-    // ═══════════════════════════════════════════
     public function history()
     {
         $orders = DB::table('orders')
@@ -97,9 +97,6 @@ class OrderController extends Controller
         return view('runner.order-history', compact('orders'));
     }
 
-    // ═══════════════════════════════════════════
-    // DETAIL — Detail satu order
-    // ═══════════════════════════════════════════
     public function detail($id)
     {
         $order = DB::table('orders')
@@ -114,24 +111,12 @@ class OrderController extends Controller
         $items = DB::table('order_items')
             ->join('photos', 'order_items.photo_id', '=', 'photos.id')
             ->where('order_items.order_id', $id)
-            ->select(
-                'order_items.*',
-                'photos.category',
-                'photos.watermark_path'
-            )
-            ->get()
-            ->map(function ($item) {
-                $item->watermark_url = env('AWS_URL').'/'.$item->watermark_path;
-
-                return $item;
-            });
+            ->select('order_items.*', 'photos.category', 'photos.watermark_path')
+            ->get();
 
         return view('runner.order-detail', compact('order', 'items'));
     }
 
-    // ═══════════════════════════════════════════
-    // MANUAL PAY — Konfirmasi pembayaran manual
-    // ═══════════════════════════════════════════
     public function manualPay($id)
     {
         $userId = Auth::id();
@@ -164,97 +149,31 @@ class OrderController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($id, $userId) {
-                $order = DB::table('orders')
-                    ->where('id', $id)
-                    ->where('user_id', $userId)
-                    ->lockForUpdate()
-                    ->first();
+            $paymentUrl = $order->tripay_pay_url;
 
-                if (! $order) {
-                    abort(404, 'Order tidak ditemukan.');
-                }
-
-                if ($order->status !== 'pending') {
-                    throw new \RuntimeException('Order sudah diproses sebelumnya.');
-                }
-
-                if ($order->expired_at && now()->greaterThan($order->expired_at)) {
-                    DB::table('orders')
-                        ->where('id', $id)
-                        ->update([
-                            'status' => 'expired',
-                            'updated_at' => now(),
-                        ]);
-
-                    throw new \RuntimeException('Order sudah expired dan tidak bisa dibayar.');
-                }
+            if (! $paymentUrl) {
+                $paymentUrl = $this->pakasir->buildPaymentUrl(
+                    $order->order_code,
+                    $order->total_amount,
+                    route('order.detail', $order->id)
+                );
 
                 DB::table('orders')
                     ->where('id', $id)
                     ->update([
-                        'status' => 'paid',
-                        'paid_at' => now(),
+                        'payment_channel' => 'pakasir',
+                        'tripay_reference' => $order->order_code,
+                        'tripay_pay_url' => $paymentUrl,
                         'updated_at' => now(),
                     ]);
+            }
 
-                $items = DB::table('order_items')
-                    ->where('order_id', $id)
-                    ->get();
-
-                foreach ($items as $item) {
-                    $photographerId = $item->photographer_id;
-                    $amount = $item->photographer_amount;
-
-                    $balance = DB::table('photographer_balances')
-                        ->where('photographer_id', $photographerId)
-                        ->lockForUpdate()
-                        ->first();
-
-                    if ($balance) {
-                        $newBalance = $balance->balance + $amount;
-                        DB::table('photographer_balances')
-                            ->where('photographer_id', $photographerId)
-                            ->update([
-                                'balance' => $newBalance,
-                                'total_earned' => $balance->total_earned + $amount,
-                                'updated_at' => now(),
-                            ]);
-                    } else {
-                        $newBalance = $amount;
-                        DB::table('photographer_balances')->insert([
-                            'photographer_id' => $photographerId,
-                            'balance' => $newBalance,
-                            'total_earned' => $amount,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-                    }
-
-                    DB::table('balance_transactions')->insert([
-                        'photographer_id' => $photographerId,
-                        'order_item_id' => $item->id,
-                        'withdraw_id' => null,
-                        'type' => 'credit',
-                        'amount' => $amount,
-                        'balance_after' => $newBalance,
-                        'description' => 'Penjualan foto - Order #'.$order->order_code,
-                        'created_at' => now(),
-                    ]);
-                }
-            });
-
-            return redirect()->route('order.detail', $id)
-                ->with('success', 'Pembayaran berhasil dikonfirmasi!');
-
-        } catch (\RuntimeException $e) {
-            return redirect()->route('order.detail', $id)
-                ->with('error', $e->getMessage());
+            return redirect()->away($paymentUrl);
         } catch (\Exception $e) {
-            Log::error('Manual payment failed for order_id='.$id.' user_id='.$userId.' msg='.$e->getMessage());
+            Log::error('Pakasir redirect failed for order_id='.$id.' user_id='.$userId.' msg='.$e->getMessage());
 
             return redirect()->route('order.detail', $id)
-                ->with('error', 'Gagal memproses pembayaran. Coba lagi.');
+                ->with('error', 'Gagal membuka halaman pembayaran. Coba lagi.');
         }
     }
 }
