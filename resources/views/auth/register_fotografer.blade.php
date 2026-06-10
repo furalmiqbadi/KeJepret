@@ -8,7 +8,7 @@
     <div class="w-full max-w-[420px] -mt-2">
         {{-- Header Register --}}
         <div class="text-center mb-2">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto mx-auto mb-1 object-contain">
+            <img src="/images/logo.png" alt="Logo" class="h-8 w-auto mx-auto mb-1 object-contain">
             <h2 class="text-lg font-black text-gray-900 tracking-tight">Daftar Fotografer</h2>
         </div>
 
