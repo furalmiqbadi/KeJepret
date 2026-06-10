@@ -33,7 +33,6 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
             ->userMenuItems([
                 MenuItem::make()
                     ->label('Kembali ke Profil')
