@@ -32,12 +32,12 @@ class StatsOverview extends BaseWidget
                 ->icon('heroicon-o-photo')
                 ->color('success'),
 
-            Stat::make('Total Order Dibayar', number_format($totalOrders))
+            Stat::make('Total Pesanan Dibayar', number_format($totalOrders))
                 ->description('Rp ' . number_format($totalRevenue, 0, ',', '.'))
                 ->icon('heroicon-o-shopping-bag')
                 ->color('primary'),
 
-            Stat::make('Withdrawal Pending', number_format($pendingWithdrawals))
+            Stat::make('Penarikan Tertunda', number_format($pendingWithdrawals))
                 ->description('Menunggu persetujuan admin')
                 ->icon('heroicon-o-banknotes')
                 ->color('warning'),

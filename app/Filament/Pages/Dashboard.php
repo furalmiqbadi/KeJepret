@@ -13,12 +13,12 @@ class Dashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return 'Dashboard';
+        return 'Dasbor';
     }
 
     public function getTitle(): string
     {
-        return 'Dashboard KeJepret';
+        return 'Dasbor KeJepret';
     }
 
     public static function getNavigationSort(): ?int

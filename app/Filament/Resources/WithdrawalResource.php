@@ -17,6 +17,9 @@ class WithdrawalResource extends Resource
 {
     protected static ?string $model = Withdrawal::class;
 
+    protected static ?string $modelLabel = 'Penarikan Dana';
+    protected static ?string $pluralModelLabel = 'Penarikan Dana';
+
     public static function getNavigationIcon(): string
     {
         return 'heroicon-o-banknotes';
@@ -24,7 +27,7 @@ class WithdrawalResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Withdrawal';
+        return 'Penarikan Dana';
     }
 
     public static function getNavigationSort(): ?int
@@ -56,6 +59,13 @@ class WithdrawalResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending'     => 'Tertunda',
+                        'approved'    => 'Disetujui',
+                        'transferred' => 'Ditransfer',
+                        'rejected'    => 'Ditolak',
+                        default       => $state,
+                    })
                     ->color(fn (string $state): string => match ($state) {
                         'approved' => 'success',
                         'transferred' => 'info',
@@ -67,15 +77,15 @@ class WithdrawalResource extends Resource
             ->filters([
                 SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'transferred' => 'Transferred',
-                        'rejected' => 'Rejected',
+                        'pending' => 'Tertunda',
+                        'approved' => 'Disetujui',
+                        'transferred' => 'Ditransfer',
+                        'rejected' => 'Ditolak',
                     ]),
             ])
             ->actions([
                 Action::make('approve')
-                    ->label('Approve')
+                    ->label('Setujui')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->requiresConfirmation()

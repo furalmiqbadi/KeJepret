@@ -2,7 +2,10 @@
 @section('title', 'Profil')
 @section('content')
 
-@php $user = auth()->user(); @endphp
+@php 
+    $user = auth()->user(); 
+    $hideNav = $user && $user->role === 'admin';
+@endphp
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 relative z-10">
 

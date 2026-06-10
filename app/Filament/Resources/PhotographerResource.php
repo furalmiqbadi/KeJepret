@@ -18,6 +18,9 @@ class PhotographerResource extends Resource
 {
     protected static ?string $model = \App\Models\User::class;
 
+    protected static ?string $modelLabel = 'Verifikasi Fotografer';
+    protected static ?string $pluralModelLabel = 'Verifikasi Fotografer';
+
     public static function getNavigationIcon(): string
     {
         return 'heroicon-o-identification';
@@ -53,9 +56,9 @@ class PhotographerResource extends Resource
             Select::make('verification_status')
                 ->label('Status Verifikasi')
                 ->options([
-                    'pending'  => 'Pending',
-                    'verified' => 'Verified',
-                    'rejected' => 'Rejected',
+                    'pending'  => 'Tertunda',
+                    'verified' => 'Terverifikasi',
+                    'rejected' => 'Ditolak',
                 ])
                 ->required(),
         ]);
@@ -76,13 +79,19 @@ class PhotographerResource extends Resource
                 TextColumn::make('verification_status')
                     ->label('Status Verifikasi')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending'  => 'Tertunda',
+                        'verified' => 'Terverifikasi',
+                        'rejected' => 'Ditolak',
+                        default    => $state,
+                    })
                     ->color(fn (string $state): string => match ($state) {
                         'verified' => 'success',
                         'rejected' => 'danger',
                         default    => 'warning',
                     }),
                 IconColumn::make('is_banned')
-                    ->label('Banned')
+                    ->label('Diblokir')
                     ->boolean(),
                 TextColumn::make('verified_at')->label('Diverifikasi')->dateTime('d M Y H:i')->placeholder('-'),
                 TextColumn::make('created_at')->label('Daftar')->date('d M Y')->sortable(),
@@ -91,14 +100,14 @@ class PhotographerResource extends Resource
                 SelectFilter::make('verification_status')
                     ->label('Status Verifikasi')
                     ->options([
-                        'pending'  => 'Pending',
-                        'verified' => 'Verified',
-                        'rejected' => 'Rejected',
+                        'pending'  => 'Tertunda',
+                        'verified' => 'Terverifikasi',
+                        'rejected' => 'Ditolak',
                     ]),
                 SelectFilter::make('is_banned')
-                    ->label('Status Banned')
+                    ->label('Status Blokir')
                     ->options([
-                        '1' => 'Banned',
+                        '1' => 'Diblokir',
                         '0' => 'Aktif',
                     ]),
             ])
@@ -143,12 +152,12 @@ class PhotographerResource extends Resource
                     }),
 
                 Action::make('ban')
-                    ->label('Ban')
+                    ->label('Blokir')
                     ->icon('heroicon-o-no-symbol')
                     ->color('danger')
                     ->form([
                         Textarea::make('banned_reason')
-                            ->label('Alasan Banned')
+                            ->label('Alasan Blokir')
                             ->required(),
                     ])
                     ->requiresConfirmation()
@@ -164,7 +173,7 @@ class PhotographerResource extends Resource
                     }),
 
                 Action::make('unban')
-                    ->label('Unban')
+                    ->label('Buka Blokir')
                     ->icon('heroicon-o-arrow-path')
                     ->color('gray')
                     ->requiresConfirmation()

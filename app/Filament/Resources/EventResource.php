@@ -21,6 +21,9 @@ class EventResource extends Resource
 {
     protected static ?string $model = \App\Models\Event::class;
 
+    protected static ?string $modelLabel = 'Acara';
+    protected static ?string $pluralModelLabel = 'Acara';
+
     public static function getNavigationIcon(): string
     {
         return 'heroicon-o-calendar-days';
@@ -28,7 +31,7 @@ class EventResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Events';
+        return 'Acara';
     }
 
     public static function getNavigationSort(): ?int
@@ -59,7 +62,7 @@ class EventResource extends Resource
                 ->rows(4),
 
             FileUpload::make('cover_image')
-                ->label('Cover Image')
+                ->label('Gambar Sampul')
                 ->image()
                 ->disk('s3')
                 ->directory('events/covers')
