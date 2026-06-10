@@ -4,7 +4,9 @@
 
 @php 
     $user = auth()->user(); 
-    $hideNav = $user && $user->role === 'admin';
+    if ($user && $user->role === 'admin') {
+        $hideNav = true;
+    }
 @endphp
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 relative z-10">
