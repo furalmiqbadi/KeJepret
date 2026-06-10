@@ -91,13 +91,13 @@
 
             @if($order->status === 'pending')
             <div class="bg-yellow-50 border border-yellow-100 rounded-2xl p-4 mb-4">
-                <p class="text-xs font-bold text-yellow-700">Pembayaran masih manual. Setelah transfer/konfirmasi pembayaran selesai, tekan tombol di bawah.</p>
+                <p class="text-xs font-bold text-yellow-700">Pembayaran akan dibuka di Pakasir. Tekan tombol di bawah untuk lanjut ke halaman pembayaran.</p>
             </div>
 
             <form action="{{ route('order.pay', $order->id) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 active:scale-[0.98] transition shadow-lg shadow-blue-500/20">
-                    Telah Melakukan Pembayaran
+                    Lanjut ke Pembayaran Pakasir
                 </button>
             </form>
             @elseif($order->status === 'paid')
@@ -121,3 +121,4 @@
 
 </div>
 @endsection
+
