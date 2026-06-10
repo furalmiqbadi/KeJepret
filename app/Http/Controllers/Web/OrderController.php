@@ -112,7 +112,12 @@ class OrderController extends Controller
             ->join('photos', 'order_items.photo_id', '=', 'photos.id')
             ->where('order_items.order_id', $id)
             ->select('order_items.*', 'photos.category', 'photos.watermark_path')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->watermark_url = env('AWS_URL').'/'.$item->watermark_path;
+
+                return $item;
+            });
 
         return view('runner.order-detail', compact('order', 'items'));
     }
