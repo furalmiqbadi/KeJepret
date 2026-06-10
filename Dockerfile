@@ -17,6 +17,13 @@ RUN apt-get update && apt-get install -y \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
+RUN { \
+    echo 'upload_max_filesize=20M'; \
+    echo 'post_max_size=25M'; \
+    echo 'memory_limit=256M'; \
+    echo 'max_execution_time=120'; \
+} > /usr/local/etc/php/conf.d/kejepret.ini
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
