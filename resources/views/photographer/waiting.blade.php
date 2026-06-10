@@ -1,12 +1,14 @@
-@extends('layouts.app')
-@section('title', 'Menunggu Verifikasi')
-@section('content')
-
 @php
     $user    = auth()->user();
     $profile = $user->photographerProfile;
     $status  = $profile->verification_status ?? 'pending';
+    if ($status === 'rejected') {
+        $hideNav = true;
+    }
 @endphp
+@extends('layouts.app')
+@section('title', $status === 'rejected' ? 'Pendaftaran Ditolak' : 'Menunggu Verifikasi')
+@section('content')
 
 <style>
     .clean-glass {
@@ -25,7 +27,7 @@
     }
 </style>
 
-<div class="max-w-xl mx-auto px-6 py-12 flex flex-col items-center text-center relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="max-w-xl mx-auto px-6 {{ $status === 'rejected' ? 'min-h-screen flex flex-col justify-center' : 'py-12 flex flex-col items-center' }} text-center relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
     <div class="clean-glass p-8 md:p-10 rounded-[2.5rem] w-full space-y-6 relative overflow-hidden">
         {{-- Modern Ambient Decorative Glow inside Card --}}
@@ -140,12 +142,15 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 mt-2">
-            <a href="{{ route('home') }}" class="flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-slate-350 hover:border-slate-400 text-slate-650 hover:text-slate-800 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
-                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Beranda
-            </a>
+            <form action="{{ route('logout') }}" method="POST" class="w-full">
+                @csrf
+                <button type="submit" class="w-full flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-slate-350 hover:border-slate-400 text-slate-650 hover:text-slate-800 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
+                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                </button>
+            </form>
             <a href="mailto:support@kejepret.id" class="flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-[0.98] cursor-pointer">
                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
