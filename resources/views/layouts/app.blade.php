@@ -144,6 +144,11 @@
         @yield('content')
     </main>
 
+    {{-- Bottom Navigation (Mobile) --}}
+    @if(!isset($hideNav))
+        @include('partials.bottom-nav')
+    @endif
+
     <script>
         (() => {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
@@ -307,10 +312,6 @@
             });
         })();
     </script>
-    {{-- Bottom Navigation (Mobile) --}}
-    @if(!isset($hideNav))
-        @include('partials.bottom-nav')
-    @endif
 
 </body>
 </html>
