@@ -54,9 +54,10 @@ $testimonials = [
 
     {{-- 2. Title --}}
     <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-2 sm:mb-6 relative z-10 ml16">
-        <span class="line-1 inline-block overflow-hidden pb-1">Temukan Foto Larimu</span>
-        <br>
-        <span class="line-2 inline-block text-blue-600 overflow-hidden pb-1">dari Setiap Event</span>
+        <span class="line-1 block md:inline-block overflow-hidden pb-1">Temukan Foto</span>
+        <span class="line-1 block md:inline-block overflow-hidden pb-1 md:ml-3">Larimu</span>
+        <br class="hidden md:block">
+        <span class="line-2 block md:inline-block text-blue-600 overflow-hidden pb-1 mt-1 md:mt-0">dari Setiap Event</span>
     </h1>
 
     {{-- 3. Subtitle --}}
@@ -813,16 +814,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Wrap every letter in .line-1 and .line-2 in a span with class 'letter'
-    const line1 = document.querySelector('.ml16 .line-1');
-    const line2 = document.querySelector('.ml16 .line-2');
-    if (line1) {
-        line1.innerHTML = line1.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    }
-    if (line2) {
-        line2.innerHTML = line2.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    }
+    const lines1 = document.querySelectorAll('.ml16 .line-1');
+    const lines2 = document.querySelectorAll('.ml16 .line-2');
+    lines1.forEach(line => {
+        line.innerHTML = line.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    });
+    lines2.forEach(line => {
+        line.innerHTML = line.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    });
 
-    if (line1 || line2) {
+    if (lines1.length > 0 || lines2.length > 0) {
         anime.timeline({loop: true})
           .add({
             targets: '.ml16 .letter',
