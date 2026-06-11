@@ -105,7 +105,7 @@
             </button>
         </div>
 
-        <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data"
+        <form action="{{ route('runner.search.post', [], false) }}" method="POST" enctype="multipart/form-data"
               class="p-6 space-y-5 relative z-10" @submit="prepareSubmit">
             @csrf
             {{-- event_id otomatis dari event yang sedang dibuka --}}

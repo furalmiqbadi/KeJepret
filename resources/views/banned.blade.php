@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('logout') }}" method="POST">
+            <form action="{{ route('logout', [], false) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-500 via-rose-500 to-red-600 hover:from-red-600 hover:to-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-md shadow-red-300/40 hover:shadow-lg hover:shadow-red-300/60 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer flex items-center justify-center gap-2">
                     Keluar dari Akun (Logout)

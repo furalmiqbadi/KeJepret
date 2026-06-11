@@ -509,7 +509,7 @@ $testimonials = [
                 
                 <div class="relative z-10 mt-auto">
                     @auth
-                    <form id="logout-register-form-home" action="{{ route('logout.register.photographer') }}" method="POST" class="hidden">
+                    <form id="logout-register-form-home" action="{{ route('logout.register.photographer', [], false) }}" method="POST" class="hidden">
                         @csrf
                     </form>
                     <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari akun saat ini untuk membuat akun fotografer baru?')) { document.getElementById('logout-register-form-home').submit(); }" class="inline-flex w-full justify-center items-center gap-2 bg-white text-blue-600 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-[1.25rem] hover:bg-slate-50 transition-colors shadow-lg hover:shadow-xl hover:scale-[1.02] duration-300">

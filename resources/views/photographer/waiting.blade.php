@@ -155,7 +155,7 @@
         </div>
 
         <div class="mt-4">
-            <form action="{{ route('logout') }}" method="POST" class="w-full">
+            <form action="{{ route('logout', [], false) }}" method="POST" class="w-full">
                 @csrf
                 <button type="submit" class="w-full flex items-center justify-center gap-2 py-3.5 bg-white/40 hover:bg-white/75 border border-slate-350 hover:border-slate-400 text-slate-650 hover:text-slate-800 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-sm shadow-slate-200/40 hover:shadow active:scale-[0.98] cursor-pointer">
                     <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">

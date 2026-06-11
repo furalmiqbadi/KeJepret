@@ -139,7 +139,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-5 relative z-10">
+            <form action="{{ route('login.post', [], false) }}" method="POST" class="space-y-5 relative z-10">
                 @csrf
 
                 {{-- Email / Surel --}}
