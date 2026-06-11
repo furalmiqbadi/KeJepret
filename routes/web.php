@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\DownloadController;
 use App\Http\Controllers\Web\OrderController;
 use App\Http\Controllers\Web\PhotoController;
+use App\Http\Controllers\Web\PhotographerNotificationController;
 use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,6 +81,8 @@ Route::middleware('auth')->group(function () {
             Route::delete('/photos/{id}', [PhotoController::class, 'destroy'])->name('photographer.photos.destroy.post');
             Route::get('/profil', [BalanceController::class, 'index'])->name('photographer.profil');
             Route::get('/sales', [BalanceController::class, 'sales'])->name('balance.sales');
+            Route::get('/notifications', [PhotographerNotificationController::class, 'index'])->name('photographer.notifications');
+            Route::post('/notifications/{id}/read', [PhotographerNotificationController::class, 'markRead'])->name('photographer.notifications.read');
             Route::post('/withdraw', [BalanceController::class, 'withdraw'])->name('balance.withdraw.post');
         });
     });

@@ -1,3 +1,7 @@
+@if(Auth::check() && Auth::user()->role === 'photographer')
+    @include('partials.photographer-notification-widget', ['variant' => 'mobile'])
+@endif
+
 <nav class="md:hidden fixed bottom-5 left-5 right-5 clean-glass z-50 h-[4.5rem] rounded-[2rem] flex items-center justify-around px-2 transition-all duration-300">
     <div class="flex w-full h-full items-center justify-around px-2">
 

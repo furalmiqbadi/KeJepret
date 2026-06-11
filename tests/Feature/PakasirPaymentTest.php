@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
@@ -95,6 +94,21 @@ class PakasirPaymentTest extends TestCase
             $table->decimal('balance_after', 10, 2);
             $table->string('description', 255);
             $table->timestamp('created_at')->useCurrent();
+        });
+
+        Schema::create('photographer_notifications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('photographer_id');
+            $table->foreignId('order_item_id');
+            $table->foreignId('order_id');
+            $table->foreignId('photo_id');
+            $table->string('type', 50)->default('photo_sold');
+            $table->string('title', 120);
+            $table->string('message', 255);
+            $table->decimal('amount', 10, 2);
+            $table->timestamp('read_at')->nullable();
+            $table->timestamps();
+            $table->unique(['photographer_id', 'order_item_id']);
         });
     }
 
@@ -217,6 +231,16 @@ class PakasirPaymentTest extends TestCase
             'order_item_id' => $orderItemId,
             'type' => 'credit',
             'amount' => 21250,
+        ]);
+
+        $this->assertDatabaseHas('photographer_notifications', [
+            'photographer_id' => $photographer->id,
+            'order_item_id' => $orderItemId,
+            'order_id' => $orderId,
+            'photo_id' => $photoId,
+            'type' => 'photo_sold',
+            'amount' => 21250,
+            'read_at' => null,
         ]);
     }
 }

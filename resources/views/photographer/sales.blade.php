@@ -129,7 +129,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-50">
                         @foreach($sales as $item)
-                            <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <tr id="sale-{{ $item->id }}" class="transition-colors group {{ isset($highlightSaleId) && (int) $highlightSaleId === (int) $item->id ? 'bg-blue-50/80 ring-2 ring-blue-200 ring-inset' : 'hover:bg-slate-50/80' }}">
                                 <td class="px-8 py-5">
                                     <span class="font-bold text-slate-800 text-xs">{{ Str::limit($item->filename, 30) }}</span>
                                 </td>
