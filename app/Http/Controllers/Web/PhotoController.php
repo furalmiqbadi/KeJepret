@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\ImageManager;
@@ -31,7 +32,9 @@ class PhotoController extends Controller
             ->orderBy('event_date', 'desc')
             ->get();
 
-        return view('photographer.upload', compact('events'));
+        $categories = config('photos.categories');
+
+        return view('photographer.upload', compact('events', 'categories'));
     }
 
     // ════════════════════════════════
@@ -44,7 +47,7 @@ class PhotoController extends Controller
             'photos.*' => 'required|image|mimes:jpg,jpeg,png|max:10240',
             'event_id' => 'nullable|exists:events,id',
             'price' => 'required|numeric|min:5000',
-            'category' => 'nullable|string|max:50',
+            'category' => ['nullable', Rule::in(array_keys(config('photos.categories')))],
         ]);
 
         $photographer = Auth::user();
@@ -72,7 +75,7 @@ class PhotoController extends Controller
                     'watermark_path' => $watermarkPath,
                     'price' => $request->price,
                     'embed_status' => 'pending',
-                    'category' => $request->category ?? null,
+                    'category' => $request->filled('category') ? $request->category : config('photos.default'),
                     'is_active' => true,
                 ]);
 
@@ -146,9 +149,10 @@ class PhotoController extends Controller
             ->where('photographer_id', Auth::id())
             ->firstOrFail();
 
-        $photo->update(['is_active' => !$photo->is_active]);
+        $photo->update(['is_active' => ! $photo->is_active]);
 
         $status = $photo->is_active ? 'diaktifkan' : 'diarsipkan';
+
         return redirect()->route('photographer.portfolio')
             ->with('success', "Foto berhasil $status.");
     }
@@ -166,7 +170,7 @@ class PhotoController extends Controller
             Storage::disk('s3')->delete($photo->r2_path);
             Storage::disk('s3')->delete($photo->watermark_path);
         } catch (\Exception $e) {
-            Log::error('Gagal hapus file dari R2: ' . $e->getMessage());
+            Log::error('Gagal hapus file dari R2: '.$e->getMessage());
         }
 
         // Hapus juga Face Enrollment atau AI data jika ada endpintnya (saat ini cukup hapus dari DB)

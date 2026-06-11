@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SearchController extends Controller
 {
@@ -67,7 +68,9 @@ class SearchController extends Controller
             ->orderBy('event_date', 'desc')
             ->get();
 
-        return view('runner.search', compact('events'));
+        $categories = config('photos.categories');
+
+        return view('runner.search', compact('events', 'categories'));
     }
 
     // ══════════════════════════════════════════
@@ -81,6 +84,7 @@ class SearchController extends Controller
             'selfie' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'selfie_base64' => 'nullable|string',
             'event_id' => 'nullable|exists:events,id',
+            'category' => ['nullable', Rule::in(array_keys(config('photos.categories')))],
         ]);
 
         if (! $request->hasFile('selfie') && ! $request->filled('selfie_base64')) {
@@ -150,6 +154,7 @@ class SearchController extends Controller
             // Ambil semua photo_id aktif
             $photoIds = Photo::where('is_active', true)
                 ->when($request->event_id, fn ($q) => $q->where('event_id', $request->event_id))
+                ->when($request->filled('category'), fn ($q) => $q->where('category', $request->category))
                 ->pluck('id')
                 ->toArray();
 

@@ -7,6 +7,7 @@ use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -21,6 +22,7 @@ class HomeController extends Controller
             if ($profile && $profile->verification_status === 'verified') {
                 return redirect()->route('photographer.portfolio');
             }
+
             return redirect()->route('photographer.waiting');
         }
 
@@ -50,13 +52,13 @@ class HomeController extends Controller
 
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'ilike', '%' . $request->q . '%')
-                  ->orWhere('location', 'ilike', '%' . $request->q . '%');
+                $q->where('name', 'ilike', '%'.$request->q.'%')
+                    ->orWhere('location', 'ilike', '%'.$request->q.'%');
             });
         }
 
         if ($request->filled('city')) {
-            $query->where('location', 'ilike', '%' . $request->city . '%');
+            $query->where('location', 'ilike', '%'.$request->city.'%');
         }
 
         if ($request->filled('date')) {
@@ -98,11 +100,11 @@ class HomeController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
         ]);
 
-        $baseSlug = \Illuminate\Support\Str::slug($request->name);
+        $baseSlug = Str::slug($request->name);
         $slug = $baseSlug;
         $counter = 1;
         while (Event::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $counter;
+            $slug = $baseSlug.'-'.$counter;
             $counter++;
         }
 
@@ -134,8 +136,8 @@ class HomeController extends Controller
 
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'ilike', '%' . $request->q . '%')
-                  ->orWhere('location', 'ilike', '%' . $request->q . '%');
+                $q->where('name', 'ilike', '%'.$request->q.'%')
+                    ->orWhere('location', 'ilike', '%'.$request->q.'%');
             });
         }
 
