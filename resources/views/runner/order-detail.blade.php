@@ -94,7 +94,7 @@
                 <p class="text-xs font-bold text-yellow-700">Pembayaran akan dibuka di Pakasir. Tekan tombol di bawah untuk lanjut ke halaman pembayaran.</p>
             </div>
 
-            <form action="{{ route('order.pay', $order->id) }}" method="POST">
+            <form action="{{ route('order.pay', $order->id, false) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 active:scale-[0.98] transition shadow-lg shadow-blue-500/20">
                     Lanjut ke Pembayaran Pakasir

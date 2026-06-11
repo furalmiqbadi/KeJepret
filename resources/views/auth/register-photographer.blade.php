@@ -129,7 +129,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register.photographer.post') }}" method="POST" enctype="multipart/form-data" class="space-y-5 relative z-10">
+            <form action="{{ route('register.photographer.post', [], false) }}" method="POST" enctype="multipart/form-data" class="space-y-5 relative z-10">
                 @csrf
 
                 {{-- Nama & Email --}}

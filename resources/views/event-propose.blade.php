@@ -24,7 +24,7 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('event.propose.post') }}" enctype="multipart/form-data" class="clean-glass rounded-[2rem] p-6 sm:p-8">
+    <form method="POST" action="{{ route('event.propose.post', [], false) }}" enctype="multipart/form-data" class="clean-glass rounded-[2rem] p-6 sm:p-8">
         @csrf
         <div class="space-y-6">
             {{-- Nama Event --}}

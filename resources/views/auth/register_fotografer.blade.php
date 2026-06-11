@@ -14,7 +14,7 @@
 
         {{-- Register Card --}}
         <div class="bg-white rounded-[1.25rem] p-4 border border-gray-100 shadow-lg relative overflow-hidden">
-            <form action="{{ route('register.fotografer') }}" method="POST" class="space-y-2 relative z-10">
+            <form action="{{ route('register.photographer.post', [], false) }}" method="POST" class="space-y-2 relative z-10">
                 @csrf
                 <div class="grid grid-cols-2 gap-2.5">
                     <div class="space-y-0.5">

@@ -63,7 +63,7 @@
 
             {{-- Form Section --}}
             <div class="flex-1 w-full">
-                <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data" class="space-y-7">
+                <form action="{{ route('profil.update', [], false) }}" method="POST" enctype="multipart/form-data" class="space-y-7">
                     @csrf
                     @method('PUT')
 

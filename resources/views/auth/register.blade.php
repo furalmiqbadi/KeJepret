@@ -145,7 +145,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register.post') }}" method="POST" class="space-y-5 relative z-10">
+            <form action="{{ route('register.post', [], false) }}" method="POST" class="space-y-5 relative z-10">
                 @csrf
 
 

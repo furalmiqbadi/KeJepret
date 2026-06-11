@@ -47,7 +47,7 @@
         <div class="absolute -top-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <form id="upload-form" action="{{ route('photographer.upload.post') }}" method="POST" enctype="multipart/form-data" class="relative z-10 space-y-8">
+        <form id="upload-form" action="{{ route('photographer.upload.post', [], false) }}" method="POST" enctype="multipart/form-data" class="relative z-10 space-y-8">
             @csrf
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">

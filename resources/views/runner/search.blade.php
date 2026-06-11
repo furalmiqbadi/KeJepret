@@ -46,7 +46,7 @@
             </button>
         </div>
 
-        <form action="{{ route('runner.search.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6 relative z-10" @submit="prepareSubmit">
+        <form action="{{ route('runner.search.post', [], false) }}" method="POST" enctype="multipart/form-data" class="space-y-6 relative z-10" @submit="prepareSubmit">
             @csrf
 
             {{-- Hidden input untuk selfie dari kamera --}}
