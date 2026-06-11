@@ -160,6 +160,19 @@ class PakasirService
                     'description' => 'Penjualan foto - Order #'.$order->order_code,
                     'created_at' => now(),
                 ]);
+
+                DB::table('photographer_notifications')->insertOrIgnore([
+                    'photographer_id' => $photographerId,
+                    'order_item_id' => $item->id,
+                    'order_id' => $order->id,
+                    'photo_id' => $item->photo_id,
+                    'type' => 'photo_sold',
+                    'title' => 'Foto terjual',
+                    'message' => 'Ada foto baru yang dibeli dari Order #'.$order->order_code,
+                    'amount' => $amountItem,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             return true;

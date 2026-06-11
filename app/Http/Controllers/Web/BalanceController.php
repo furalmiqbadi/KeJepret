@@ -35,7 +35,7 @@ class BalanceController extends Controller
     // ════════════════════════════════
     // SALES — Riwayat penjualan foto
     // ════════════════════════════════
-    public function sales()
+    public function sales(Request $request)
     {
         $photographerId = Auth::id();
 
@@ -89,6 +89,8 @@ class BalanceController extends Controller
             ->whereYear('orders.created_at', now()->year)
             ->count();
 
+        $highlightSaleId = $request->integer('highlight');
+
         return view('photographer.sales', compact(
             'sales',
             'totalRevenue',
@@ -96,7 +98,8 @@ class BalanceController extends Controller
             'fotoTersedia',
             'fotoTerjual',
             'pendapatanBulanIni',
-            'penjualanBulanIni'
+            'penjualanBulanIni',
+            'highlightSaleId'
         ));
     }
 

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'KeJepret') — KeJepret</title>
+    <title>@yield('title', 'KeJepret') â€” KeJepret</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -143,6 +144,169 @@
         @yield('content')
     </main>
 
+    <script>
+        (() => {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const widgets = Array.from(document.querySelectorAll('[data-photographer-notification-widget]'));
+
+            if (!widgets.length) {
+                return;
+            }
+
+            const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            })[character]);
+
+            widgets.forEach((widget) => {
+                if (window.getComputedStyle(widget).display === 'none') {
+                    return;
+                }
+                const toggle = widget.querySelector('[data-notification-toggle]');
+                const panel = widget.querySelector('[data-notification-panel]');
+                const list = widget.querySelector('[data-notification-list]');
+                const badge = widget.querySelector('[data-notification-badge]');
+                const pageLabel = widget.querySelector('[data-notification-page]');
+                const prevButton = widget.querySelector('[data-notification-prev]');
+                const nextButton = widget.querySelector('[data-notification-next]');
+                const closeButton = widget.querySelector('[data-notification-close]');
+                const indexUrl = widget.dataset.indexUrl;
+                const readUrlTemplate = widget.dataset.readUrlTemplate;
+                const limit = Number(widget.dataset.limit || 8);
+                let currentPage = 1;
+                let currentUnread = Number(badge?.textContent?.trim() || 0) || 0;
+
+                const setBadge = (count) => {
+                    if (!badge) return;
+                    badge.textContent = String(Math.min(count, 99));
+                    badge.classList.toggle('hidden', count <= 0);
+                };
+
+                const setPanelVisible = (visible) => {
+                    panel?.classList.toggle('hidden', !visible);
+                };
+
+                const renderEmpty = (message) => {
+                    if (!list) return;
+                    list.innerHTML = `<div class="p-5 text-center text-xs font-bold text-slate-400">${escapeHtml(message)}</div>`;
+                };
+
+                const renderItems = (items) => {
+                    if (!list) return;
+
+                    if (!items.length) {
+                        renderEmpty('Belum ada notifikasi.');
+                        return;
+                    }
+
+                    list.innerHTML = items.map((item) => `
+                        <button type="button" data-notification-item="${item.id}" data-sales-url="${escapeHtml(item.sales_url)}" class="w-full text-left p-4 hover:bg-slate-50/90 transition flex gap-3 ${item.is_read ? 'bg-white/20' : 'bg-blue-50/70'}">
+                            <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-white/60">
+                                ${item.thumbnail_url ? `<img src="${escapeHtml(item.thumbnail_url)}" alt="${escapeHtml(item.filename)}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-slate-300"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>'}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div>
+                                        <p class="text-sm font-black text-slate-900 leading-tight">${escapeHtml(item.title)}</p>
+                                        <p class="text-[11px] text-slate-500 font-semibold mt-1 leading-snug">${escapeHtml(item.message)}</p>
+                                    </div>
+                                    ${item.is_read ? '' : '<span class="mt-1 w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>'}
+                                </div>
+                                <div class="mt-3 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                    <span>${escapeHtml(item.category || 'Foto Event')} - ${escapeHtml(item.amount_formatted)}</span>
+                                    <span>${escapeHtml(item.time_label)}</span>
+                                </div>
+                            </div>
+                        </button>
+                    `).join('');
+                };
+
+                const updatePagination = (meta) => {
+                    if (pageLabel) pageLabel.textContent = String(meta.page || 1);
+                    if (prevButton) prevButton.disabled = !meta.has_prev;
+                    if (nextButton) nextButton.disabled = !meta.has_next;
+                };
+
+                const loadNotifications = async (targetPage = 1, autoOpen = false) => {
+                    try {
+                        const response = await fetch(`${indexUrl}?limit=${limit}&page=${targetPage}`, { headers: { 'Accept': 'application/json' } });
+                        if (!response.ok) return;
+                        const payload = await response.json();
+                        const data = payload?.data || [];
+                        const meta = payload?.meta || {};
+                        const nextUnread = Number(meta.unread_count || 0);
+                        const hasNew = currentUnread !== null && nextUnread > currentUnread;
+
+                        currentUnread = nextUnread;
+                        setBadge(nextUnread);
+                        currentPage = meta.page || targetPage;
+                        renderItems(data);
+                        updatePagination(meta);
+
+                        if ((autoOpen || hasNew) && nextUnread > 0) {
+                            setPanelVisible(true);
+                        }
+                    } catch (error) {
+                        renderEmpty('Gagal memuat notifikasi.');
+                    }
+                };
+
+                const markReadAndGo = async (item) => {
+                    try {
+                        await fetch(readUrlTemplate.replace('__ID__', item.id), {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                        });
+                    } finally {
+                        window.location.href = item.salesUrl;
+                    }
+                };
+
+                toggle?.addEventListener('click', () => {
+                    const willOpen = panel?.classList.contains('hidden');
+                    setPanelVisible(willOpen);
+                    if (willOpen) {
+                        loadNotifications(currentPage || 1, true);
+                    }
+                });
+
+                closeButton?.addEventListener('click', () => setPanelVisible(false));
+                prevButton?.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        loadNotifications(currentPage - 1, true);
+                    }
+                });
+                nextButton?.addEventListener('click', () => {
+                    loadNotifications(currentPage + 1, true);
+                });
+
+                list?.addEventListener('click', (event) => {
+                    const button = event.target.closest('[data-notification-item]');
+                    if (!button) return;
+                    markReadAndGo({
+                        id: button.getAttribute('data-notification-item'),
+                        salesUrl: button.getAttribute('data-sales-url'),
+                    });
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!widget.contains(event.target)) {
+                        setPanelVisible(false);
+                    }
+                });
+
+                loadNotifications(1, false);
+                window.setInterval(() => loadNotifications(currentPage || 1, false), 15000);
+            });
+        })();
+    </script>
     {{-- Bottom Navigation (Mobile) --}}
     @if(!isset($hideNav))
         @include('partials.bottom-nav')
