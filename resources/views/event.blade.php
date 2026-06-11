@@ -2,7 +2,7 @@
 @section('title', 'Semua Acara')
 @section('content')
 
-<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-12 relative">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-24 pb-8 sm:pb-12 relative">
     {{-- Decorative Ambient Orbs --}}
     <div class="absolute top-20 -left-40 w-96 h-96 bg-sky-300/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute top-[40%] -right-40 w-[28rem] h-[28rem] bg-indigo-300/10 rounded-full blur-3xl pointer-events-none"></div>

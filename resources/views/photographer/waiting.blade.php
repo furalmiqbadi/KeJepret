@@ -27,7 +27,7 @@
     }
 </style>
 
-<div class="max-w-xl mx-auto px-6 {{ $status === 'rejected' ? 'min-h-screen flex flex-col justify-center' : 'py-12 flex flex-col items-center' }} text-center relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="max-w-xl mx-auto px-6 {{ $status === 'rejected' ? 'min-h-screen flex flex-col justify-center' : 'pt-2 pb-12 sm:py-12 flex flex-col items-center' }} text-center relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
     <div class="clean-glass p-8 md:p-10 rounded-[2.5rem] w-full space-y-6 relative overflow-hidden">
         {{-- Modern Ambient Decorative Glow inside Card --}}

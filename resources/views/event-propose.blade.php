@@ -2,7 +2,7 @@
 @section('title', 'Ajukan Event Baru')
 @section('content')
 
-<div class="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-12 relative z-10">
+<div class="max-w-2xl mx-auto px-4 sm:px-6 pt-2 sm:pt-24 pb-8 sm:pb-12 relative z-10">
     <div class="mb-10 text-center">
         <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 mb-2">PUNYA ACARA LARI?</p>
         <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">Ajukan Acara Baru</h1>

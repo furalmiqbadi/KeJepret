@@ -2,7 +2,7 @@
 @section('title', 'Portfolio Foto')
 @section('content')
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 pt-2 pb-12 sm:py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
     <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

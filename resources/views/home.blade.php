@@ -31,7 +31,7 @@ $testimonials = [
 @endphp
 
 {{-- ===== HERO ===== --}}
-<section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-24 text-center relative overflow-hidden">
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pt-2 sm:pt-16 pb-10 sm:pb-24 text-center relative overflow-hidden">
     
     {{-- Decorative Background Elements --}}
     <div class="absolute inset-0 pointer-events-none -z-10 flex justify-center">
@@ -44,7 +44,7 @@ $testimonials = [
     </div>
 
     {{-- 1. Badge --}}
-    <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 mb-8 hover:-translate-y-0.5 transition-transform relative z-10">
+    <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 mb-4 sm:mb-8 hover:-translate-y-0.5 transition-transform relative z-10">
         <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
             <circle cx="12" cy="13" r="4"/>
@@ -53,19 +53,19 @@ $testimonials = [
     </div>
 
     {{-- 2. Title --}}
-    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-6 relative z-10 ml16">
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-2 sm:mb-6 relative z-10 ml16">
         <span class="line-1 inline-block overflow-hidden pb-1">Temukan Foto Larimu</span>
         <br>
         <span class="line-2 inline-block text-blue-600 overflow-hidden pb-1">dari Setiap Event</span>
     </h1>
 
     {{-- 3. Subtitle --}}
-    <p class="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-medium relative z-10">
+    <p class="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto mb-4 sm:mb-10 leading-relaxed font-medium relative z-10">
         Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Proses pencarian canggih dengan teknologi <span class="font-bold text-slate-700">Pengenalan Wajah</span> secepat kilat.
     </p>
 
     {{-- 4. Main CTA Button --}}
-    <div class="relative z-10 mb-20 flex justify-center">
+    <div class="relative z-10 mb-6 sm:mb-20 flex justify-center">
         <a href="{{ route('search') }}" class="group relative inline-flex items-center justify-center gap-4 bg-blue-600 text-white font-bold text-base px-2 py-2 pl-8 rounded-full transition-all shadow-[0_8px_30px_rgb(37,99,235,0.3)] hover:shadow-[0_8px_40px_rgb(37,99,235,0.4)] hover:-translate-y-1 hover:bg-blue-700">
             Cari Fotomu Sekarang
             <span class="w-10 h-10 rounded-full bg-white text-blue-600 flex items-center justify-center group-hover:bg-slate-50 transition-colors">
@@ -77,7 +77,7 @@ $testimonials = [
     </div>
 
     {{-- 5. Floating Mockups Area --}}
-    <div class="relative max-w-4xl mx-auto h-[400px] sm:h-[450px] flex justify-center items-end z-10 perspective-[1000px] mb-10">
+    <div class="relative max-w-4xl mx-auto h-[400px] sm:h-[450px] flex justify-center items-end z-10 perspective-[1000px] mb-4 sm:mb-10">
         
         {{-- Left Mockup (Chat/Review Card) --}}
         <div id="comment-box-left" class="hidden md:block absolute left-0 sm:left-[10%] bottom-16 w-60 sm:w-64 bg-white rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 transform -rotate-[10deg] hover:-rotate-6 hover:-translate-y-2 transition-all duration-500 z-20 cursor-pointer select-none">
@@ -208,9 +208,9 @@ $testimonials = [
 </section>
 
 {{-- ===== CARA KERJA ===== --}}
-<section class="py-24 bg-transparent relative z-10 overflow-hidden">
+<section class="py-4 sm:py-24 bg-transparent relative z-10 overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16 relative">
+        <div class="text-center mb-12 sm:mb-16 relative">
             <span class="inline-flex items-center gap-2 bg-gradient-to-r from-sky-500/10 to-blue-600/10 border border-sky-500/20 text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] px-5 py-2.5 rounded-full mb-5 shadow-sm shadow-blue-500/5">
                 <svg class="w-3.5 h-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 Panduan Cepat
@@ -219,7 +219,7 @@ $testimonials = [
             <p class="text-slate-500 text-sm sm:text-base max-w-lg mx-auto font-medium leading-relaxed">Dari pencarian foto pelari hingga selesai diunduh dengan kualitas tinggi, semua bisa dilakukan dalam hitungan detik.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12 sm:gap-y-8 relative mt-4 sm:mt-0">
             {{-- Garis Penghubung Desktop --}}
             <div class="hidden md:block absolute top-12 left-[calc(33.33%+2rem)] right-[calc(33.33%+2rem)] h-[2px] bg-gradient-to-r from-sky-200 via-blue-300 to-indigo-200 z-0 border-t border-dashed border-white/50"></div>
 
@@ -264,9 +264,9 @@ $testimonials = [
 </section>
 
 {{-- ===== EVENT TERBARU ===== --}}
-<section class="py-16 relative z-10">
+<section class="py-4 sm:py-16 relative z-10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="flex items-end justify-between mb-8">
+        <div class="flex items-end justify-between mb-4 sm:mb-8">
             <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">EVENT LARI</p>
                 <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Event Terbaru</h2>
@@ -322,7 +322,7 @@ $testimonials = [
 </section>
 
 {{-- ===== KENAPA KEJEPRET ===== --}}
-<section class="py-24 relative overflow-hidden">
+<section class="py-4 sm:py-24 relative overflow-hidden">
     {{-- Decorative backgrounds --}}
     <div class="absolute inset-0 pointer-events-none -z-10">
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-200/20 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/4"></div>
@@ -330,7 +330,7 @@ $testimonials = [
     </div>
 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="grid lg:grid-cols-2 gap-6 sm:gap-16 items-center">
             
             {{-- Left Content --}}
             <div class="space-y-8">
@@ -432,9 +432,9 @@ $testimonials = [
 </section>
 
 {{-- ===== TESTIMONI ===== --}}
-<section class="py-16">
+<section class="py-4 sm:py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-10">
+        <div class="text-center mb-4 sm:mb-10">
             <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2">TESTIMONI</p>
             <h2 class="text-3xl font-black text-gray-900">Kata Mereka</h2>
         </div>
@@ -463,9 +463,9 @@ $testimonials = [
 </section>
 
 {{-- ===== BERGABUNG ===== --}}
-<section class="py-24 relative z-10">
+<section class="py-4 sm:py-24 relative z-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-6 sm:mb-16">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6 shadow-sm">
                 <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
                 <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">BERGABUNG</span>
@@ -547,7 +547,7 @@ $testimonials = [
 
 {{-- ===== FOOTER CTA ===== --}}
 {{-- ===== FOOTER CTA ===== --}}
-<section class="relative bg-slate-950 pt-24 pb-10 text-center overflow-hidden">
+<section class="relative bg-slate-950 pt-4 sm:pt-24 pb-8 sm:pb-10 text-center overflow-hidden">
     {{-- Decorative Ambient Glows --}}
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] sm:w-[800px] h-[400px] bg-blue-600/20 rounded-full blur-[120px]"></div>

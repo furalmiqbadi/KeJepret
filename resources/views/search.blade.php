@@ -2,7 +2,7 @@
 @section('title', 'Cari Foto')
 @section('content')
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 relative">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 pt-2 pb-8 sm:py-8 relative">
     {{-- Decorative Ambient Orbs --}}
     <div class="absolute top-10 -left-40 w-96 h-96 bg-sky-300/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-10 -right-40 w-[28rem] h-[28rem] bg-indigo-300/10 rounded-full blur-3xl pointer-events-none"></div>

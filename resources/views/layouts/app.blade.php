@@ -140,7 +140,7 @@
     @endif
 
     {{-- Main Content --}}
-    <main class="relative z-10 {{ isset($hideNav) ? 'pt-0 pb-0' : 'pt-20 pb-24 md:pb-8' }}">
+    <main class="relative z-10 {{ isset($hideNav) ? 'pt-0 pb-0' : 'pt-4 md:pt-20 pb-24 md:pb-8' }}">
         @yield('content')
     </main>
 

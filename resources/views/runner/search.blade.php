@@ -2,7 +2,7 @@
 @section('title', 'Cari Foto')
 @section('content')
 
-<div class="max-w-lg mx-auto px-4 sm:px-6 pt-24 pb-12">
+<div class="max-w-lg mx-auto px-4 sm:px-6 pt-2 sm:pt-24 pb-8 sm:pb-12">
     {{-- Judul Halaman dengan Margin atas lapang & Ambient glow --}}
     <div class="mb-10 text-center relative">
         <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-12 bg-sky-400/10 rounded-full blur-xl pointer-events-none"></div>

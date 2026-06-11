@@ -2,7 +2,7 @@
 @section('title', 'Upload Foto')
 @section('content')
 
-<div class="max-w-2xl mx-auto px-4 sm:px-6 py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="max-w-2xl mx-auto px-4 sm:px-6 pt-2 pb-12 sm:py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
     <div class="mb-10">
         <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-2">FOTOGRAFER</p>

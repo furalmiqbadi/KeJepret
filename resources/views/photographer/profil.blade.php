@@ -4,7 +4,7 @@
 
 @php $user = auth()->user(); @endphp
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 relative z-10">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 pt-2 pb-12 sm:py-12 relative z-10">
 
     {{-- Background Ambient Elements --}}
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-gradient-to-b from-sky-100/50 to-transparent blur-3xl pointer-events-none -z-10"></div>
