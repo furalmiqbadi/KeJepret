@@ -139,7 +139,7 @@
 
                     <div class="h-px bg-slate-200/50 my-2 mx-4"></div>
 
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout', [], false) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-red-50 text-red-500 transition-all group font-bold">
                             <div class="w-10 h-10 rounded-[1rem] bg-red-100/50 text-red-500 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500 group-hover:text-white transition-all shadow-sm">
@@ -198,7 +198,7 @@
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
                         </div>
-                        <form action="{{ route('balance.withdraw.post') }}" method="POST" class="space-y-5">
+                        <form action="{{ route('balance.withdraw.post', [], false) }}" method="POST" class="space-y-5">
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>

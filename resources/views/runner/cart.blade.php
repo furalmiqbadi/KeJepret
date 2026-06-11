@@ -61,7 +61,7 @@
                             <p class="text-base font-black text-blue-600 mt-3">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>
 
-                        <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" class="mt-3">
+                        <form action="{{ route('cart.remove', $item->cart_item_id, false) }}" method="POST" class="mt-3">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="inline-flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-600 transition">
@@ -94,7 +94,7 @@
                 <span class="text-xl font-black text-blue-600">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
 
-            <form action="{{ route('order.checkout') }}" method="POST">
+            <form action="{{ route('order.checkout', [], false) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 active:scale-[0.98] transition shadow-lg shadow-blue-500/20">
                     Checkout

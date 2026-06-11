@@ -93,7 +93,7 @@
                     <div class="h-px bg-slate-200/50 my-2 mx-4"></div>
                     @endif
 
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout', [], false) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-red-50 text-red-500 transition-all group font-bold">
                             <div class="w-10 h-10 rounded-[1rem] bg-red-100/50 text-red-500 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500 group-hover:text-white transition-all shadow-sm">
@@ -131,7 +131,7 @@
                     </div>
 
                     <div class="shrink-0">
-                        <form id="logout-register-form" action="{{ route('logout.register.photographer') }}" method="POST" class="hidden">
+                        <form id="logout-register-form" action="{{ route('logout.register.photographer', [], false) }}" method="POST" class="hidden">
                             @csrf
                         </form>
                         <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari akun saat ini untuk membuat akun fotografer baru?')) { document.getElementById('logout-register-form').submit(); }" 

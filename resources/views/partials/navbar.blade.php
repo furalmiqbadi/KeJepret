@@ -61,15 +61,18 @@
 
         </div>
 
-        <!-- Right: Profile / Login -->
+        <!-- Right: Notifications / Profile / Login -->
         <div class="flex items-center">
             @auth
+                @if(Auth::user()->role === 'photographer')
+                    @include('partials.photographer-notification-widget', ['variant' => 'desktop'])
+                @endif
                 @php
                     $profilRoute = Auth::user()->role === 'photographer'
                         ? route('photographer.profil')
                         : route('profil');
                 @endphp
-                <a href="{{ $profilRoute }}" class="w-12 h-12 rounded-[1.1rem] flex items-center justify-center hover:scale-105 hover:rotate-3 transition-all duration-300 overflow-hidden shadow-sm border-2 border-white bg-gradient-to-tr from-blue-600 to-indigo-600 text-white text-sm font-black italic">
+                <a href="{{ $profilRoute }}" class="w-12 h-12 rounded-[1.1rem] flex items-center justify-center hover:scale-105 hover:rotate-3 transition-all duration-300 overflow-hidden shadow-sm border-2 border-white bg-gradient-to-tr from-blue-600 to-indigo-600 text-white text-sm font-black italic {{ Auth::user()->role === 'photographer' ? 'ml-3' : '' }}">
                     @if(Auth::user()->profile_face_url)
                         <img src="{{ Auth::user()->profile_face_url }}" class="w-full h-full object-cover">
                     @else
