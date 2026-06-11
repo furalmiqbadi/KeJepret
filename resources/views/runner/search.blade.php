@@ -51,6 +51,22 @@
 
             {{-- Hidden input untuk selfie dari kamera --}}
             <input type="hidden" name="selfie_base64" x-ref="selfieBase64">
+
+            <div class="space-y-2 group">
+                <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest">Kategori <span class="normal-case tracking-normal font-medium opacity-60">(opsional)</span></label>
+                <div class="relative">
+                    <select name="category" class="w-full bg-white/70 border border-slate-200 text-slate-900 text-sm font-bold rounded-2xl focus:ring-4 focus:ring-blue-500/15 focus:border-blue-500 block pl-5 pr-10 py-4 transition-all shadow-sm outline-none appearance-none cursor-pointer">
+                        <option value="">Semua Kategori</option>
+                        @foreach($categories as $key => $label)
+                        <option value="{{ $key }}" {{ request('category') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                </div>
+            </div>
+
             <input type="file" name="selfie" x-ref="selfieFile" accept="image/png,image/jpeg,image/jpg"
                 class="hidden" @change="onFileChange">
 
