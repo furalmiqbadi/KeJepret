@@ -15,7 +15,7 @@
     <div class="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4 shadow-sm">
             <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">WORKSPACE FOTOGRAFER</p>
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">RUANG KERJA FOTOGRAFER</p>
         </div>
         <h1 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight mb-2">Profil & Keuangan</h1>
         <p class="text-sm sm:text-base font-semibold text-slate-500 max-w-xl mx-auto">Kelola identitas publik, cek saldo penghasilan, dan tarik dana ke rekening Anda secara praktis.</p>
@@ -107,14 +107,14 @@
                     @else
                     <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-600 border border-amber-200/60 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Pending
+                        Tertunda
                     </span>
                     @endif
                 </div>
 
                 <a href="{{ route('profil.edit') }}" class="inline-flex w-full justify-center items-center gap-2 bg-slate-900 hover:bg-black text-white shadow-lg hover:shadow-xl shadow-slate-900/20 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-[1.25rem] transition-all hover:-translate-y-0.5">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    Edit Profil
+                    Ubah Profil
                 </a>
             </div>
 
@@ -125,7 +125,7 @@
                         <div class="w-10 h-10 rounded-[1rem] bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <span class="text-sm tracking-wide flex-1">Portfolio Foto</span>
+                        <span class="text-sm tracking-wide flex-1">Portofolio Foto</span>
                         <svg class="w-4 h-4 opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                     </a>
                     

@@ -144,7 +144,7 @@
 
                 {{-- Email / Surel --}}
                 <div class="space-y-1.5">
-                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
                             <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

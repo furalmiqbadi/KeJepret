@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Portfolio Foto')
+@section('title', 'Portofolio Foto')
 @section('content')
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -7,12 +7,12 @@
     <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-2">FOTOGRAFER</p>
-            <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-1">Portfolio Foto</h1>
-            <p class="text-sm font-bold text-slate-500">Kelola semua foto yang sudah kamu upload.</p>
+            <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-1">Portofolio Foto</h1>
+            <p class="text-sm font-bold text-slate-500">Kelola semua foto yang sudah kamu unggah.</p>
         </div>
         <a href="{{ route('photographer.upload') }}" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs uppercase tracking-widest px-6 py-4 rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-1">
             <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Upload Baru
+            Unggah Baru
         </a>
     </div>
 
@@ -36,8 +36,8 @@
             <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         </div>
         <p class="text-2xl font-black text-slate-800 tracking-tight">Belum ada foto</p>
-        <p class="text-sm font-bold text-slate-500 mt-2">Mulai upload foto eventmu sekarang untuk dijual.</p>
-        <a href="{{ route('photographer.upload') }}" class="inline-flex mt-6 px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">Upload Sekarang</a>
+        <p class="text-sm font-bold text-slate-500 mt-2">Mulai unggah foto acaramu sekarang untuk dijual.</p>
+        <a href="{{ route('photographer.upload') }}" class="inline-flex mt-6 px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">Unggah Sekarang</a>
     </div>
     @else
     
@@ -80,16 +80,16 @@
                 <div class="absolute bottom-3 left-3 flex gap-2">
                     @if($photo->embed_status === 'embedded')
                     <span class="inline-flex items-center gap-1 bg-green-500/90 backdrop-blur-sm text-white text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-lg shadow-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Ready
+                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Siap
                     </span>
                     @elseif($photo->embed_status === 'failed')
                     <span class="inline-flex items-center gap-1 bg-red-500/90 backdrop-blur-sm text-white text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-lg shadow-sm">
-                        Failed
+                        Gagal
                     </span>
                     @else
                     <span class="inline-flex items-center gap-1 bg-amber-400/90 backdrop-blur-sm text-white text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-lg shadow-sm">
                         <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Pending
+                        Tertunda
                     </span>
                     @endif
                 </div>
@@ -104,7 +104,7 @@
 
             <div class="p-5 flex-1 flex flex-col">
                 <div class="mb-4">
-                    <p class="text-[11px] font-black text-blue-600 uppercase tracking-widest mb-1 truncate">{{ $photo->event->name ?? 'Tanpa Event' }}</p>
+                    <p class="text-[11px] font-black text-blue-600 uppercase tracking-widest mb-1 truncate">{{ $photo->event->name ?? 'Tanpa Acara' }}</p>
                     @if($photo->category)
                     <p class="text-xs font-bold text-slate-400">{{ $photo->category }}</p>
                     @endif

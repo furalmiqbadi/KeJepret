@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Ajukan Event Baru')
+@section('title', 'Ajukan Acara Baru')
 @section('content')
 
 <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-12 relative z-10">
@@ -32,7 +32,7 @@
                 <label for="name" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Nama Acara <span class="text-red-500">*</span></label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" required
                     class="w-full px-4 py-3.5 clean-glass-input rounded-2xl text-sm font-bold text-slate-800 outline-none @error('name') border-red-300 focus:border-red-400 focus:ring-red-500/10 @enderror"
-                    placeholder="Contoh: Jakarta Marathon 2026">
+                    placeholder="Contoh: Maraton Jakarta 2026">
                 @error('name') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
             </div>
 
@@ -46,7 +46,7 @@
 
             {{-- Lokasi Event --}}
             <div>
-                <label for="location" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Lokasi (Kota/Venue) <span class="text-red-500">*</span></label>
+                <label for="location" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Lokasi (Kota/Tempat) <span class="text-red-500">*</span></label>
                 <input type="text" name="location" id="location" value="{{ old('location') }}" required
                     class="w-full px-4 py-3.5 clean-glass-input rounded-2xl text-sm font-bold text-slate-800 outline-none @error('location') border-red-300 focus:border-red-400 focus:ring-red-500/10 @enderror"
                     placeholder="Contoh: GBK, Jakarta Pusat">
@@ -64,7 +64,7 @@
 
             {{-- Cover Image --}}
             <div>
-                <label for="cover_image" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Foto Cover Event (Opsional)</label>
+                <label for="cover_image" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Foto Sampul Acara (Opsional)</label>
                 <input type="file" name="cover_image" id="cover_image" accept="image/*"
                     class="w-full px-4 py-3 clean-glass-input rounded-2xl text-sm font-medium text-slate-800 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 outline-none @error('cover_image') border-red-300 focus:border-red-400 focus:ring-red-500/10 @enderror">
                 <p class="mt-1.5 text-[10px] text-slate-400 font-medium">Format: JPG, PNG, WEBP. Maks 10MB.</p>

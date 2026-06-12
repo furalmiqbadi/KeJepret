@@ -8,7 +8,7 @@
         <div>
             <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">KERANJANG</p>
             <h1 class="text-3xl font-black text-gray-900">Foto Pilihanmu</h1>
-            <p class="text-gray-500 text-sm mt-1">{{ $items->count() }} foto siap checkout.</p>
+            <p class="text-gray-500 text-sm mt-1">{{ $items->count() }} foto siap dipesan.</p>
         </div>
 
         <a href="{{ $searchBackUrl }}" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-100 text-gray-600 rounded-2xl font-bold text-sm hover:text-blue-600 hover:border-blue-200 transition">
@@ -56,7 +56,7 @@
 
                     <div class="flex-1 min-w-0 flex flex-col justify-between">
                         <div>
-                            <p class="text-sm font-black text-gray-900 truncate">{{ $item->category ?? 'Foto Event' }}</p>
+                            <p class="text-sm font-black text-gray-900 truncate">{{ $item->category ?? 'Foto Acara' }}</p>
                             <p class="text-xs text-gray-400 font-semibold mt-1 truncate">{{ $item->photographer }}</p>
                             <p class="text-base font-black text-blue-600 mt-3">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>
@@ -97,7 +97,7 @@
             <form action="{{ route('order.checkout', [], false) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 active:scale-[0.98] transition shadow-lg shadow-blue-500/20">
-                    Checkout
+                    Buat Pesanan
                 </button>
             </form>
 

@@ -23,12 +23,12 @@
                             <div class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-gray-50 border border-gray-100 rounded-xl group-focus-within:bg-green-600 group-focus-within:text-white group-focus-within:border-green-600 transition-all duration-300 shadow-sm">
                                 <span class="material-symbols-outlined text-[18px] font-light">person</span>
                             </div>
-                            <input type="text" name="name" placeholder="John" required
+                            <input type="text" name="name" placeholder="Budi" required
                                 class="w-full pl-11 pr-2 py-2 bg-gray-50 border border-gray-100 rounded-xl text-xs font-bold text-gray-900 outline-none focus:bg-white focus:border-green-400 focus:ring-4 focus:ring-green-100 transition-all font-sans">
                         </div>
                     </div>
                     <div class="space-y-0.5">
-                        <label class="text-[8px] font-bold text-gray-400 uppercase tracking-widest ml-1">Email</label>
+                        <label class="text-[8px] font-bold text-gray-400 uppercase tracking-widest ml-1">Surel</label>
                         <div class="relative group">
                             <div class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-gray-50 border border-gray-100 rounded-xl group-focus-within:bg-green-600 group-focus-within:text-white group-focus-within:border-green-600 transition-all duration-300 shadow-sm">
                                 <span class="material-symbols-outlined text-[18px] font-light">mail</span>
@@ -75,7 +75,7 @@
                 </button>
 
                 <div class="text-center">
-                    <a href="{{ route('register') }}" class="text-[9px] font-bold text-gray-400 hover:text-blue-600 transition-colors uppercase tracking-wider">&larr; Daftar sebagai user biasa</a>
+                    <a href="{{ route('register') }}" class="text-[9px] font-bold text-gray-400 hover:text-blue-600 transition-colors uppercase tracking-wider">&larr; Daftar sebagai pengguna biasa</a>
                 </div>
             </form>
 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit Profil')
+@section('title', 'Ubah Profil')
 @section('content')
 
 @php 
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-blue-100 shadow-sm">{{ $user->role === 'runner' ? 'Pelari' : ucfirst($user->role) }}</span>
+                    <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-blue-100 shadow-sm">{{ $user->role === 'runner' ? 'Pelari' : ($user->role === 'admin' ? 'Administrator' : 'Fotografer') }}</span>
                 </div>
             </div>
 
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="relative group opacity-80">
-                            <label for="email" class="block text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest">Email (Permanen)</label>
+                            <label for="email" class="block text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest">Surel (Permanen)</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-4.5 flex items-center pointer-events-none text-slate-400">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>

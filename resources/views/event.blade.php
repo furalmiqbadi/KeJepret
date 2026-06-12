@@ -65,7 +65,7 @@
             <a href="{{ route('event') }}"
                 class="px-5 py-3.5 bg-white/40 hover:bg-white/70 border border-sky-400/50 hover:border-sky-500 text-sky-600 hover:text-sky-700 rounded-2xl font-black text-xs uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap flex items-center justify-center gap-1.5 shadow-sm">
                 <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                Reset
+                Atur Ulang
             </a>
             @endif
 
@@ -106,8 +106,8 @@
             <svg class="w-8 h-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         </div>
         <h3 class="font-black text-slate-800 text-lg mb-1 leading-tight">Tidak ada acara ditemukan</h3>
-        <p class="text-xs text-slate-400 font-semibold mb-6">Coba ubah kata kunci pencarian atau reset filter.</p>
-        <a href="{{ route('event') }}" class="inline-flex px-6 py-3.5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-black text-xs uppercase italic tracking-wider rounded-2xl transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md">Reset Filter</a>
+        <p class="text-xs text-slate-400 font-semibold mb-6">Coba ubah kata kunci pencarian atau atur ulang penyaring.</p>
+        <a href="{{ route('event') }}" class="inline-flex px-6 py-3.5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-black text-xs uppercase italic tracking-wider rounded-2xl transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md">Atur Ulang Penyaring</a>
     </div>
     @else
     <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-10">

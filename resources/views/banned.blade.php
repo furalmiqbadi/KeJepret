@@ -94,7 +94,7 @@
             <div class="space-y-2">
                 <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Akun Telah Diblokir</h1>
                 <p class="text-slate-500 font-semibold text-xs leading-relaxed max-w-sm mx-auto">
-                    Akun fotografer kamu saat ini diblokir oleh admin dan tidak dapat mengakses fitur fotografer.
+                    Akun fotografer kamu saat ini diblokir oleh administrator dan tidak dapat mengakses fitur fotografer.
                 </p>
             </div>
 
@@ -108,7 +108,7 @@
                 <div class="relative z-10">
                     <p class="text-[9px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">Alasan Penangguhan</p>
                     <p class="text-xs font-bold text-red-950/80 leading-relaxed">
-                        {{ session('banned_reason') ?? optional(auth()->user())->banned_reason ?? 'Tidak ada keterangan spesifik dari admin.' }}
+                        {{ session('banned_reason') ?? optional(auth()->user())->banned_reason ?? 'Tidak ada keterangan khusus dari administrator.' }}
                     </p>
                 </div>
             </div>
@@ -116,7 +116,7 @@
             <form action="{{ route('logout', [], false) }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-500 via-rose-500 to-red-600 hover:from-red-600 hover:to-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-md shadow-red-300/40 hover:shadow-lg hover:shadow-red-300/60 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer flex items-center justify-center gap-2">
-                    Keluar dari Akun (Logout)
+                    Keluar dari Akun
                     <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>

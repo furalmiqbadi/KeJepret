@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Upload Foto')
+@section('title', 'Unggah Foto')
 @section('content')
 
 <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
     <div class="mb-10">
         <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-2">FOTOGRAFER</p>
-        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-1">Upload Foto</h1>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-1">Unggah Foto</h1>
         <p class="text-sm font-bold text-slate-500">Pilih banyak foto sekaligus untuk dijual</p>
     </div>
 
@@ -15,7 +15,7 @@
     <div id="toast-success" class="bg-green-50 border border-green-100 text-green-600 px-6 py-5 rounded-[1.5rem] mb-8 shadow-sm flex items-start gap-4 animate-in fade-in slide-in-from-top-4 relative">
         <svg class="w-6 h-6 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <div class="flex-1">
-            <p class="text-sm font-black mb-1.5 tracking-wide">Upload Berhasil!</p>
+            <p class="text-sm font-black mb-1.5 tracking-wide">Unggah Berhasil!</p>
             <p class="text-xs font-bold text-green-700">{{ session('success') }}</p>
         </div>
         <button onclick="dismissToast('toast-success')" class="text-green-400 hover:text-green-700 transition">
@@ -29,7 +29,7 @@
     <div id="toast-error" class="bg-red-50 border border-red-100 text-red-600 px-6 py-5 rounded-[1.5rem] mb-8 shadow-sm flex items-start gap-4 animate-in fade-in slide-in-from-top-4 relative" style="animation: shake 0.5s ease;">
         <svg class="w-6 h-6 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <div class="flex-1">
-            <p class="text-sm font-black mb-1.5 tracking-wide">Upload Gagal!</p>
+            <p class="text-sm font-black mb-1.5 tracking-wide">Unggah Gagal!</p>
             <ul class="list-disc pl-5 text-xs font-semibold space-y-1 text-red-700">
                 @foreach($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -53,13 +53,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {{-- Pilih Event --}}
                 <div class="space-y-2 group">
-                    <label class="block text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest group-focus-within:text-blue-600 transition-colors">Pilih Event <span class="normal-case tracking-normal font-medium opacity-60">(opsional)</span></label>
+                    <label class="block text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest group-focus-within:text-blue-600 transition-colors">Pilih Acara <span class="normal-case tracking-normal font-medium opacity-60">(opsional)</span></label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </span>
                         <select name="event_id" class="w-full bg-white/70 border border-slate-200 text-slate-900 text-sm font-bold rounded-2xl focus:ring-4 focus:ring-blue-500/15 focus:border-blue-500 block pl-12 pr-10 py-4 transition-all shadow-sm outline-none appearance-none cursor-pointer">
-                            <option value="">Tanpa Event</option>
+                            <option value="">Tanpa Acara</option>
                             @foreach($events as $event)
                             <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
                                 {{ $event->name }} &mdash; {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
@@ -110,7 +110,7 @@
                     <div class="w-full border-t border-slate-200/80"></div>
                 </div>
                 <div class="relative flex justify-center">
-                    <span class="bg-white/90 backdrop-blur-md px-5 text-[10px] font-black text-slate-400 uppercase tracking-widest rounded-full border border-slate-200/80 py-1.5 shadow-sm">Pilih File Gambar</span>
+                    <span class="bg-white/90 backdrop-blur-md px-5 text-[10px] font-black text-slate-400 uppercase tracking-widest rounded-full border border-slate-200/80 py-1.5 shadow-sm">Pilih Berkas Gambar</span>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
                                 <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             </div>
                             <p class="text-sm font-black text-slate-700 mb-1">Klik untuk memilih foto</p>
-                            <p class="text-xs text-slate-500 font-semibold">Format JPG/PNG, maksimal 10MB per file. Bisa pilih banyak.</p>
+                            <p class="text-xs text-slate-500 font-semibold">Format JPG/PNG, maksimal 10 MB per berkas. Dapat memilih lebih dari satu berkas.</p>
                         </div>
 
                         {{-- Input file tersembunyi --}}
@@ -148,7 +148,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4"/>
                         <path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8z"/>
                     </svg>
-                    <span id="btn-label">Upload Foto Sekarang</span>
+                    <span id="btn-label">Unggah Foto Sekarang</span>
                 </button>
             </div>
 
@@ -172,7 +172,7 @@
                 </div>
             </div>
             <div class="text-center relative z-10">
-                <p class="text-xl font-black text-slate-900 tracking-tight">Mengupload Foto...</p>
+                <p class="text-xl font-black text-slate-900 tracking-tight">Mengunggah Foto...</p>
                 <p id="overlay-file-count" class="text-sm font-bold text-slate-500 mt-2">Mohon tunggu, jangan tutup halaman</p>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden relative z-10">
@@ -186,7 +186,7 @@
         <button type="button" onclick="closeModal()" class="absolute top-6 right-6 sm:top-8 sm:right-8 text-white/50 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full backdrop-blur-md transition-all hover:scale-110 shadow-lg">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
-        <img id="modal-image" src="" alt="Preview" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
+        <img id="modal-image" src="" alt="Pratinjau" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
     </div>
 
 </div>
@@ -264,7 +264,7 @@
 
         const count = selectedFiles.length;
         if (count > 0) {
-            fileCountLabel.textContent = count + ' file dipilih (siap diupload)';
+            fileCountLabel.textContent = count + ' berkas dipilih (siap diunggah)';
             fileCountLabel.classList.remove('hidden');
             
             selectedFiles.forEach((file, index) => {

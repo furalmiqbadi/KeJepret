@@ -66,7 +66,7 @@
                         <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-slate-800">Ditinjau Admin</p>
+                        <p class="text-xs font-bold text-slate-800">Ditinjau Administrator</p>
                         <p class="text-[10px] text-slate-400">Proses evaluasi dokumen selesai</p>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
             <span class="inline-block bg-red-50 text-red-500 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-100 mb-4">Ditolak</span>
             <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Pendaftaran Ditolak</h1>
             <p class="text-slate-500 font-semibold text-xs leading-relaxed mt-2 max-w-sm mx-auto">
-                Maaf, pendaftaran fotografer kamu tidak disetujui oleh admin KeJepret.
+                Maaf, pendaftaran fotografer kamu tidak disetujui oleh administrator KeJepret.
                 @if($profile->rejection_reason)
                 <span class="block mt-2 font-black text-red-600">Alasan: {{ $profile->rejection_reason }}</span>
                 @endif
@@ -125,7 +125,7 @@
                         <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-slate-800">Ditinjau Admin</p>
+                        <p class="text-xs font-bold text-slate-800">Ditinjau Administrator</p>
                         <p class="text-[10px] text-slate-400">Evaluasi dokumen tidak disetujui</p>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                     <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
-                    Logout
+                    Keluar
                 </button>
             </form>
         </div>
@@ -178,11 +178,11 @@
                 const email = "{{ $user->email }}";
                 const status = "Ditolak";
                 
-                const message = `Halo Admin KeJepret, saya membutuhkan bantuan mengenai akun fotografer saya.
+                const message = `Halo Administrator KeJepret, saya membutuhkan bantuan mengenai akun fotografer saya.
 
 Detail Akun:
 - Nama: ${name}
-- Email: ${email}
+- Surel: ${email}
 - Status: ${status}
 
 Pertanyaan/Keluhan:
@@ -211,7 +211,7 @@ ${keluhan}`;
             <span class="inline-block bg-amber-50 text-amber-600 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-amber-100 mb-4 animate-pulse">Menunggu Verifikasi</span>
             <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Sedang Diproses</h1>
             <p class="text-slate-500 font-semibold text-xs leading-relaxed mt-2 max-w-sm mx-auto">
-                Pendaftaran fotografer kamu sedang ditinjau oleh admin KeJepret.
+                Pendaftaran fotografer kamu sedang ditinjau oleh administrator KeJepret.
                 Proses verifikasi membutuhkan waktu maksimal <span class="font-black text-indigo-650">1x24 jam</span>.
             </p>
         </div>
@@ -233,7 +233,7 @@ ${keluhan}`;
                         <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-slate-800">Ditinjau Admin</p>
+                        <p class="text-xs font-bold text-slate-800">Ditinjau Administrator</p>
                         <p class="text-[10px] text-slate-400">Sedang dalam proses peninjauan berkas</p>
                     </div>
                 </div>

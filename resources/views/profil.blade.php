@@ -20,7 +20,7 @@
     <div class="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4 shadow-sm">
             <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">WORKSPACE PENGGUNA</p>
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">RUANG KERJA PENGGUNA</p>
         </div>
         <h1 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight mb-2">Profil & Aktivitas</h1>
         <p class="text-sm sm:text-base font-semibold text-slate-500 max-w-xl mx-auto">Kelola identitas, pantau riwayat pembelian foto, dan dapatkan akses ke fitur khusus KeJepret.</p>
@@ -67,13 +67,13 @@
 
                 <div class="flex justify-center gap-2 mb-8">
                     <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-blue-100 shadow-sm">
-                        {{ $user->role === 'runner' ? 'Pelari Aktif' : ucfirst($user->role) }}
+                        {{ $user->role === 'runner' ? 'Pelari Aktif' : ($user->role === 'admin' ? 'Administrator' : 'Fotografer') }}
                     </span>
                 </div>
 
                 <a href="{{ route('profil.edit') }}" class="inline-flex w-full justify-center items-center gap-2 bg-slate-900 hover:bg-black text-white shadow-lg hover:shadow-xl shadow-slate-900/20 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-[1.25rem] transition-all hover:-translate-y-0.5">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    Edit Profil
+                    Ubah Profil
                 </a>
             </div>
 
@@ -127,7 +127,7 @@
                             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white">FITUR KHUSUS</p>
                         </div>
                         <h3 class="text-3xl font-black text-white tracking-tight mb-2">Ingin Jadi Fotografer?</h3>
-                        <p class="text-white/80 text-sm leading-relaxed max-w-md">Bergabunglah sebagai fotografer profesional dan dapatkan penghasilan dari setiap foto yang Anda jual di platform ini.</p>
+                        <p class="text-white/80 text-sm leading-relaxed max-w-md">Bergabunglah sebagai fotografer profesional dan dapatkan penghasilan dari setiap foto yang Anda jual melalui layanan ini.</p>
                     </div>
 
                     <div class="shrink-0">
@@ -152,10 +152,10 @@
                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </div>
                     <div class="flex-1 text-center md:text-left">
-                        <h2 class="font-black text-slate-900 text-2xl tracking-tight mb-2">Halaman Admin</h2>
-                        <p class="text-sm text-slate-500 font-semibold mb-6">Kelola event, pengguna, dan pengaturan sistem secara menyeluruh di Panel Admin.</p>
+                        <h2 class="font-black text-slate-900 text-2xl tracking-tight mb-2">Halaman Administrator</h2>
+                        <p class="text-sm text-slate-500 font-semibold mb-6">Kelola acara, pengguna, dan pengaturan sistem secara menyeluruh di Panel Administrator.</p>
                         <a href="/admin" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all">
-                            Buka Admin Panel
+                            Buka Panel Administrator
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                     </div>
@@ -183,7 +183,7 @@
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-lg font-black text-slate-900 truncate mb-1">Order #{{ $order->id }}</p>
+                                <p class="text-lg font-black text-slate-900 truncate mb-1">Pesanan #{{ $order->id }}</p>
                                 <p class="text-xs text-slate-500 font-bold flex items-center gap-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                     {{ \Carbon\Carbon::parse($order->created_at)->translatedFormat('d M Y') }}
@@ -204,7 +204,7 @@
                         </svg>
                     </div>
                     <p class="text-sm font-bold text-slate-500">Belum ada riwayat pembelian</p>
-                    <p class="text-xs text-slate-400 mt-1 font-medium mb-6">Mulai eksplorasi event dan temukan foto terbaik Anda!</p>
+                    <p class="text-xs text-slate-400 mt-1 font-medium mb-6">Mulai jelajahi acara dan temukan foto terbaik Anda!</p>
                     <a href="{{ route('runner.search') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black hover:shadow-lg hover:-translate-y-1 transition-all">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         Cari Foto Sekarang

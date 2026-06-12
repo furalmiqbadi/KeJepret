@@ -31,7 +31,7 @@
             <div class="flex items-start justify-between gap-4">
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-black text-gray-900 truncate group-hover:text-blue-600 transition-colors">
-                        {{ $session->event->name ?? 'Semua Event' }}
+                        {{ $session->event->name ?? 'Semua Acara' }}
                     </p>
                     <p class="text-xs text-gray-400 font-semibold mt-0.5">
                         {{ \Carbon\Carbon::parse($session->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('d M Y, H:i') }} WIB
@@ -53,7 +53,7 @@
             <div class="flex items-start justify-between gap-4">
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-black text-gray-900 truncate">
-                        {{ $session->event->name ?? 'Semua Event' }}
+                        {{ $session->event->name ?? 'Semua Acara' }}
                     </p>
                     <p class="text-xs text-gray-400 font-semibold mt-0.5">
                         {{ \Carbon\Carbon::parse($session->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('d M Y, H:i') }} WIB

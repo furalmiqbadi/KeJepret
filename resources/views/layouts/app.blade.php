@@ -221,7 +221,7 @@
                                     ${item.is_read ? '' : '<span class="mt-1 w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>'}
                                 </div>
                                 <div class="mt-3 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    <span>${escapeHtml(item.category || 'Foto Event')} - ${escapeHtml(item.amount_formatted)}</span>
+                                    <span>${escapeHtml(item.category || 'Foto Acara')} - ${escapeHtml(item.amount_formatted)}</span>
                                     <span>${escapeHtml(item.time_label)}</span>
                                 </div>
                             </div>

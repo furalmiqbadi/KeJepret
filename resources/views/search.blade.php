@@ -55,7 +55,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-black text-slate-800">Semua Acara</p>
-                            <p class="text-[10px] text-slate-400 font-semibold">Tampilkan semua event</p>
+                            <p class="text-[10px] text-slate-400 font-semibold">Tampilkan semua acara</p>
                         </div>
                     </button>
 
@@ -150,7 +150,7 @@
         <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         <p class="font-semibold text-sm">Tidak ada acara ditemukan</p>
         @if(request('q'))
-        <a href="{{ route('search') }}" class="text-xs text-blue-600 font-bold mt-2 inline-block">Reset pencarian</a>
+        <a href="{{ route('search') }}" class="text-xs text-blue-600 font-bold mt-2 inline-block">Atur ulang pencarian</a>
         @endif
     </div>
     @else

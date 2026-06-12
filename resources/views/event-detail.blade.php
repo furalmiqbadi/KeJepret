@@ -86,7 +86,7 @@
         <div class="px-6 py-5 border-b border-slate-200/40 relative z-10">
             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-1">TEMUKAN FOTOMU</p>
             <h2 class="text-lg font-black text-slate-800">Cari Foto di Acara Ini</h2>
-            <p class="text-xs text-slate-400 font-semibold mt-1">Ambil selfie langsung atau unggah file — AI akan mencarikan fotomu di acara ini.</p>
+            <p class="text-xs text-slate-400 font-semibold mt-1">Ambil swafoto langsung atau unggah berkas. Kecerdasan buatan akan mencarikan fotomu di acara ini.</p>
         </div>
 
         {{-- Tab Toggle --}}
@@ -101,7 +101,7 @@
                 :class="mode === 'file' ? 'bg-white shadow-sm text-blue-600 border border-white/60' : 'text-slate-400 hover:text-slate-600'"
                 class="flex items-center justify-center gap-2 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                Unggah File
+                Unggah Berkas
             </button>
         </div>
 
@@ -173,7 +173,7 @@
                             <span class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center mx-auto shadow-sm text-sky-500 border border-sky-100/50 group-hover:scale-105 transition-transform duration-300">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                             </span>
-                            <p class="text-xs font-black text-slate-600 uppercase tracking-wider pt-2">Pilih file fotomu</p>
+                            <p class="text-xs font-black text-slate-600 uppercase tracking-wider pt-2">Pilih berkas fotomu</p>
                             <p class="text-[10px] text-slate-400 font-bold">JPG, PNG, atau JPEG (Maks. 5MB)</p>
                         </div>
                     </template>
@@ -207,8 +207,8 @@
         <div class="w-14 h-14 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-sky-100/50 text-sky-500">
             <svg class="w-7 h-7 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         </div>
-        <h3 class="font-black text-slate-800 text-lg mb-1 leading-tight">Login untuk Mencari Foto</h3>
-        <p class="text-xs text-slate-400 font-semibold mb-6">Kamu perlu login terlebih dahulu untuk mencari foto di acara ini.</p>
+        <h3 class="font-black text-slate-800 text-lg mb-1 leading-tight">Masuk untuk Mencari Foto</h3>
+        <p class="text-xs text-slate-400 font-semibold mb-6">Kamu perlu masuk terlebih dahulu untuk mencari foto di acara ini.</p>
         <div class="flex gap-3 justify-center">
             <a href="{{ route('login') }}" class="px-6 py-3.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-black text-xs uppercase italic tracking-wider rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md shadow-blue-200/50">Masuk Sekarang</a>
             <a href="{{ route('register') }}" class="px-6 py-3.5 bg-white/40 hover:bg-white/70 border border-slate-200 text-slate-600 hover:text-slate-800 rounded-xl font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-sm">Daftar Gratis</a>

@@ -19,14 +19,14 @@
 
 @php
 $steps = [
-    ['num'=>'01','title'=>'Cari Event-mu','desc'=>'Ketik nama event marathon atau kota yang kamu ikuti. Filter berdasarkan kota atau tanggal.','icon'=>'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
-    ['num'=>'02','title'=>'Pilih & Beli Foto','desc'=>'Temukan fotomu lewat pengenalan wajah . Bayar mudah, harga mulai Rp 20.000.','icon'=>'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
+    ['num'=>'01','title'=>'Cari Acaramu','desc'=>'Ketik nama acara maraton atau kota yang kamu ikuti. Saring berdasarkan kota atau tanggal.','icon'=>'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
+    ['num'=>'02','title'=>'Pilih & Beli Foto','desc'=>'Temukan fotomu lewat pengenalan wajah. Bayar mudah, harga mulai Rp 20.000.','icon'=>'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
     ['num'=>'03','title'=>'Unduh & Simpan Selamanya','desc'=>'Foto resolusi tinggi langsung tersimpan di koleksimu. Unduh kapan saja, tanpa batas.','icon'=>'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'],
 ];
 $testimonials = [
-    ['name'=>'Andi Wijaya',   'event'=>'Jakarta Marathon 2025', 'avatar'=>'AW', 'color'=>'bg-blue-100 text-blue-700',   'quote'=>'Langsung ketemu foto saya di finish line. Kualitasnya sangat bagus dan harganya sangat terjangkau.'],
-    ['name'=>'Sari Dewi',     'event'=>'Bali Fun Run 2025',     'avatar'=>'SD', 'color'=>'bg-orange-100 text-orange-700','quote'=>'Di KeJepret langsung ketemu cuman modal selfie. Prosesnya cepat banget. Recommended!'],
-    ['name'=>'Budi Santoso',  'event'=>'Bandung Trail Run 2025','avatar'=>'BS', 'color'=>'bg-green-100 text-green-700',  'quote'=>'Foto resolusi tinggi, proses download cepat. Akan terus pakai KeJepret di setiap event!'],
+    ['name'=>'Andi Wijaya',   'event'=>'Maraton Jakarta 2025',          'avatar'=>'AW', 'color'=>'bg-blue-100 text-blue-700',   'quote'=>'Foto saya langsung ditemukan di garis finis. Kualitasnya sangat bagus dan harganya sangat terjangkau.'],
+    ['name'=>'Sari Dewi',     'event'=>'Lari Gembira Bali 2025',       'avatar'=>'SD', 'color'=>'bg-orange-100 text-orange-700','quote'=>'Di KeJepret, foto langsung ditemukan hanya dengan swafoto. Prosesnya sangat cepat. Sangat direkomendasikan!'],
+    ['name'=>'Budi Santoso',  'event'=>'Lari Lintas Alam Bandung 2025','avatar'=>'BS', 'color'=>'bg-green-100 text-green-700',  'quote'=>'Foto beresolusi tinggi dan proses unduhnya cepat. Saya akan terus memakai KeJepret di setiap acara!'],
 ];
 @endphp
 
@@ -56,12 +56,12 @@ $testimonials = [
     <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-800 mb-6 relative z-10 ml16">
         <span class="line-1 inline-block overflow-hidden pb-1">Temukan Foto Larimu</span>
         <br>
-        <span class="line-2 inline-block text-blue-600 overflow-hidden pb-1">dari Setiap Event</span>
+        <span class="line-2 inline-block text-blue-600 overflow-hidden pb-1">dari Setiap Acara</span>
     </h1>
 
     {{-- 3. Subtitle --}}
     <p class="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-medium relative z-10">
-        Cari, temukan, dan miliki foto terbaikmu dari ratusan event marathon di seluruh Indonesia. Proses pencarian canggih dengan teknologi <span class="font-bold text-slate-700">Pengenalan Wajah</span> secepat kilat.
+        Cari, temukan, dan miliki foto terbaikmu dari ratusan acara maraton di seluruh Indonesia. Proses pencarian canggih dengan teknologi <span class="font-bold text-slate-700">Pengenalan Wajah</span> secepat kilat.
     </p>
 
     {{-- 4. Main CTA Button --}}
@@ -86,8 +86,8 @@ $testimonials = [
             </div>
             <div class="text-left pl-2">
                 <h4 class="text-xs font-bold text-slate-800 mb-1">Sari Dewi</h4>
-                <p class="text-[11px] text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-lg rounded-tl-none border border-slate-100">"Di KeJepret langsung ketemu fotonya pakai face recognition. Cepat banget!"</p>
-                <div class="mt-2 text-[9px] text-slate-400 text-right">Bali Fun Run • 4:30 pm</div>
+                <p class="text-[11px] text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-lg rounded-tl-none border border-slate-100">"Di KeJepret, fotonya langsung ditemukan memakai pengenalan wajah. Sangat cepat!"</p>
+                <div class="mt-2 text-[9px] text-slate-400 text-right">Lari Gembira Bali • 16.30 WIB</div>
             </div>
         </div>
 
@@ -114,8 +114,8 @@ $testimonials = [
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
                         <div class="text-left">
-                            <div class="text-[10px] font-bold text-slate-800">Cari Wajah AI</div>
-                            <div class="text-[9px] text-slate-500">Unggah foto selfie Anda</div>
+                            <div class="text-[10px] font-bold text-slate-800">Cari Wajah dengan Kecerdasan Buatan</div>
+                            <div class="text-[9px] text-slate-500">Unggah foto swafoto Anda</div>
                         </div>
                     </div>
                 </div>
@@ -174,8 +174,8 @@ $testimonials = [
             </div>
             <div class="text-left pr-2">
                 <h4 class="text-xs font-bold text-slate-800 mb-1">Andi Wijaya</h4>
-                <p class="text-[11px] text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-lg rounded-tr-none border border-slate-100">"Kualitas tajam, resolusi tinggi. Sempurna buat diposting di sosmed!"</p>
-                <div class="mt-2 text-[9px] text-slate-400 text-left">Jakarta Marathon • 10:15 am</div>
+                <p class="text-[11px] text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-lg rounded-tr-none border border-slate-100">"Kualitas tajam dan resolusinya tinggi. Sempurna untuk dibagikan di media sosial!"</p>
+                <div class="mt-2 text-[9px] text-slate-400 text-left">Maraton Jakarta • 10.15 WIB</div>
             </div>
         </div>
 
@@ -200,7 +200,7 @@ $testimonials = [
             </div>
             <div class="text-center hover:scale-105 transition-transform duration-300">
                 <div class="text-2xl sm:text-3xl font-black text-slate-800 mb-0.5"><span class="counter-up" data-target="4.9" data-decimals="1">4.9</span><span class="text-lg text-slate-400 font-bold">/5</span></div>
-                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">RATING PENGGUNA</div>
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">PENILAIAN PENGGUNA</div>
             </div>
         </div>
     </div>
@@ -268,8 +268,8 @@ $testimonials = [
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="flex items-end justify-between mb-8">
             <div>
-                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">EVENT LARI</p>
-                <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Event Terbaru</h2>
+                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">ACARA LARI</p>
+                <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Acara Terbaru</h2>
             </div>
             <a href="{{ route('event') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors">
                 Lihat semua
@@ -280,7 +280,7 @@ $testimonials = [
         @if($events->isEmpty())
         <div class="text-center py-16 text-gray-400">
             <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <p class="font-semibold text-sm">Belum ada event tersedia</p>
+            <p class="font-semibold text-sm">Belum ada acara tersedia</p>
         </div>
         @else
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -340,21 +340,21 @@ $testimonials = [
                         <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">Kenapa KeJepret?</span>
                     </div>
                     <h2 class="text-4xl sm:text-5xl font-black text-slate-800 leading-[1.1] tracking-tight">
-                        Platform Foto Lari<br>
+                        Layanan Foto Lari<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-400">Terpercaya #1</span>
                     </h2>
                 </div>
                 
                 <p class="text-slate-500 text-base sm:text-lg leading-relaxed font-medium">
-                    Kami bekerja sama dengan fotografer terbaik di setiap event untuk memastikan momen berhargamu terabadikan dengan kualitas paling sempurna.
+                    Kami bekerja sama dengan fotografer terbaik di setiap acara untuk memastikan momen berhargamu terabadikan dengan kualitas paling sempurna.
                 </p>
                 
                 <ul class="space-y-4">
                     @foreach([
-                        ['icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', 'text' => 'Foto resolusi tinggi ready to print'],
+                        ['icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z', 'text' => 'Foto beresolusi tinggi siap cetak'],
                         ['icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'text' => 'Harga terjangkau mulai Rp 20.000'],
                         ['icon' => 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', 'text' => 'Unduh langsung tanpa batas waktu'],
-                        ['icon' => 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', 'text' => 'Fotografer profesional di setiap event']
+                        ['icon' => 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', 'text' => 'Fotografer profesional di setiap acara']
                     ] as $item)
                     <li class="flex items-center gap-4 group">
                         <div class="w-10 h-10 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-blue-50 transition-all duration-300">
@@ -483,10 +483,10 @@ $testimonials = [
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Event Organizer</h3>
-                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Dokumentasikan event lari Anda dengan fotografer profesional kami. Bagikan kenangan tak terlupakan kepada seluruh peserta.</p>
+                <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Penyelenggara Acara</h3>
+                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Dokumentasikan acara lari Anda dengan fotografer profesional kami. Bagikan kenangan tak terlupakan kepada seluruh peserta.</p>
                 <a href="{{ route('event.propose') }}" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors group/link mt-auto">
-                    <span class="border-b-2 border-transparent group-hover/link:border-blue-600 transition-colors pb-0.5">Ajukan Event</span>
+                    <span class="border-b-2 border-transparent group-hover/link:border-blue-600 transition-colors pb-0.5">Ajukan Acara</span>
                     <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
@@ -505,7 +505,7 @@ $testimonials = [
                     </svg>
                 </div>
                 <h3 class="relative z-10 font-black text-white text-2xl mb-4 drop-shadow-sm">Jadi Fotografer</h3>
-                <p class="relative z-10 text-blue-50 text-sm leading-relaxed mb-10 flex-grow font-medium">Bergabunglah sebagai mitra fotografer. Abadikan momen pelari dan dapatkan penghasilan tak terbatas dari setiap foto yang terjual di platform kami.</p>
+                <p class="relative z-10 text-blue-50 text-sm leading-relaxed mb-10 flex-grow font-medium">Bergabunglah sebagai mitra fotografer. Abadikan momen pelari dan dapatkan penghasilan tak terbatas dari setiap foto yang terjual melalui layanan kami.</p>
                 
                 <div class="relative z-10 mt-auto">
                     @auth
@@ -534,7 +534,7 @@ $testimonials = [
                     </svg>
                 </div>
                 <h3 class="relative z-10 font-black text-slate-800 text-2xl mb-4">Butuh Bantuan?</h3>
-                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Punya pertanyaan seputar cara pembelian foto atau mendaftarkan event? Tim support kami selalu siap membantu Anda kapan saja.</p>
+                <p class="relative z-10 text-slate-500 text-sm leading-relaxed mb-10 flex-grow font-medium">Punya pertanyaan seputar cara pembelian foto atau pendaftaran acara? Tim dukungan kami selalu siap membantu Anda kapan saja.</p>
                 <button onclick="openHelpModal()" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link mt-auto bg-transparent border-none cursor-pointer">
                     <span class="border-b-2 border-transparent group-hover/link:border-indigo-600 transition-colors pb-0.5">Hubungi Kami</span>
                     <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -569,7 +569,7 @@ $testimonials = [
         </h2>
         
         <p class="text-slate-400 text-base sm:text-lg mb-12 max-w-xl mx-auto font-medium leading-relaxed">
-            Ribuan foto dari ratusan event lari menunggu kamu. Proses pencarian instan dengan teknologi pengenalan wajah. Gratis untuk dicari.
+            Ribuan foto dari ratusan acara lari menunggu kamu. Proses pencarian seketika dengan teknologi pengenalan wajah. Pencarian tersedia secara gratis.
         </p>
         
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -581,7 +581,7 @@ $testimonials = [
             </a>
             
             <a href="{{ route('event') }}" class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white font-black text-sm uppercase tracking-widest px-8 py-5 rounded-2xl transition-all duration-300 border border-white/10 hover:border-white/20 backdrop-blur-md">
-                Lihat Event
+                Lihat Acara
                 <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -598,7 +598,7 @@ $testimonials = [
                 <span class="font-black text-white text-xl tracking-tight">KeJepret</span>
             </div>
             <p class="text-slate-500 text-sm font-medium text-center md:text-left">
-                © {{ date('Y') }} KeJepret. Platform foto lari terpercaya di Indonesia.
+                © {{ date('Y') }} KeJepret. Layanan foto lari terpercaya di Indonesia.
             </p>
             <div class="flex gap-4">
                 {{-- Placeholder Social Icons --}}
@@ -636,13 +636,13 @@ $testimonials = [
             
             <div class="space-y-2">
                 <h3 class="text-2xl font-black text-slate-800 tracking-tight">Kirim Pertanyaan</h3>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">Tulis pertanyaan atau keluhan Anda di bawah. Pesan Anda akan langsung dikirimkan ke WhatsApp tim support KeJepret.</p>
+                <p class="text-slate-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">Tulis pertanyaan atau keluhan Anda di bawah. Pesan Anda akan langsung dikirimkan ke WhatsApp tim dukungan KeJepret.</p>
             </div>
 
             <div class="space-y-4 text-left">
                 <div>
                     <label for="home-modal-complaint-text" class="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2 ml-1">Pertanyaan / Keluhan</label>
-                    <textarea id="home-modal-complaint-text" rows="4" class="w-full clean-glass-input rounded-2xl p-4 text-sm focus:outline-none resize-none" placeholder="Tulis pertanyaan Anda seputar pembelian foto, pendaftaran event, atau kendala lainnya di sini..."></textarea>
+                    <textarea id="home-modal-complaint-text" rows="4" class="w-full clean-glass-input rounded-2xl p-4 text-sm focus:outline-none resize-none" placeholder="Tulis pertanyaan Anda seputar pembelian foto, pendaftaran acara, atau kendala lainnya di sini..."></textarea>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -699,11 +699,11 @@ function sendHomeModalToWhatsapp() {
         const role = "Guest";
     @endauth
     
-    const message = `Halo Admin KeJepret, saya membutuhkan bantuan/memiliki pertanyaan mengenai platform KeJepret.
+    const message = `Halo Administrator KeJepret, saya membutuhkan bantuan atau memiliki pertanyaan mengenai layanan KeJepret.
 
 Detail Pengirim:
 - Nama: ${name}
-- Email: ${email}
+- Surel: ${email}
 - Status: ${role}
 
 Pertanyaan/Keluhan:

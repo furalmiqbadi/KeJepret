@@ -112,7 +112,7 @@
                     </svg>
                 </div>
                 <p class="text-lg font-black text-slate-700">Belum ada foto yang terjual</p>
-                <p class="text-slate-400 font-bold text-sm mt-1">Terus upload foto terbaikmu!</p>
+                <p class="text-slate-400 font-bold text-sm mt-1">Terus unggah foto terbaikmu!</p>
             </div>
         @else
             <div class="overflow-x-auto">
@@ -120,7 +120,7 @@
                     <thead class="bg-slate-50 border-b border-slate-100">
                         <tr>
                             <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Foto</th>
-                            <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Kode Order</th>
+                            <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Kode Pesanan</th>
                             <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Kategori</th>
                             <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Harga</th>
                             <th class="px-8 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 whitespace-nowrap">Pendapatan</th>

@@ -158,7 +158,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
-                            <input type="text" name="name" placeholder="John Doe"
+                            <input type="text" name="name" placeholder="Budi Santoso"
                                 value="{{ old('name') }}"
                                 class="w-full clean-glass-input rounded-2xl pl-11 pr-5 py-3.5 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 shadow-sm shadow-slate-200/50">
                         </div>
@@ -166,7 +166,7 @@
 
                     {{-- Email / Surel --}}
                     <div class="space-y-1.5">
-                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel (Email)</label>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Alamat Surel</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
                                 <svg class="h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

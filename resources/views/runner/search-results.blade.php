@@ -6,7 +6,7 @@
 
     <div class="flex items-center justify-between gap-4 mb-8">
         <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">HASIL AI SEARCH</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">HASIL PENCARIAN KECERDASAN BUATAN</p>
             <h1 class="text-3xl font-black text-gray-900">Foto Ditemukan</h1>
             <p class="text-gray-500 text-sm mt-1">{{ $photos->count() }} foto cocok dengan wajahmu.</p>
         </div>
@@ -33,7 +33,7 @@
             <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <p class="font-black text-gray-400 text-lg">Tidak ada foto ditemukan</p>
-        <p class="text-gray-400 text-sm mt-1">Coba upload selfie dengan pencahayaan lebih baik.</p>
+        <p class="text-gray-400 text-sm mt-1">Coba unggah swafoto dengan pencahayaan yang lebih baik.</p>
         <a href="{{ route('runner.search') }}" class="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold text-sm hover:bg-blue-700 transition">Coba Lagi</a>
     </div>
     @else
@@ -44,14 +44,14 @@
             {{-- Foto Watermark --}}
             <div class="relative aspect-[4/5] sm:aspect-square overflow-hidden bg-slate-100 flex items-center justify-center">
                 {{-- Blurred Background --}}
-                <img src="{{ $photo['watermark_url'] }}" class="absolute inset-0 w-full h-full object-cover opacity-60 blur-md scale-110 pointer-events-none" alt="Blurred background">
+                <img src="{{ $photo['watermark_url'] }}" class="absolute inset-0 w-full h-full object-cover opacity-60 blur-md scale-110 pointer-events-none" alt="Latar belakang buram">
                 
                 <button
                     type="button"
                     class="preview-trigger block w-full h-full relative z-10"
                     data-preview-url="{{ $photo['watermark_url'] }}"
-                    data-preview-alt="Preview foto event {{ $photo['event_name'] }}"
-                    aria-label="Lihat preview foto"
+                    data-preview-alt="Pratinjau foto acara {{ $photo['event_name'] }}"
+                    aria-label="Lihat pratinjau foto"
                 >
                     <img src="{{ $photo['watermark_url'] }}" alt="Foto"
                         class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-2xl">
@@ -108,11 +108,11 @@
                 type="button"
                 id="photo-preview-close"
                 class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 rounded-xl px-3 py-2 text-sm font-bold"
-                aria-label="Tutup preview"
+                aria-label="Tutup pratinjau"
             >
                 Tutup
             </button>
-            <img id="photo-preview-image" src="" alt="Preview foto" class="w-full max-h-[85vh] object-contain rounded-2xl bg-black/40">
+            <img id="photo-preview-image" src="" alt="Pratinjau foto" class="w-full max-h-[85vh] object-contain rounded-2xl bg-black/40">
         </div>
     </div>
 </div>
@@ -178,7 +178,7 @@ const previewClose = document.getElementById('photo-preview-close');
 document.querySelectorAll('.preview-trigger').forEach((button) => {
     button.addEventListener('click', () => {
         previewImage.src = button.dataset.previewUrl;
-        previewImage.alt = button.dataset.previewAlt || 'Preview foto';
+        previewImage.alt = button.dataset.previewAlt || 'Pratinjau foto';
         previewModal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
     });

@@ -6,9 +6,9 @@
     {{-- Judul Halaman dengan Margin atas lapang & Ambient glow --}}
     <div class="mb-10 text-center relative">
         <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-12 bg-sky-400/10 rounded-full blur-xl pointer-events-none"></div>
-        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-sky-500 mb-2">Pencarian Wajah AI</p>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-sky-500 mb-2">Pencarian Wajah Berbantuan Kecerdasan Buatan</p>
         <h1 class="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-sky-900 to-slate-900">Cari Fotomu</h1>
-        <p class="text-slate-500 text-xs mt-2 max-w-sm mx-auto leading-relaxed">Cukup ambil swafoto atau unggah foto, teknologi AI kami akan mencarikan semua fotomu dari berbagai acara.</p>
+        <p class="text-slate-500 text-xs mt-2 max-w-sm mx-auto leading-relaxed">Cukup ambil swafoto atau unggah foto, teknologi kecerdasan buatan kami akan mencarikan semua fotomu dari berbagai acara.</p>
     </div>
     @if(session('info'))
     <div class="flex items-start gap-3 bg-yellow-50/80 backdrop-blur border border-yellow-200/50 text-yellow-800 rounded-2xl px-5 py-4 mb-6 shadow-sm">
@@ -253,7 +253,7 @@
         </div>
 
         <div class="text-center relative z-10">
-            <p class="text-xl font-black text-blue-700 leading-tight">AI Memindai Wajah...</p>
+            <p class="text-xl font-black text-blue-700 leading-tight">Kecerdasan Buatan Memindai Wajah...</p>
             <p class="text-xs text-blue-500 font-semibold mt-2 leading-relaxed">Mencocokkan wajahmu dengan ribuan foto berkualitas tinggi di sistem KeJepret</p>
         </div>
 
@@ -261,7 +261,7 @@
         <div class="w-full space-y-2.5 relative z-10">
             <div id="step-enroll" class="flex items-center gap-3 px-4 py-3 bg-blue-50/40 backdrop-blur-sm rounded-2xl border border-blue-100/40 transition-all duration-500">
                 <div class="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-black shrink-0 animate-pulse">1</div>
-                <p class="text-[11px] font-bold text-blue-700">Mendaftarkan wajah ke AI...</p>
+                <p class="text-[11px] font-bold text-blue-700">Mendaftarkan wajah ke sistem...</p>
             </div>
             <div id="step-search" class="flex items-center gap-3 px-4 py-3 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/25 transition-all duration-500">
                 <div class="w-5 h-5 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center text-slate-400 text-[10px] font-black shrink-0 border border-white/20">2</div>
